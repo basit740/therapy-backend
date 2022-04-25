@@ -1,0 +1,109 @@
+.new-version-container {
+	padding-top: 110px;
+
+	margin: 0 40px 40px 40px;
+	margin-bottom: 20px;
+}
+
+.new-version {
+	padding: 10px 15px 15px 15px;
+	background-color: white;
+	width: 100%;
+	border-radius: 10px;
+}
+.choose-version label {
+	text-transform: uppercase;
+	display: block;
+}
+.choose-version select {
+	padding: 5px;
+
+	border-radius: 5px;
+	width: 35%;
+}
+.new-version-button a {
+	position: relative;
+	float: right;
+	padding: 5px 45px 5px 45px;
+
+	background-color: black;
+	color: white;
+	border-radius: 5px;
+	margin-top: -45px;
+}
+
+.new-version-button {
+	position: absolute;
+}
+.new-version-button {
+	position: relative;
+}
+.new-version-form-container {
+	position: absolute;
+	right: 250px;
+	bottom: 12px;
+}
+.new-version-form-container input {
+	width: 300px;
+	border-radius: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.black-line {
+	margin-top: 20px;
+}
+
+.continue-version {
+	margin-top: 20px;
+	width: 100%;
+	display: flex;
+}
+
+.continue-version .first-box {
+	width: 28%;
+	margin-right: 40px;
+}
+.first-box h6 {
+	font-size: 16px;
+	text-transform: uppercase;
+	font-weight: normal;
+}
+.first-box-content {
+	width: 100%;
+	margin-right: 30px;
+	padding: 105px 15px 105px 15px;
+	background-color: #dcdcdc;
+	border-radius: 5px;
+}
+.first-box-content button {
+	padding: 5px 40px 5px 40px;
+	background-color: black;
+	color: white;
+	border-radius: 5px;
+}
+.first-box-content-tag {
+	margin-bottom: 50px;
+}
+.first-box-content-tag span {
+	font-size: 14px;
+}
+
+/* Steps css here */
+
+.continue-version .second-box {
+	width: 35%;
+	margin-right: 20px;
+}
+
+/*Common CSS */
+
+.h6-upper {
+	font-size: 16px;
+	text-transform: uppercase;
+	font-weight: normal;
+}
+
+.continue-version .third-box {
+	width: 35%;
+}

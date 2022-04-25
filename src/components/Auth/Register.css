@@ -1,0 +1,113 @@
+.banner {
+	background-color: black;
+	color: white;
+	min-height: 100%;
+}
+.form-container {
+	margin: 0 auto !important;
+}
+.actual-content {
+	margin: 0 auto !important;
+	width: 430px;
+}
+
+.actual-content h1 {
+	text-align: center;
+}
+
+.image {
+	width: 100%;
+}
+
+.text-container {
+	text-align: center;
+	padding-top: 50px;
+}
+
+.nospacing {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.col-md-7 {
+	height: auto;
+}
+
+.subtitle {
+	color: #bdc1ca;
+	font-size: 1.1em;
+}
+
+.signup {
+	padding-left: 50px;
+	padding-right: 50px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	border-radius: 5px;
+	border: 0;
+}
+.signin-text {
+	margin-top: 30px !important;
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
+p {
+	text-align: center;
+}
+p a {
+	text-decoration: none;
+	color: black;
+	cursor: pointer;
+}
+p a:hover {
+	font-weight: bold;
+	text-decoration: none;
+	color: black;
+}
+
+.button-container {
+	text-align: center;
+	width: 100%;
+}
+
+.register-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+.terms {
+	bottom: 0;
+}
+
+/* CSS for Sign In */
+
+.button-container-sign-in {
+	display: flex;
+	justify-content: space-between;
+}
+
+.button-container-sign-in .signin {
+	padding-left: 30px;
+	padding-right: 30px;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	border-radius: 5px;
+	width: 48%;
+}
+
+.bc-black {
+	background-color: black;
+	color: white;
+}
+.bc-white {
+	background-color: white;
+	color: black;
+}
+.forgot-password {
+	text-align: right;
+}
+
+.feedback-container {
+	margin-bottom: 150px;
+}

@@ -1,0 +1,72 @@
+header {
+	width: 100%;
+	background-color: white;
+	color: gray;
+	height: 70px;
+	position: fixed;
+	margin-bottom: 40px;
+	z-index: 100;
+}
+header nav {
+	display: flex;
+}
+header nav h4 {
+	margin: 0;
+	bottom: 0;
+	margin-top: 20px;
+	color: black;
+}
+
+header nav .brand {
+	width: 25%;
+	padding-left: 15px;
+	display: flex;
+}
+
+.logo-dot {
+	margin-right: 10px;
+	margin-top: 27px;
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	background-color: black;
+}
+
+header nav .nav-links {
+	width: 70%;
+	float: right;
+	margin-top: 25px;
+	margin-left: 100px;
+	display: flex;
+}
+nav .nav-links a {
+	padding-bottom: 18px;
+	margin-right: 40px;
+	text-decoration: none;
+	color: gray;
+	font-size: 18px;
+	text-transform: uppercase;
+}
+nav .nav-links a:hover {
+	border-bottom: 3px solid black;
+	color: black;
+}
+.brand-link {
+	opacity: 0.7;
+}
+.brand-link:hover {
+	text-decoration: none;
+	color: inherit;
+	opacity: 1;
+}
+.navlink-active {
+	border-bottom: 3px solid black;
+	color: black;
+}
+.nav-links .logout-link:hover {
+	text-decoration: none;
+	color: inherit;
+	opacity: 1;
+	border-bottom: 3px solid black;
+	color: #ffcc00;
+}

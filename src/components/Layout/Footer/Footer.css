@@ -1,0 +1,26 @@
+.footer {
+	line-height: 40px;
+	padding: 15px;
+	background-color: #f7f7f7;
+	width: 100%;
+	overflow: hidden;
+	position: fixed;
+	bottom: 0;
+	z-index: 15;
+}
+.footer .footer-left {
+	float: left;
+}
+.footer-right {
+	float: right;
+	display: flex;
+}
+
+.footer-right a {
+	text-decoration: none;
+	color: gray;
+	margin-right: 20px;
+}
+.footer-right a:hover {
+	border-bottom: 1px solid black;
+}

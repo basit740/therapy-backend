@@ -1,0 +1,45 @@
+.my-versions-left {
+	width: 70%;
+	background-color: white;
+	padding: 15px 30px;
+	border-radius: 10px;
+	margin-right: 30px;
+	min-height: 400px;
+}
+
+.my-versions-left table {
+	width: 100%;
+}
+.my-versions-left table tr {
+	border-bottom: 1px solid #ccc;
+	padding: 5px;
+}
+.my-versions-left table td {
+	padding: 10px;
+	padding-left: 0px;
+	margin-left: 0px;
+}
+
+.width-10 {
+	width: 10%;
+}
+.status-chip {
+	border-radius: 40px;
+	background-color: #dcdcdc;
+	width: 150px;
+	padding: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	text-transform: uppercase;
+	display: block;
+	text-align: center;
+}
+.action-chip {
+	padding: 5px 10px 5px 10px;
+	background-color: gray;
+	color: white;
+	text-transform: uppercase;
+}
+.bg-black {
+	background-color: black;
+}

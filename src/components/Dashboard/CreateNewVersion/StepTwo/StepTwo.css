@@ -1,0 +1,22 @@
+.stepTwoOfEleven {
+	margin: 20px 300px 20px 20px;
+}
+.stepTwoOfEleven p:nth-child(2) {
+	text-align: justify;
+	margin-top: 15px;
+	color: #a8a8a8;
+}
+
+.feelings-cards-container {
+	margin-top: 50px;
+	display: flex;
+	justify-content: space-between;
+}
+.feeling-card {
+	width: 24%;
+}
+.feeling-card__title {
+	font-size: 22px;
+	text-align: center;
+	margin-bottom: 10px;
+}

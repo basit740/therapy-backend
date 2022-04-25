@@ -1,0 +1,136 @@
+.Body {
+	padding: 60px 25px 10px 25px;
+	display: flex;
+	color: black;
+}
+
+.sectionOne {
+	background-color: white;
+	margin-top: 50px;
+	width: 23%;
+	margin-right: 5px;
+	border-radius: 3px;
+	padding: 10px;
+}
+
+.progress {
+	margin-bottom: 15px;
+	background-color: white;
+	font-weight: bold;
+	margin: 20px 0 5px 20px;
+}
+
+.sectionTwo {
+	background-color: white;
+	margin-top: 50px;
+	position: relative;
+	width: 77%;
+	border-radius: 3px;
+	padding: 25px 25px 25px 25px;
+}
+
+.progressbar {
+	position: relative;
+	justify-content: space-around;
+}
+.progressbar::before {
+	content: '';
+	position: absolute;
+	top: 49%;
+	transform: translateY(-50%);
+	left: 7%;
+	height: 1010px;
+	width: 1px;
+	background-color: #dcdcdc;
+}
+.progressStep {
+	width: 1.25rem;
+	height: 1.25rem;
+	border: 1px solid #dcdcdc;
+	background-color: #dcdcdc;
+	border-radius: 50%;
+	text-align: center;
+}
+
+.progressStep-Active {
+	background-color: black;
+	z-index: 10;
+}
+
+.progressStep-ActiveSign {
+	transform: translate(-65%, -60%);
+	position: absolute;
+	width: 0.6rem;
+	height: 0.6rem;
+	background-color: black;
+	border-radius: 50%;
+}
+.step-text {
+	opacity: 0.8;
+}
+.step-text:hover {
+	opacity: 1;
+}
+.progressStep-ActiveMark {
+	transform: translate(-65%, -110%);
+	position: absolute;
+	width: 0.6rem;
+	font-size: 6px;
+	height: 0.6rem;
+}
+
+.inlineProgress {
+	display: flex;
+	margin-top: 2px;
+	margin-bottom: 10px;
+	height: 82px;
+	cursor: pointer;
+}
+
+.inlineProgress div:nth-child(1) {
+	margin: 10px;
+}
+
+.inlineProgress div:nth-child(2) {
+	margin: 1px;
+	text-align: left;
+	justify-content: left;
+}
+
+.inlineProgress div div:nth-child(1) {
+	font-size: 14px;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.inlineProgress div div:nth-child(2) {
+	font-size: 13px;
+	padding-left: 10px;
+	color: #a8a8a8;
+}
+
+.prevOrSave {
+	bottom: 20px;
+	text-align: end;
+	margin-top: 200px;
+	position: absolute;
+	right: 5%;
+}
+
+.prevOrSave button:nth-child(1) {
+	margin: 0 7px 0 0;
+	background-color: #dddddd;
+	color: 22ee2e;
+	border: none;
+	padding: 7px 45px 7px 45px;
+	border-radius: 6px;
+}
+
+.prevOrSave button:nth-child(2) {
+	margin: 0 0 0 7px;
+	background-color: #2e2e2e;
+	color: #dddddd;
+	border: none;
+	padding: 7px 15px 7px 15px;
+	border-radius: 6px;
+}
