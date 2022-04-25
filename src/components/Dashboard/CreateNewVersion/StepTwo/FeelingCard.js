@@ -11,7 +11,8 @@ const FeelingCard = ({
 	onDragOver,
 	isLoading,
 }) => {
-	const [feeling, setFeelings] = useState(feelings);
+	console.log('feeliongs', feelings);
+	//const [feeling, setFeelings] = useState(feelings);
 
 	const updateFeelings = (item) => {
 		let prevArray = feelings;

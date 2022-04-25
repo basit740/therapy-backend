@@ -11,6 +11,8 @@ import FeelingCard from './FeelingCard.js';
 
 import StepTwoStatic from './StepTwoStatic';
 
+const EMPTY_ARRAY = [];
+
 const FEELING_CARDS = [
 	{
 		title: 'Low Impact',
@@ -27,13 +29,13 @@ const FEELING_CARDS = [
 ];
 
 const issues = {
-	low: [],
-	medium: [],
+	low: [], ///issueImpact='low'
+	medium: [], //issueImpactType='medium'
 	high: [],
 	critical: [],
 	dragId: null,
 	dragSrcId: null,
-	dataLoading: false,
+	dataLoading: true,
 };
 
 // actual functoin definition starts here
@@ -41,8 +43,16 @@ const StepTwo = (props) => {
 	const authCtx = useContext(AuthContext);
 	const newVerCtx = useContext(NewVersionContext);
 
+	console.log('in steptwo');
+
 	const [state, dispatch] = useReducer(reducer, issues);
-	props.onStateChange(state);
+
+	//props.onStateChange(state);
+
+	useEffect(() => {
+		props.onStateChange(state);
+	}, [state, props.onStateChange]);
+
 	console.log('local state always renders', state);
 
 	const [dataIsLoading, setDataIsLoading] = useState(false);
@@ -96,6 +106,7 @@ const StepTwo = (props) => {
 
 	const dropHandler = (event) => {
 		event.preventDefault();
+
 		newVerCtx.stepOneUnSaver();
 
 		if (event.target.id == 1) {
@@ -135,7 +146,7 @@ const StepTwo = (props) => {
 		}
 
 		// passing state
-		newVerCtx.stepTwoIssuesModifier(state);
+		//newVerCtx.stepTwoIssuesModifier(state);
 	};
 
 	const allowDrop = (event) => {
@@ -146,15 +157,20 @@ const StepTwo = (props) => {
 	////////////////////////// END DRAG & DROP FUNCTIONALITY HERE ////////////
 
 	useEffect(() => {
+		console.log('in useffect 1');
 		// data data from server
 		(async function () {
-			newVerCtx.stepTwoClearer();
-			setDataIsLoading(true);
+			//newVerCtx.stepTwoClearer();
+			console.log('in useeffect 2');
+			dispatch({ type: ACTIONS.SET_DATA_LOADING });
 
 			let response = await getIssues(newVerCtx.versionId);
-			setDataIsLoading(false);
+			//setDataIsLoading(false);
+
+			console.log('in user effect 3');
 
 			if (response.success && response.data.length > 0) {
+				console.log('data', response.data);
 				dispatch({
 					type: ACTIONS.DATA_FROM_SERVER,
 					payload: { data: response.data },
@@ -215,7 +231,7 @@ const StepTwo = (props) => {
 					<FeelingCard
 						id='1'
 						key={1}
-						feelings={state.low}
+						feelings={state.dataLoading ? EMPTY_ARRAY : state.low}
 						onDragStart={dragStartHandler}
 						onDragEnd={dragEndHandler}
 						onDragOver={allowDrop}
@@ -228,7 +244,7 @@ const StepTwo = (props) => {
 					<FeelingCard
 						id='2'
 						key={2}
-						feelings={state.medium}
+						feelings={state.dataLoading ? EMPTY_ARRAY : state.medium}
 						onDragStart={dragStartHandler}
 						onDragEnd={dragEndHandler}
 						onDragOver={allowDrop}
@@ -242,7 +258,7 @@ const StepTwo = (props) => {
 					<FeelingCard
 						id='3'
 						key={3}
-						feelings={state.high}
+						feelings={state.dataLoading ? EMPTY_ARRAY : state.high}
 						onDragStart={dragStartHandler}
 						onDragEnd={dragEndHandler}
 						onDragOver={allowDrop}
@@ -256,7 +272,7 @@ const StepTwo = (props) => {
 					<FeelingCard
 						id='4'
 						key={4}
-						feelings={state.critical}
+						feelings={state.dataLoading ? EMPTY_ARRAY : state.critical}
 						onDragStart={dragStartHandler}
 						onDragEnd={dragEndHandler}
 						onDragOver={allowDrop}

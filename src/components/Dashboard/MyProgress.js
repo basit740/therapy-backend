@@ -97,6 +97,7 @@ const MyProgress = () => {
 		}
 		setFormStep(parseInt(formStep) - 1);
 	};
+
 	const nextHandler = async () => {
 		setSaveButtonText('Save & Continue');
 
@@ -179,6 +180,9 @@ const MyProgress = () => {
 		}
 		setFormStep(parseInt(event.target.id));
 	};
+
+	console.log('formStemp', formStep);
+
 	return (
 		<main className='Body'>
 			<section className='sectionOne'>
