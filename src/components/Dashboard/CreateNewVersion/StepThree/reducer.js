@@ -5,6 +5,9 @@ export const ACTIONS = {
 	ON_FIRST_REFLECTION: 'on_first_reflection',
 	ON_SECOND_REFLECTION: 'on_second_reflection',
 	ON_THIRD_REFLECTION: 'on_third_reflection',
+	DATA_FROM_GLOBAL_STATE: 'data_from_global_state',
+	DATA_FROM_SERVER: 'data_from_server',
+	dataLoading: true,
 };
 export const initialState = {
 	feelings: [
@@ -16,28 +19,47 @@ export const initialState = {
 
 export default function reducer(state, action) {
 	let type = action.type;
-	let value = action.payload.data;
+	let data = action.payload.data;
+	let prevState = { ...state };
 
 	switch (type) {
 		case ACTIONS.ON_FIRST_HABIT:
-			state.feelings[0].feelingContent = value;
+			prevState.feelings[0].feelingContent = data;
 			break;
 		case ACTIONS.ON_SECOND_HABIT:
-			state.feelings[1].feelingContent = value;
+			prevState.feelings[1].feelingContent = data;
 			break;
 		case ACTIONS.ON_THIRD_HABIT:
-			state.feelings[2].feelingContent = value;
+			prevState.feelings[2].feelingContent = data;
 			break;
 		case ACTIONS.ON_FIRST_REFLECTION:
-			state.feelings[0].feelingReflection = value;
+			prevState.feelings[0].feelingReflection = data;
 			break;
 		case ACTIONS.ON_SECOND_REFLECTION:
-			state.feelings[1].feelingReflection = value;
+			prevState.feelings[1].feelingReflection = data;
 			break;
 		case ACTIONS.ON_THIRD_REFLECTION:
-			state.feelings[2].feelingReflection = value;
+			prevState.feelings[2].feelingReflection = data;
+			break;
+		case ACTIONS.DATA_FROM_GLOBAL_STATE:
+			console.log('step three global state');
+			prevState = {
+				feelings: [
+					{ id: 1, feelingContent: '', feelingReflection: '' },
+					{ id: 2, feelingContent: '', feelingReflection: '' },
+					{ id: 3, feelingContent: '', feelingReflection: '' },
+				],
+			};
+			break;
+		case ACTIONS.DATA_FROM_SERVER:
+			console.log('stepthree reducer', data);
+			const newState = {
+				feelings: [...data],
+			};
+			prevState = newState;
+			break;
 		default:
-		//do nothing;
+		//return prevState;
 	}
-	return state;
+	return prevState;
 }

@@ -5,6 +5,8 @@ import NewVersionContext from '../../../../store/new-version-context';
 
 import reducer, { ACTIONS } from './reducer';
 
+// skeleton
+
 import './StepTwo.css';
 import Feeling from './Feeling.js';
 import FeelingCard from './FeelingCard.js';
@@ -54,8 +56,6 @@ const StepTwo = (props) => {
 	}, [state, props.onStateChange]);
 
 	console.log('local state always renders', state);
-
-	const [dataIsLoading, setDataIsLoading] = useState(false);
 
 	const [feelingCards, setFeelingCards] = useState(FEELING_CARDS);
 
@@ -236,7 +236,7 @@ const StepTwo = (props) => {
 						onDragEnd={dragEndHandler}
 						onDragOver={allowDrop}
 						onDrop={dropHandler}
-						isLoading={dataIsLoading}
+						isLoading={state.dataLoading}
 					/>
 				</div>
 				<div className='feeling-card' id='2'>
@@ -249,7 +249,7 @@ const StepTwo = (props) => {
 						onDragEnd={dragEndHandler}
 						onDragOver={allowDrop}
 						onDrop={dropHandler}
-						isLoading={dataIsLoading}
+						isLoading={state.dataLoading}
 					/>
 				</div>
 
@@ -263,7 +263,7 @@ const StepTwo = (props) => {
 						onDragEnd={dragEndHandler}
 						onDragOver={allowDrop}
 						onDrop={dropHandler}
-						isLoading={dataIsLoading}
+						isLoading={state.dataLoading}
 					/>
 				</div>
 
@@ -277,7 +277,7 @@ const StepTwo = (props) => {
 						onDragEnd={dragEndHandler}
 						onDragOver={allowDrop}
 						onDrop={dropHandler}
-						isLoading={dataIsLoading}
+						isLoading={state.dataLoading}
 					/>
 				</div>
 			</div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import classes from './FeelingCard.module.css';
 import Feeling from './Feeling.js';
+import Loading from './Loading';
 
 const FeelingCard = ({
 	feelings,
@@ -34,7 +35,7 @@ const FeelingCard = ({
 				onDrop={onDrop}
 				onDragOver={onDragOver}
 			>
-				{isLoading || (feelings.length == 0 && <p></p>)}
+				{isLoading && <Loading />}
 
 				{feelings.length > 0 &&
 					feelings.map((feeling) => {

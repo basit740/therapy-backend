@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { replace } from 'formik';
 
+import { initialState } from '../components/Dashboard/CreateNewVersion/StepThree/reducer';
+
 const NewVersionContext = React.createContext({
 	versionId: '',
 	versionIdHandler: (versionId) => {},
@@ -22,8 +24,8 @@ const NewVersionContext = React.createContext({
 	stepTwoIssues: {},
 	stepTwoClearer: () => {},
 
-	stepThreeFeelingsModifier: (feelings) => {},
-	stepTwoFeelings: [],
+	stepThreeStateModifier: (state) => {},
+	stepThreeState: null,
 });
 
 export const NewVersionContextProvider = (props) => {
@@ -41,11 +43,30 @@ export const NewVersionContextProvider = (props) => {
 	const [stepTwoIssues, setStepTwoIssues] = useState({});
 
 	// stepThree
-	const [stepThreeState, setStepThreeState] = useState();
+	const [stepThreeState, setStepThreeState] = useState(initialState);
 
 	const versionIdHandler = (versionId) => {
 		setStepOneSaved(false);
 		setVersionId(versionId);
+
+		setStepOneFirst('');
+		setStepOneSecond('');
+		setStepOneThird('');
+		setStepOneFourth('');
+
+		setStepOneSaved(false);
+
+		// StepTwo
+		setStepTwoIssues({});
+
+		// stepThree
+		setStepThreeState({
+			feelings: [
+				{ id: 1, feelingContent: '', feelingReflection: '' },
+				{ id: 2, feelingContent: '', feelingReflection: '' },
+				{ id: 3, feelingContent: '', feelingReflection: '' },
+			],
+		});
 	};
 
 	const stepOneFirstHandler = (val) => {
@@ -93,9 +114,10 @@ export const NewVersionContextProvider = (props) => {
 
 	// stepThree Feelings
 
-	const stepThreeFeelingsModifier = (state) => {
-		setStepThreeState(state);
-		console.log(stepThreeState);
+	const stepThreeStateModifier = (state) => {
+		setStepThreeState((prev) => {
+			return { ...state };
+		});
 	};
 
 	const contextValue = {
@@ -116,8 +138,8 @@ export const NewVersionContextProvider = (props) => {
 		stepTwoIssues,
 		stepTwoIssuesModifier,
 		stepTwoClearer,
-		stepThreeFeelingsModifier,
-		stepThreeState,
+		// stepThreeStateModifier,
+		// stepThreeState,
 	};
 
 	return (

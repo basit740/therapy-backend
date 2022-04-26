@@ -24,7 +24,6 @@ exports.createIssue = async (req, res, next) => {
 		version: req.params.versionId,
 	});
 
-	console.log(prevIssues);
 	// updated flag
 
 	let updatedResult = null;

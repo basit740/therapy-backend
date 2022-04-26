@@ -5,6 +5,7 @@ const Version = require('../../models/Version.js');
 const ErrorResponse = require('../../utils/errorResponse.js');
 
 exports.createTags = async (req, res, next) => {
+	console.log(req.body);
 	try {
 		const version = await Version.findById(req.params.versionId);
 		if (!version) {
@@ -14,6 +15,21 @@ exports.createTags = async (req, res, next) => {
 					404
 				)
 			);
+		}
+
+		// remove existing tags for that version
+
+		const tags = await StepFour.find({
+			version: req.params.versionId,
+		});
+
+		let result = null;
+
+		if (tags.length > 0) {
+			console.log('found');
+			result = await StepFour.deleteMany({
+				version: req.params.versionId,
+			});
 		}
 
 		req.body.tags.map((tag) => {
@@ -28,6 +44,8 @@ exports.createTags = async (req, res, next) => {
 		res.status(200).json({
 			success: true,
 			data: returnedTags,
+			deleted: result,
+			count: returnedTags.length,
 		});
 	} catch (err) {
 		next(err);
@@ -54,6 +72,7 @@ exports.getTags = async (req, res, next) => {
 		res.status(200).json({
 			success: true,
 			data: tags,
+			count: tags.length,
 		});
 	} catch (err) {
 		next(err);

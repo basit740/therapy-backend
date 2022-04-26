@@ -5,11 +5,12 @@ const mongoose = require('mongoose');
 const StepFourSchema = new mongoose.Schema({
 	tagTitle: {
 		type: String,
-		unique: true,
+		unique: false,
 	},
 	tagSelected: {
 		type: Boolean,
 		default: false,
+		unique: false,
 	},
 	createdAt: {
 		type: Date,

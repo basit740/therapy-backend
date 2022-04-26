@@ -39,39 +39,11 @@ const MyProgress = () => {
 
 	const [checkClassName, setCheckClassName] = useState('');
 
-	// states for StepTwo Components (issues)
-
+	// States for All Step Components
 	const [stepTwoState, setStepTwoState] = useState({});
-
-	// states for StepThree Components (feelings)
-
 	const [stepThreeState, setStepThreeState] = useState({});
+	const [stepFourState, setStepFourState] = useState({});
 
-	// states for firstStep
-
-	//functions for set StepOne Component
-
-	// const firstValueHandler = (val) => {
-	// 	newVerCtx.stepOneFirstHandler(val);
-	// };
-	// const secondValueHandler = (val) => {
-	// 	newVerCtx.stepOneSecondHandler(val);
-	// };
-
-	// const thirdValueHandler = (val) => {
-	// 	newVerCtx.stepOneThirdHandler(val);
-	// };
-
-	// functions for StepTwo Component
-
-	/*
-		console.log('low', lowImpIssues);
-
-		console.log('medium', mediumImpIssues);
-		console.log('high', highImpIssues);
-		console.log('critical', criticalImpIssues);
-
-		*/
 	let [formStep, setFormStep] = useState(1);
 
 	const [activeClassNames, setActiveClassNames] = useState({
@@ -137,15 +109,15 @@ const MyProgress = () => {
 
 			setSaveButtonText('Please wait...');
 
-			console.log('step two state in my progressjs', stepTwoState);
+			//console.log('step two state in my progressjs', stepTwoState);
 
 			const response = await createIssues(newVerCtx.versionId, requestBody);
 
-			console.log('data from server', response.data);
+			//console.log('data from server', response.data);
 
 			setSaveButtonText('Save & Continue');
 		} else if (formStep === 4) {
-			console.log('step Three State', stepThreeState);
+			//console.log('stepThreeState in my progress', stepThreeState);
 
 			setSaveButtonText('Please wait...');
 			const response = await createFeelings(
@@ -158,16 +130,19 @@ const MyProgress = () => {
 				setSaveButtonText('try again');
 				return;
 			}
-			console.log('data from Server For Step Three', response.data);
+			//console.log('data from Server For Step Three', response.data);
 		} else if (formStep === 12) {
 			setSaveButtonText('See Results');
+		} else if (formStep === 5) {
+			// handling stepFour component
+			console.log('stepFourState', stepFourState);
 		}
 
 		setFormStep(parseInt(formStep) + 1);
 	};
 
 	const stateChangeHandler = (state) => {
-		console.log('step two state in my progress.js');
+		//console.log('step two state in my progress.js');
 		setStepTwoState(state);
 	};
 	const stepsHandler = (event) => {
@@ -181,7 +156,7 @@ const MyProgress = () => {
 		setFormStep(parseInt(event.target.id));
 	};
 
-	console.log('formStemp', formStep);
+	//console.log('formStemp', formStep);
 
 	return (
 		<main className='Body'>
@@ -473,7 +448,9 @@ const MyProgress = () => {
 				{formStep === 4 && (
 					<StepThree onStateChange={(state) => setStepThreeState(state)} />
 				)}
-				{formStep === 5 && <StepFour />}
+				{formStep === 5 && (
+					<StepFour onStateChange={(state) => setStepFourState(state)} />
+				)}
 				{formStep === 6 && <StepFive />}
 				{formStep === 7 && <StepSix />}
 				{formStep === 8 && <StepSeven />}

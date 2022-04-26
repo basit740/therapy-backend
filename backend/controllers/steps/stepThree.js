@@ -18,19 +18,46 @@ exports.createFeelings = async (req, res, next) => {
 
 	try {
 		const feelings = [...req.body.feelings];
-		feelings.map((feeling) => {
-			feeling['version'] = req.params.versionId;
+
+		const prevFeelings = await StepThree.find({
+			version: req.params.versionId,
 		});
 
-		const returnedFeelings = await StepThree.insertMany(req.body.feelings);
-		if (!returnedFeelings) {
-			return next(new ErrorResponse(`feelings not created on StepThree`, 400));
+		// update existing one
+
+		let updatedResult = null;
+		if (prevFeelings.length > 0) {
+			updatedResult = await StepThree.bulkWrite(
+				feelings.map((doc) => ({
+					updateMany: {
+						filter: { _id: doc._id },
+						update: doc,
+						upsert: true,
+					},
+				}))
+			);
+
+			res.status(200).json({
+				success: true,
+				data: updatedResult,
+			});
+		} else {
+			feelings.map((feeling) => {
+				feeling['version'] = req.params.versionId;
+			});
+
+			const returnedFeelings = await StepThree.insertMany(req.body.feelings);
+			if (!returnedFeelings) {
+				return next(
+					new ErrorResponse(`feelings not created on StepThree`, 400)
+				);
+			}
+
+			res.status(200).json({
+				success: true,
+				data: returnedFeelings,
+			});
 		}
-
-		res.status(200).json({
-			success: true,
-			data: returnedFeelings,
-		});
 	} catch (err) {
 		next(err);
 	}

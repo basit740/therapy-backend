@@ -74,7 +74,7 @@ export default function reducer(state, action) {
 	if (action.type === ACTIONS.DRAGGING) {
 		state.dragId = action.payload.dragId;
 		state.dragSrcId = action.payload.dragSrcId;
-		return state;
+		return { ...state };
 	}
 	if (action.type === ACTIONS.DROP_ON_LOW) {
 		if (state.dragSrcId === 2) {

@@ -1,85 +1,88 @@
-import React, { useContext, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import NewVersionContext from '../../../../store/new-version-context';
 import StepThreeAdd from './StepThreeAdd';
 
+import { getFeelings } from '../../../../api/stepthree';
+
 // Reducer
 import reducer, { initialState, ACTIONS } from './reducer';
-
-
+import StepThreeStatic from './StepThreeStatic';
 
 function StepThree({ onStateChange }) {
 	const newVerCtx = useContext(NewVersionContext);
 
 	const [state, dispatch] = useReducer(reducer, initialState);
 
-	const firstHabitHandler = (value) => {
-		dispatch({ type: ACTIONS.ON_FIRST_HABIT, payload: { data: value } });
-		// newVerCtx.stepThreeFeelingsModifier(state);
-		onStateChange(state);
-	};
-	const secondHabitHandler = (value) => {
-		dispatch({ type: ACTIONS.ON_SECOND_HABIT, payload: { data: value } });
-		// newVerCtx.stepThreeFeelingsModifier(state);
-		onStateChange(state);
-	};
-	const thirdHabitHandler = (value) => {
-		dispatch({ type: ACTIONS.ON_THIRD_HABIT, payload: { data: value } });
-		// newVerCtx.stepThreeFeelingsModifier(state);
-		onStateChange(state);
-	};
+	useEffect(() => {
+		console.log('useEffect 1', state);
+		//onStateChange(state);
+	}, [state]);
 
-	const firstReflectionHandler = (value) => {
-		dispatch({ type: ACTIONS.ON_FIRST_REFLECTION, payload: { data: value } });
-		// newVerCtx.stepThreeFeelingsModifier(state);
-		onStateChange(state);
-	};
-	const secondReflectionHandler = (value) => {
-		dispatch({ type: ACTIONS.ON_SECOND_REFLECTION, payload: { data: value } });
-		// newVerCtx.stepThreeFeelingsModifier(state);
-		onStateChange(state);
-	};
-	const thirdReflectionHandler = (value) => {
-		dispatch({ type: ACTIONS.ON_THIRD_REFLECTION, payload: { data: value } });
-		// newVerCtx.stepThreeFeelingsModifier(state);
-		onStateChange(state);
-	};
+	useEffect(() => {
+		console.log('useEffect 2', state);
+		(async () => {
+			const response = await getFeelings(newVerCtx.versionId);
+
+			if (response.success && response.data.length > 0) {
+				dispatch({
+					type: ACTIONS.DATA_FROM_SERVER,
+					payload: { data: response.data },
+				});
+			} else {
+				dispatch({
+					type: ACTIONS.DATA_FROM_GLOBAL_STATE,
+					payload: { data: initialState },
+				});
+			}
+			console.log('useEffect 3', state);
+		})();
+	}, []);
 
 	return (
 		<section className='stepThreeOfEleven'>
-			<h2>Identify and eliminate non-productive coping methods.</h2>
-			<p>
-				The things that bother you con have a negative impact on your
-				well-being, and may make things seem worse than they are. You may get
-				more stressed, or feel down or angrier than the situation seems to
-				warrant and these may trigger harmful actions or emotions that are
-				probably putting you in an even worse frame of mind. These are the
-				things that we know are not good for us, but we turn to them anyway as
-				non-productive coping mechanisms. Some examples: I drink a lot; I smoke
-				a lot; I overeat: I am angry a lot of the time.
-			</p>
-			<p>
-				What are your non-productive go to tools? Go ahead and list the things
-				you do that are not productive, and also reflect on how they make you
-				feel afterwards.
-			</p>
-
-			{/* {identifyMethods.length > 0 ? (
-				identifyMethods.map((i) => <StepThreeAdd i={i} />)
-			) : (
-				<div></div>
-			)} */}
+			<StepThreeStatic />
 
 			<StepThreeAdd
-				onHabit={firstHabitHandler}
-				onReflection={firstReflectionHandler}
+				habit={state.feelings[0].feelingContent}
+				reflection={state.feelings[0].feelingReflection}
+				onHabit={(value) =>
+					dispatch({ type: ACTIONS.ON_FIRST_HABIT, payload: { data: value } })
+				}
+				onReflection={(value) =>
+					dispatch({
+						type: ACTIONS.ON_FIRST_REFLECTION,
+						payload: { data: value },
+					})
+				}
 			/>
 			<StepThreeAdd
-				onHabit={secondHabitHandler}
-				onReflection={secondReflectionHandler}
+				habit={state.feelings[1].feelingContent}
+				reflection={state.feelings[1].feelingReflection}
+				onHabit={(value) => {
+					dispatch({ type: ACTIONS.ON_SECOND_HABIT, payload: { data: value } });
+				}}
+				onReflection={(value) =>
+					dispatch({
+						type: ACTIONS.ON_SECOND_REFLECTION,
+						payload: { data: value },
+					})
+				}
 			/>
 			<StepThreeAdd
-				onHabit={thirdHabitHandler}
-				onReflection={thirdReflectionHandler}
+				habit={state.feelings[2].feelingContent}
+				reflection={state.feelings[2].feelingReflection}
+				onHabit={(value) =>
+					dispatch({
+						type: ACTIONS.ON_THIRD_HABIT,
+						payload: { data: value },
+					})
+				}
+				onReflection={(value) =>
+					dispatch({
+						type: ACTIONS.ON_THIRD_REFLECTION,
+						payload: { data: value },
+					})
+				}
 			/>
 		</section>
 	);
