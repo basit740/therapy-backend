@@ -3,13 +3,14 @@ const mongoose = require('mongoose');
 // Tags
 
 const StepFourSchema = new mongoose.Schema({
-	tagTitle: {
+	title: {
 		type: String,
 		unique: false,
 	},
-	tagSelected: {
-		type: Boolean,
-		default: false,
+	status: {
+		type: String,
+		default: 'not_selected',
+		enum: ['selected', 'not_selected'],
 		unique: false,
 	},
 	createdAt: {

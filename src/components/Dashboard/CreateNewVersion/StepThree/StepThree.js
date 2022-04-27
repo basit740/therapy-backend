@@ -15,7 +15,7 @@ function StepThree({ onStateChange }) {
 
 	useEffect(() => {
 		console.log('useEffect 1', state);
-		//onStateChange(state);
+		onStateChange(state);
 	}, [state]);
 
 	useEffect(() => {

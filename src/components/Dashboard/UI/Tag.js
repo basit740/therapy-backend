@@ -1,30 +1,23 @@
 import React, { useState } from 'react';
 import './Tag.css';
 
-const Tag = ({ title, id, onClick }) => {
+const Tag = ({ title, id, onClick, status }) => {
+	//const [localStatus, setLocalStatus] = useState(status);
+
 	const [classes, setClasses] = useState('tag');
 	const clickHandler = () => {
-		let allClasses = 'tag';
-		if (classes.includes('tag__selected')) {
-			setClasses('tag');
-			onClick({
-				id: id,
-				status: 'not_selected',
-				title: title,
-			});
-		} else {
-			allClasses += ' tag__selected';
-			setClasses(allClasses);
-			onClick({
-				id: id,
-				status: 'selected',
-				title: title,
-			});
-		}
+		onClick({
+			id: id,
+			status: status,
+			title: title,
+		});
 	};
 
 	return (
-		<div className={classes} onClick={clickHandler}>
+		<div
+			className={status === 'selected' ? `tag tag__selected` : `tag`}
+			onClick={clickHandler}
+		>
 			{title}
 		</div>
 	);

@@ -50,6 +50,10 @@
 	padding-right: 5px;
 }
 
+.new-version-form-container input[type='submit'] {
+	width: 200px;
+}
+
 .black-line {
 	margin-top: 20px;
 }

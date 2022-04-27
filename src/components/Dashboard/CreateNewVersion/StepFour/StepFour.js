@@ -1,28 +1,26 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect, useReducer, useContext } from 'react';
 import classes from './StepFour.module.css';
 import uniqueId from 'lodash.uniqueid';
-
+import { DEFAULT_TAGS_DATA } from '../../../../data/step-four/defaultData';
+import NewVersionContext from '../../../../store/new-version-context';
 import StepFourStatic from './StepFourStatic';
 import AddNewTag from './AddNewTag';
 import Tag from '../../UI/Tag';
+import Loading from './Loading';
+
+import { getTags } from '../../../../api/stepfour';
 
 import reducer, { INITIAL_STATE, ACTIONS } from './reducer';
+import { initialState } from '../StepThree/reducer';
 
 const StepFour = ({ onStateChange }) => {
 	const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
-	const addToSelected = (item) => {
-		dispatch({
-			type: ACTIONS.ADD_TO_SELECTED,
-			payload: { data: item },
-		});
-	};
-
+	const newVerCtx = useContext(NewVersionContext);
 	const newTagHandler = () => {
 		if (state.tagTitle.trim() === '') {
 			return;
 		}
-
 		dispatch({
 			type: ACTIONS.ADD_NEW_TAG,
 			payload: { data: state.tagTitle },
@@ -30,8 +28,32 @@ const StepFour = ({ onStateChange }) => {
 	};
 
 	useEffect(() => {
+		//console.log(' step4 useeffect 1');
+		//console.log(state);
 		onStateChange(state);
 	}, [state]);
+
+	useEffect(() => {
+		(async () => {
+			const response = await getTags(newVerCtx.versionId);
+			if (response.success && response.data.length > 0) {
+				dispatch({
+					type: ACTIONS.DATA_FROM_SERVER,
+					payload: {
+						data: response.data,
+					},
+				});
+			} else {
+				dispatch({
+					type: ACTIONS.DATA_FROM_LOCAL_STATE,
+					payload: {
+						data: DEFAULT_TAGS_DATA,
+					},
+				});
+			}
+		})();
+	}, []);
+
 	return (
 		<section className={classes.stepFourOfEleven}>
 			<StepFourStatic />
@@ -49,13 +71,21 @@ const StepFour = ({ onStateChange }) => {
 			<br />
 
 			<div className={classes.selectedTextArea}>
-				{state.tags.length > 0 ? (
+				{state.dataIsLoading && <Loading />}
+
+				{!state.dataIsLoading && state.tags.length > 0 ? (
 					state.tags.map((obj, i) => (
 						<Tag
 							key={obj.id}
 							title={obj.title}
 							id={obj.id}
-							onClick={addToSelected}
+							status={obj.status}
+							onClick={(item) => {
+								dispatch({
+									type: ACTIONS.TOGGLE_SELECT,
+									payload: { data: item },
+								});
+							}}
 						/>
 					))
 				) : (

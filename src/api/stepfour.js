@@ -3,6 +3,7 @@
 // Tags
 
 export const createTags = async (versionId, tags) => {
+	console.log('tags in api', tags);
 	const response = await fetch(
 		process.env.REACT_APP_API_URL + '/stepFourTags/' + versionId,
 		{

@@ -124,6 +124,7 @@
 	border: none;
 	padding: 7px 45px 7px 45px;
 	border-radius: 6px;
+	min-width: 149px;
 }
 
 .prevOrSave button:nth-child(2) {
@@ -133,4 +134,5 @@
 	border: none;
 	padding: 7px 15px 7px 15px;
 	border-radius: 6px;
+	min-width: 149px;
 }

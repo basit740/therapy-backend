@@ -2,13 +2,13 @@ import uniqueId from 'lodash.uniqueid';
 import { DEFAULT_TAGS_DATA } from '../../../../data/step-four/defaultData';
 export const INITIAL_STATE = {
 	tags: DEFAULT_TAGS_DATA,
-	selected: [],
 	tagTitle: '',
+	dataIsLoading: true,
 };
 
 export const ACTIONS = {
 	CHANGE_TITLE: 'title_change',
-	ADD_TO_SELECTED: 'add_to_selected',
+	TOGGLE_SELECT: 'toggle_select',
 	ADD_NEW_TAG: 'add_new_tag',
 	DATA_FROM_SERVER: 'data_from_server',
 	DATA_FROM_LOCAL_STATE: 'data_from_local_state',
@@ -34,18 +34,58 @@ export default function reducer(state, action) {
 		case ACTIONS.CHANGE_TITLE:
 			prevState.tagTitle = data;
 			break;
-		case ACTIONS.ADD_TO_SELECTED:
+		case ACTIONS.TOGGLE_SELECT:
 			if (data.status === 'selected') {
-				prevState.selected = [...prevState.selected, data];
+				prevState.tags.map((tag) => {
+					if (tag.id == data.id) {
+						tag['status'] = 'not_selected';
+					}
+				});
 			} else {
-				const filteredTags = prevState.selected.filter(
-					(tag) => tag.id !== data.id
-				);
-				prevState.selected = filteredTags;
+				prevState.tags.map((tag) => {
+					if (tag.id == data.id) {
+						tag['status'] = 'selected';
+					}
+				});
 			}
+
+			break;
+		case ACTIONS.DATA_FROM_SERVER:
+			//console.log(action);
+			prevState['tags'] = data;
+			prevState.tags.map((tag) => {
+				tag['id'] = tag._id;
+			});
+			prevState.dataIsLoading = false;
+			break;
+		case ACTIONS.DATA_FROM_LOCAL_STATE:
+			prevState.tags = [
+				{
+					id: '123',
+					title: 'Watch a Comedy',
+					status: 'selected',
+				},
+				{ id: '453', title: 'Go to sleep early', status: 'not_selected' },
+				{
+					id: '323',
+					title: 'Weighted blanket',
+					status: 'not_selected',
+				},
+				{
+					id: '562',
+					title: 'Go to a movie',
+					status: 'not_selected',
+				},
+				{
+					id: '531',
+					title: 'Ride a bike',
+					status: 'not_selected',
+				},
+			];
+			prevState.dataIsLoading = false;
 			break;
 		default:
-			return prevState;
+		//return prevState;
 	}
 	return prevState;
 }

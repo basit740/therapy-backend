@@ -2,7 +2,8 @@ import React, { useEffect, useState, useContext } from 'react';
 
 // for API call
 import { createIssues } from '../../api/steptwo.js';
-import { createFeelings, getFeelings } from '../../api/stepthree';
+import { createFeelings } from '../../api/stepthree';
+import { createTags } from '../../api/stepfour.js';
 
 //context
 import NewVersionContext from '../../store/new-version-context.js';
@@ -107,7 +108,7 @@ const MyProgress = () => {
 				],
 			};
 
-			setSaveButtonText('Please wait...');
+			setSaveButtonText('Saving...');
 
 			//console.log('step two state in my progressjs', stepTwoState);
 
@@ -119,7 +120,7 @@ const MyProgress = () => {
 		} else if (formStep === 4) {
 			//console.log('stepThreeState in my progress', stepThreeState);
 
-			setSaveButtonText('Please wait...');
+			setSaveButtonText('Saving...');
 			const response = await createFeelings(
 				newVerCtx.versionId,
 				stepThreeState
@@ -134,8 +135,16 @@ const MyProgress = () => {
 		} else if (formStep === 12) {
 			setSaveButtonText('See Results');
 		} else if (formStep === 5) {
-			// handling stepFour component
-			console.log('stepFourState', stepFourState);
+			setSaveButtonText('Saving...');
+			const requestObj = {
+				tags: stepFourState.tags,
+			};
+			const response = await createTags(newVerCtx.versionId, requestObj);
+			if (response.success === false) {
+				setSaveButtonText('try again!');
+				return;
+			}
+			setSaveButtonText('Sava Continue');
 		}
 
 		setFormStep(parseInt(formStep) + 1);

@@ -17,6 +17,7 @@ const NewVersion = () => {
 	const [showForm, setShowForm] = useState(false);
 	const [versionName, setVersionName] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
+	const [buttonText, setButtonText] = useState('Submit');
 	const navigate = useNavigate();
 	const inputRef = useRef();
 
@@ -79,10 +80,13 @@ const NewVersion = () => {
 										autoFocus
 										onChange={versionNameHandler}
 										placeholder='enter version name here'
-										style={{
-											borderColor: `${isLoading ? 'red' : ''}`,
-											border: `${isLoading ? '4px solid red' : ''}`,
-										}}
+										disabled={isLoading ? true : false}
+									/>
+
+									<input
+										type='submit'
+										disabled={isLoading ? true : false}
+										value={isLoading ? 'Creating...' : 'Submit'}
 									/>
 								</form>
 							)}

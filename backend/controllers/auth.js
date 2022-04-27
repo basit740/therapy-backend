@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
 exports.register = async (req, res, next) => {
-	console.log(req.body);
 	try {
 		const user = await User.create(req.body);
 

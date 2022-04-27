@@ -5,7 +5,6 @@ const Version = require('../../models/Version.js');
 const ErrorResponse = require('../../utils/errorResponse.js');
 
 exports.createTags = async (req, res, next) => {
-	console.log(req.body);
 	try {
 		const version = await Version.findById(req.params.versionId);
 		if (!version) {
@@ -26,7 +25,6 @@ exports.createTags = async (req, res, next) => {
 		let result = null;
 
 		if (tags.length > 0) {
-			console.log('found');
 			result = await StepFour.deleteMany({
 				version: req.params.versionId,
 			});
