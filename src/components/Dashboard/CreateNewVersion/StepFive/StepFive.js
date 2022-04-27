@@ -1,42 +1,91 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer, useContext, useEffect } from 'react';
+import NewVersionContext from '../../../../store/new-version-context';
 import StepFiveAdd from './StepFiveAdd';
 import './StepFive.css';
 import StepFiveStatic from './StepFiveStatic';
+import reducer, { ACTIONS, initialState } from './reducer';
 
-function StepFive() {
-	let [textareaAction, setTextareaAction] = useState([1]);
+import { getActions } from '../../../../api/stepFive';
 
-	const addAnotherAction = () => {
-		let check = textareaAction.length + 1;
-		setTextareaAction([...textareaAction, check]);
-		console.log(textareaAction);
-	};
-	const firstActionHandler = (event) => {
-		console.log(event.target.value);
-	};
+function StepFive({ onStateChange }) {
+	const [state, dispatch] = useReducer(reducer, initialState);
 
-	const secondActionHandler = (event) => {
-		console.log(event.target.value);
-	};
-	const thirdActionHandler = (event) => {
-		console.log(event.target.value);
+	const newVerCtx = useContext(NewVersionContext);
+
+	const firstActionHandler = (e) => {
+		dispatch({
+			type: ACTIONS.FIRST_ACTION,
+			payload: { value: e.target.value },
+		});
 	};
 
-	const firstDateChangeHandler = (event) => {};
-	const secondDateChangeHandler = () => {};
-	const thirdDateChangeHandler = () => {};
+	const secondActionHandler = (e) => {
+		dispatch({
+			type: ACTIONS.SECOND_ACTION,
+			payload: { value: e.target.value },
+		});
+	};
+	const thirdActionHandler = (e) => {
+		dispatch({
+			type: ACTIONS.THIRD_ACTION,
+			payload: { value: e.target.value },
+		});
+	};
+
+	const firstDateChangeHandler = (e) => {
+		dispatch({
+			type: ACTIONS.FIRST_DATE,
+			payload: { value: e.target.value },
+		});
+	};
+	const secondDateChangeHandler = (e) => {
+		dispatch({
+			type: ACTIONS.SECOND_DATE,
+			payload: { value: e.target.value },
+		});
+	};
+	const thirdDateChangeHandler = (e) => {
+		dispatch({
+			type: ACTIONS.THIRD_DATE,
+			payload: { value: e.target.value },
+		});
+	};
+
+	useEffect(() => {
+		onStateChange(state);
+	}, [state, onStateChange]);
+
+	useEffect(() => {
+		(async () => {
+			const response = await getActions(newVerCtx.versionId);
+
+			if (response.success && response.data.length > 0) {
+				dispatch({
+					type: ACTIONS.DATA_FROM_SERVER,
+					payload: { data: response.data },
+				});
+			}
+		})();
+	}, []);
 
 	return (
 		<section className='takeAction'>
 			<StepFiveStatic />
 
-			<StepFiveAdd onChange={firstActionHandler} />
+			<StepFiveAdd
+				onChange={firstActionHandler}
+				value={state.actions[0].actionContent}
+			/>
 
 			<div></div>
 
 			<div className='addDate'>
 				<div>
-					<input type='date' onChane={firstDateChangeHandler} />
+					<input
+						type='date'
+						onChange={firstDateChangeHandler}
+						value={state.actions[0].actionDate}
+					/>
 				</div>
 				{/* <div>
 					<button onClick={addAnotherAction} className='AddMoreDate'>
@@ -49,13 +98,20 @@ function StepFive() {
 				Which are the Things you may Have to put on hold for a short while?
 			</p>
 
-			<StepFiveAdd onChange={secondActionHandler} />
+			<StepFiveAdd
+				onChange={secondActionHandler}
+				value={state.actions[1].actionContent}
+			/>
 
 			<div></div>
 
 			<div className='addDate'>
 				<div>
-					<input type='date' onChange={secondDateChangeHandler} />
+					<input
+						type='date'
+						onChange={secondDateChangeHandler}
+						value={state.actions[1].actionDate}
+					/>
 				</div>
 				{/* <div>
 					<button onClick={addAnotherAction} className='AddMoreDate'>
@@ -70,12 +126,19 @@ function StepFive() {
 				control over for the time being?
 			</p>
 
-			<StepFiveAdd onChange={thirdActionHandler} />
+			<StepFiveAdd
+				onChange={thirdActionHandler}
+				value={state.actions[2].actionContent}
+			/>
 
 			<div></div>
 			<div className='addDate'>
 				<div>
-					<input type='date' onChange={thirdDateChangeHandler} />
+					<input
+						type='date'
+						onChange={thirdDateChangeHandler}
+						value={state.actions[2].actionDate}
+					/>
 				</div>
 				{/* <div>
 					<button onClick={addAnotherAction} className='AddMoreDate'>

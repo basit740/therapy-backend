@@ -4,6 +4,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { createIssues } from '../../api/steptwo.js';
 import { createFeelings } from '../../api/stepthree';
 import { createTags } from '../../api/stepfour.js';
+import { createActions } from '../../api/stepFive.js';
 
 //context
 import NewVersionContext from '../../store/new-version-context.js';
@@ -44,6 +45,7 @@ const MyProgress = () => {
 	const [stepTwoState, setStepTwoState] = useState({});
 	const [stepThreeState, setStepThreeState] = useState({});
 	const [stepFourState, setStepFourState] = useState({});
+	const [stepFiveState, setStepFiveState] = useState({});
 
 	let [formStep, setFormStep] = useState(1);
 
@@ -144,7 +146,19 @@ const MyProgress = () => {
 				setSaveButtonText('try again!');
 				return;
 			}
-			setSaveButtonText('Sava Continue');
+			setSaveButtonText('Save & Continue');
+		} else if (formStep === 6) {
+			setSaveButtonText('Saving...');
+
+			const response = await createActions(newVerCtx.versionId, {
+				actions: [...stepFiveState.actions],
+			});
+
+			if (response.success === false) {
+				setSaveButtonText('try again!');
+				return;
+			}
+			setSaveButtonText('Save & Continue');
 		}
 
 		setFormStep(parseInt(formStep) + 1);
@@ -460,7 +474,9 @@ const MyProgress = () => {
 				{formStep === 5 && (
 					<StepFour onStateChange={(state) => setStepFourState(state)} />
 				)}
-				{formStep === 6 && <StepFive />}
+				{formStep === 6 && (
+					<StepFive onStateChange={(state) => setStepFiveState(state)} />
+				)}
 				{formStep === 7 && <StepSix />}
 				{formStep === 8 && <StepSeven />}
 				{formStep === 9 && <StepEight />}

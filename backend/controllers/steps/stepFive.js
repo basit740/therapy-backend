@@ -16,6 +16,18 @@ exports.createActions = async (req, res, next) => {
 			);
 		}
 
+		const tags = await StepFive.find({
+			version: req.params.versionId,
+		});
+
+		let result = null;
+
+		if (tags.length > 0) {
+			result = await StepFive.deleteMany({
+				version: req.params.versionId,
+			});
+		}
+
 		req.body.actions.map((action) => {
 			action['version'] = req.params.versionId;
 			let date = new Date(action.actionDate);
