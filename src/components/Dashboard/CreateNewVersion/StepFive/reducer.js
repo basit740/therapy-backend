@@ -6,6 +6,7 @@ export const ACTIONS = {
 	SECOND_DATE: 'second_date',
 	THIRD_DATE: 'third_date',
 	DATA_FROM_SERVER: 'data_from_server',
+	DATA_FROM_LOCAL_STATE: 'data_from_local_state',
 };
 
 export const initialState = {
@@ -58,6 +59,28 @@ export default function reducer(state, action) {
 			break;
 		case ACTIONS.DATA_FROM_SERVER:
 			pState['actions'] = [...data];
+			pState.actions.map((act) => {
+				act['id'] = act._id;
+
+				let date = new Date(act.actionDate);
+				act.actionDate = date.toISOString().substring(0, 10);
+			});
+			break;
+		case ACTIONS.DATA_FROM_LOCAL_STATE:
+			pState['actions'] = [
+				{
+					actionContent: '',
+					actionDate: undefined,
+				},
+				{
+					actionContent: '',
+					actionDate: undefined,
+				},
+				{
+					actionContent: '',
+					actionDate: undefined,
+				},
+			];
 			break;
 		default:
 		//do nothing

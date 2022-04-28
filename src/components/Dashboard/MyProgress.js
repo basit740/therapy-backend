@@ -74,7 +74,7 @@ const MyProgress = () => {
 	};
 
 	const nextHandler = async () => {
-		setSaveButtonText('Save & Continue');
+		//setSaveButtonText('Save & Continue');
 
 		// save bit for stepOne
 		if (formStep === 2) {
@@ -159,6 +159,8 @@ const MyProgress = () => {
 				return;
 			}
 			setSaveButtonText('Save & Continue');
+		} else {
+			//do thing
 		}
 
 		setFormStep(parseInt(formStep) + 1);

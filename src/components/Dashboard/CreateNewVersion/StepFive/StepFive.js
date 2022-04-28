@@ -52,17 +52,26 @@ function StepFive({ onStateChange }) {
 	};
 
 	useEffect(() => {
+		console.log('use effect 1', state);
 		onStateChange(state);
-	}, [state, onStateChange]);
+	}, [state]);
 
 	useEffect(() => {
 		(async () => {
+			console.log('use effect 2', state);
 			const response = await getActions(newVerCtx.versionId);
 
 			if (response.success && response.data.length > 0) {
 				dispatch({
 					type: ACTIONS.DATA_FROM_SERVER,
 					payload: { data: response.data },
+				});
+			} else {
+				dispatch({
+					type: ACTIONS.DATA_FROM_LOCAL_STATE,
+					payload: {
+						data: null,
+					},
 				});
 			}
 		})();

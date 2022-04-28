@@ -51,7 +51,8 @@
 }
 
 .new-version-form-container input[type='submit'] {
-	width: 200px;
+	width: 150px;
+	margin-left: 5px;
 }
 
 .black-line {

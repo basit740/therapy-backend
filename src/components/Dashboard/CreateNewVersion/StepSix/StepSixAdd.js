@@ -1,14 +1,13 @@
 import React from 'react';
 import './StepSix.css';
 
-const StepSixAdd = (props) => {
-	let { id, onChange } = props;
+const StepSixAdd = ({ value, onChange, id }) => {
 	return (
 		<>
 			<div className='numbers'>
 				<div>{id}</div>
 				<div>
-					<textarea onChange={onChange}></textarea>
+					<textarea id={id} value={value} onChange={onChange}></textarea>
 				</div>
 			</div>
 		</>
