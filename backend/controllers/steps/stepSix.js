@@ -20,6 +20,18 @@ exports.createContacts = async (req, res, next) => {
 			contact['version'] = req.params.versionId;
 		});
 
+		const exContacts = await StepSix.find({
+			version: req.params.versionId,
+		});
+
+		let result = null;
+
+		if (exContacts.length > 0) {
+			result = await StepSix.deleteMany({
+				version: req.params.versionId,
+			});
+		}
+
 		const contacts = await StepSix.insertMany(req.body.contacts);
 		if (!contacts) {
 			return next(new ErrorResponse('contacts not created on StepSix', 400));

@@ -96,17 +96,6 @@ function Loading() {
 					marginRight: '5px',
 				}}
 			/>
-			<Skeleton
-				variant='rectangular'
-				height={40}
-				width={getRandomNum(100, 200)}
-				style={{
-					marginBottom: '5px',
-					borderRadius: '20px',
-					display: 'inline-block',
-					marginRight: '5px',
-				}}
-			/>
 		</>
 	);
 }

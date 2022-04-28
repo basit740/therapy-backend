@@ -5,6 +5,7 @@ import { createIssues } from '../../api/steptwo.js';
 import { createFeelings } from '../../api/stepthree';
 import { createTags } from '../../api/stepfour.js';
 import { createActions } from '../../api/stepFive.js';
+import { createContacts } from '../../api/stepSix.js';
 
 //context
 import NewVersionContext from '../../store/new-version-context.js';
@@ -46,6 +47,7 @@ const MyProgress = () => {
 	const [stepThreeState, setStepThreeState] = useState({});
 	const [stepFourState, setStepFourState] = useState({});
 	const [stepFiveState, setStepFiveState] = useState({});
+	const [stepSixState, setStepSixState] = useState({});
 
 	let [formStep, setFormStep] = useState(1);
 
@@ -74,7 +76,7 @@ const MyProgress = () => {
 	};
 
 	const nextHandler = async () => {
-		//setSaveButtonText('Save & Continue');
+		setSaveButtonText('Save & Continue');
 
 		// save bit for stepOne
 		if (formStep === 2) {
@@ -159,8 +161,18 @@ const MyProgress = () => {
 				return;
 			}
 			setSaveButtonText('Save & Continue');
-		} else {
-			//do thing
+		} else if (formStep === 7) {
+			setSaveButtonText('Saving...');
+
+			const response = await createContacts(newVerCtx.versionId, stepSixState);
+			console.log(response);
+
+			if (response.success === false) {
+				setSaveButtonText('try again!');
+				return;
+			}
+
+			setSaveButtonText('Save & Continue');
 		}
 
 		setFormStep(parseInt(formStep) + 1);
@@ -479,7 +491,9 @@ const MyProgress = () => {
 				{formStep === 6 && (
 					<StepFive onStateChange={(state) => setStepFiveState(state)} />
 				)}
-				{formStep === 7 && <StepSix />}
+				{formStep === 7 && (
+					<StepSix onStateChange={(state) => setStepSixState(state)} />
+				)}
 				{formStep === 8 && <StepSeven />}
 				{formStep === 9 && <StepEight />}
 				{formStep === 10 && <StepNine />}

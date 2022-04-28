@@ -34,6 +34,20 @@ export default function reducer(state, action) {
 				},
 			];
 			break;
+		case ACTIONS.DATA_FROM_SERVER:
+			pState['contacts'] = action.payload.data;
+			pState.contacts.map((ct) => {
+				ct['id'] = ct._id;
+			});
+			break;
+		case ACTIONS.DATA_FROM_LOCAL_STATE:
+			pState['contacts'] = [
+				{ id: '1', contactDetail: '' },
+				{ id: '2', contactDetail: '' },
+				{ id: '3', contactDetail: '' },
+			];
+			break;
+
 		default:
 		//
 	}
