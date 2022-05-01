@@ -3,7 +3,7 @@ import './StepSeven.css';
 import StepSevenStatic from './StepSevenStatic';
 import Thoughts from './Thoughts';
 
-const StepSeven = () => {
+const StepSeven = ({ onStateChange }) => {
 	const [thoughtCards, setThoughtCards] = useState('');
 
 	const newThoughtHandler = (newThought) => {
@@ -14,13 +14,14 @@ const StepSeven = () => {
 			return [...thoughtCards[indexOfThoughtCard].thoughts, newThought];
 		});
 	};
+
 	return (
 		<section className='step-seven'>
 			<h2>Identify and elimnate "The Monkey Mind"</h2>
 
 			<StepSevenStatic />
 			<div className='thoughts'>
-				<Thoughts />
+				<Thoughts onStateChange={onStateChange} />
 			</div>
 		</section>
 	);

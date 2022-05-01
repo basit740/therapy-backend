@@ -7,7 +7,7 @@ const StepSevenSchema = new mongoose.Schema({
 		type: String,
 	},
 	thoughtCategory: {
-		type: [String],
+		type: String,
 		enum: ['likely', 'real', 'probably', 'unrealistic'],
 	},
 	createdAt: {

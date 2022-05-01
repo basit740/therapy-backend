@@ -1,110 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer, useContext } from 'react';
 import './Thoughts.css';
 import ThoughtCard from './ThoughtCard';
 
 import Thought from './Thought';
 
-const Thoughts = (props) => {
-	const [firstThoughts, setFirstThoughts] = useState([]);
-	const [secondThoghts, setSecondThoughts] = useState([]);
-	const [thirdThoughts, setThirdThoughts] = useState([]);
-	const [fourthThoughts, setFourthThoughts] = useState([]);
+import reducer, { ACTIONS } from './reducer';
 
-	const [newThought, setNewThought] = useState('');
+import { getThoughts } from '../../../../api/stepSeven';
+import NewVersionContext from '../../../../store/new-version-context';
 
-	const [draggingThought, setDraggingThought] = useState(null);
+const EMPTY_ARRAY = [];
 
-	const [dragSourceId, setDragSourceId] = useState(null);
+const initialState = {
+	thoughts: {
+		first: [],
+		second: [],
+		third: [],
+		fourth: [],
+	},
+	dragId: null,
+	dragSrcId: null,
+	dataLoading: true,
+};
+
+const Thoughts = ({ onStateChange }) => {
+	const [state, dispatch] = useReducer(reducer, initialState);
+
+	const newVerCtx = useContext(NewVersionContext);
 
 	////////////////////////////////////// HELPER FUNCTIONS       /////////////////////
-	const cleanSourceCard = (id, draggingThg) => {
-		if (id == 1) {
-			const filtered = firstThoughts.filter((thg) => thg.id != draggingThg.id);
-			setFirstThoughts(filtered);
-		} else if (id == 2) {
-			const filtered = secondThoghts.filter((thg) => thg.id != draggingThg.id);
-			setSecondThoughts(filtered);
-		} else if (id == 3) {
-			const filtered = thirdThoughts.filter((thg) => thg.id != draggingThg.id);
-			setThirdThoughts(filtered);
-		} else if (id == 4) {
-			const filtered = fourthThoughts.filter((tgh) => tgh.id != draggingThg.id);
-			setFourthThoughts(filtered);
-		}
-	};
 
-	const findInFirstCard = (draggingTgh) => {
-		const found = firstThoughts.find((thg) => thg.id == draggingTgh.id);
-		if (found) {
-			return true;
-		}
-	};
-
-	const findInSecondCard = (draggingTgh) => {
-		const found = secondThoghts.find((thg) => thg.id == draggingTgh.id);
-		if (found) {
-			return true;
-		}
-	};
-
-	const findInThirdCard = (draggingTgh) => {
-		const found = thirdThoughts.find((thg) => thg.id == draggingTgh.id);
-		if (found) {
-			return true;
-		}
-	};
-
-	const findInFourthCard = (draggingTgh) => {
-		const found = fourthThoughts.find((thg) => thg.id == draggingTgh.id);
-		if (found) {
-			return true;
-		}
-	};
-
-	const filterThoughts = (parentCardId, thgId) => {
-		if (parentCardId == 1) {
-			const filterd = firstThoughts.filter((thg) => thg.id != thgId);
-			return filterd;
-		}
-		if (parentCardId == 2) {
-			const filterd = secondThoghts.filter((thg) => thg.id != thgId);
-			return filterd;
-		}
-		if (parentCardId == 3) {
-			const filterd = thirdThoughts.filter((thg) => thg.id != thgId);
-			return filterd;
-		}
-
-		if (parentCardId == 4) {
-			const filterd = fourthThoughts.filter((thg) => thg.id != thgId);
-			return filterd;
-		}
-	};
 	/////////////////////////////////// NATIVE ADD AND DELETE FUNCTIONALITY FOR ITEMS ///////////
 
 	const newThoughtHandler = (newThought) => {
-		setNewThought(newThought);
-		if (newThought.cardId === '1') {
-			setFirstThoughts((prevThoughts) => {
-				return [...prevThoughts, newThought];
-			});
-			setNewThought('');
-		} else if (newThought.cardId === '2') {
-			setSecondThoughts((prevThoughts) => {
-				return [...prevThoughts, newThought];
-			});
-			setNewThought('');
-		} else if (newThought.cardId === '3') {
-			setThirdThoughts((prevThoughts) => {
-				return [...prevThoughts, newThought];
-			});
-			setNewThought('');
-		} else {
-			setFourthThoughts((prevThoughts) => {
-				return [...prevThoughts, newThought];
-			});
-			setNewThought('');
-		}
+		dispatch({
+			type: ACTIONS.ADD_NEW_THOUGHT,
+			payload: {
+				newThought: newThought,
+				cardId: newThought.cardId,
+			},
+		});
 	};
 
 	const deleteThgHandler = (event) => {
@@ -112,45 +47,36 @@ const Thoughts = (props) => {
 		const CARD_ID = event.target.getAttribute('parentId');
 		console.log('parent Card id', CARD_ID);
 
-		if (CARD_ID == 1) {
-			setFirstThoughts(filterThoughts(1, event.target.id));
-		} else if (CARD_ID == 2) {
-			setSecondThoughts(filterThoughts(2, event.target.id));
-		} else if (CARD_ID == 3) {
-			setThirdThoughts(filterThoughts(3, event.target.id));
-		} else {
-			setFourthThoughts(filterThoughts(4, event.target.id));
-		}
+		dispatch({
+			type: ACTIONS.DELETE_THOUGHT,
+			payload: {
+				cardId: CARD_ID,
+				thoughtId: event.target.id,
+			},
+		});
+
+		// if (CARD_ID == 1) {
+		// 	setFirstThoughts(filterThoughts(1, event.target.id));
+		// } else if (CARD_ID == 2) {
+		// 	setSecondThoughts(filterThoughts(2, event.target.id));
+		// } else if (CARD_ID == 3) {
+		// 	setThirdThoughts(filterThoughts(3, event.target.id));
+		// } else {
+		// 	setFourthThoughts(filterThoughts(4, event.target.id));
+		// }
 	};
 
 	const dragStartHandler = (event) => {
 		console.log('drag is started', event.target.parentNode.id);
 		event.target.classList.add('dragging');
-		if (event.target.parentNode.id == 4) {
-			const thg = fourthThoughts.find((thg) => thg.id == event.target.id);
-			console.log('dragging thgought', thg);
-			setDraggingThought(thg);
-			setDragSourceId(4);
-		}
 
-		if (event.target.parentNode.id == 3) {
-			const thg = thirdThoughts.find((thg) => thg.id == event.target.id);
-			//console.log('dragging thought',thg)
-			setDraggingThought(thg);
-			setDragSourceId(3);
-		}
-		if (event.target.parentNode.id == 2) {
-			const thg = secondThoghts.find((thg) => thg.id == event.target.id);
-			//console.log('dragging thought',thg)
-			setDraggingThought(thg);
-			setDragSourceId(2);
-		}
-		if (event.target.parentNode.id == 1) {
-			const thg = firstThoughts.find((thg) => thg.id == event.target.id);
-			//console.log('dragging thought',thg)
-			setDraggingThought(thg);
-			setDragSourceId(1);
-		}
+		dispatch({
+			type: ACTIONS.DRAGGING,
+			payload: {
+				dragId: event.target.id,
+				dragSrcId: event.target.parentNode.id,
+			},
+		});
 	};
 
 	const dragEndHandler = (event) => {
@@ -162,55 +88,32 @@ const Thoughts = (props) => {
 		const element = document.querySelector('.dragging');
 		console.log('drop end', event.target.id);
 
-		if (event.target.id == 1) {
+		if (event.target.id == state.dragSrcId) {
 			// check if already exists
-			if (dragSourceId == 1) {
-				return;
-			}
-			if (findInFirstCard(draggingThought.id)) {
-				return;
-			}
+			return;
+		}
 
-			setFirstThoughts((prev) => {
-				return [...prev, draggingThought];
-			});
+		switch (event.target.id) {
+			case '1':
+				dispatch({
+					type: ACTIONS.DROP_ON_FIRST,
+				});
+				break;
+			case '2':
+				dispatch({
+					type: ACTIONS.DROP_ON_SECOND,
+				});
+				break;
+			case '3':
+				dispatch({
+					type: ACTIONS.DROP_ON_THIRD,
+				});
+				break;
 
-			cleanSourceCard(dragSourceId, draggingThought);
-		} else if (event.target.id == 2) {
-			if (dragSourceId == 2) {
-				return;
-			}
-
-			if (findInSecondCard(draggingThought.id)) {
-				return;
-			}
-			setSecondThoughts((prev) => {
-				return [...prev, draggingThought];
-			});
-			cleanSourceCard(dragSourceId, draggingThought);
-		} else if (event.target.id == 3) {
-			if (dragSourceId == 3) {
-				return;
-			}
-
-			if (findInThirdCard(draggingThought.id)) {
-				return;
-			}
-			setThirdThoughts((prev) => {
-				return [...prev, draggingThought];
-			});
-			cleanSourceCard(dragSourceId, draggingThought);
-		} else if (event.target.id == 4) {
-			if (dragSourceId == 4) {
-				return;
-			}
-			if (findInFourthCard(draggingThought.id)) {
-				return;
-			}
-			setFourthThoughts((prev) => {
-				return [...prev, draggingThought];
-			});
-			cleanSourceCard(dragSourceId, draggingThought);
+			default:
+				dispatch({
+					type: ACTIONS.DROP_ON_FOURTH,
+				});
 		}
 	};
 
@@ -219,6 +122,25 @@ const Thoughts = (props) => {
 		event.preventDefault();
 	};
 
+	useEffect(() => {
+		onStateChange(state);
+		console.log('useEffect 1', state);
+	}, [state]);
+
+	useEffect(() => {
+		(async () => {
+			const response = await getThoughts(newVerCtx.versionId);
+
+			if (response.success && response.data.length > 0) {
+				dispatch({
+					type: ACTIONS.DATA_FROM_SERVER,
+					payload: { data: response.data },
+				});
+			} else {
+				dispatch({ type: ACTIONS.DATA_FROM_LOCAL_STATE });
+			}
+		})();
+	}, []);
 	return (
 		<div className='thought-cards-container'>
 			<div className='container'>
@@ -228,7 +150,7 @@ const Thoughts = (props) => {
 							key='1'
 							id='1'
 							title='Very likely or Real'
-							thoughts={firstThoughts}
+							thoughts={state.dataLoading ? EMPTY_ARRAY : state.thoughts.first}
 							onNewThought={newThoughtHandler}
 							onDragStart={dragStartHandler}
 							onDragEnd={dragEndHandler}
@@ -242,7 +164,7 @@ const Thoughts = (props) => {
 							key='2'
 							id='2'
 							title='somewhat likely or real'
-							thoughts={secondThoghts}
+							thoughts={state.dataLoading ? EMPTY_ARRAY : state.thoughts.second}
 							onNewThought={newThoughtHandler}
 							onDragStart={dragStartHandler}
 							onDragEnd={dragEndHandler}
@@ -256,7 +178,7 @@ const Thoughts = (props) => {
 							key='3'
 							id='3'
 							title='Probably not or unrealistic'
-							thoughts={thirdThoughts}
+							thoughts={state.dataLoading ? EMPTY_ARRAY : state.thoughts.third}
 							onNewThought={newThoughtHandler}
 							onDragStart={dragStartHandler}
 							onDragEnd={dragEndHandler}
@@ -270,7 +192,7 @@ const Thoughts = (props) => {
 							key='4'
 							id='4'
 							title='Highly unlikey or unrealistic'
-							thoughts={fourthThoughts}
+							thoughts={state.dataLoading ? EMPTY_ARRAY : state.thoughts.fourth}
 							onNewThought={newThoughtHandler}
 							onDragStart={dragStartHandler}
 							onDragEnd={dragEndHandler}

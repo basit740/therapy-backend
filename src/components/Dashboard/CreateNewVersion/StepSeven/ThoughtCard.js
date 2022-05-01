@@ -17,7 +17,7 @@ const ThoughtCard = (props) => {
 	};
 	const inputShowHideHandler = () => {
 		setIsShown(true);
-		setTimeout(() => inputRef.current.focus(), 0);
+		inputRef.current.focus();
 	};
 
 	const submitHandler = (event) => {

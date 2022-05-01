@@ -18,6 +18,21 @@ exports.createThoughts = async (req, res, next) => {
 		req.body.thoughts.map((thg) => {
 			thg['version'] = req.params.versionId;
 		});
+
+		// delete existing thoughts if any
+
+		const exThoughts = await StepSeven.find({
+			version: req.params.versionId,
+		});
+
+		let result = null;
+
+		if (exThoughts.length > 0) {
+			result = await StepSeven.deleteMany({
+				version: req.params.versionId,
+			});
+		}
+
 		const thoughts = await StepSeven.insertMany(req.body.thoughts);
 		if (!thoughts) {
 			return next(new ErrorResponse('thoughts not created on StepSeven', 400));
@@ -50,11 +65,13 @@ exports.getThoughts = async (req, res, next) => {
 				new ErrorResponse(`error finding thoughs on Step Seven`, 400)
 			);
 		}
+
 		res.status(200).json({
 			success: true,
 			data: thoughts,
 		});
 	} catch (err) {
+		d;
 		next(err);
 	}
 };

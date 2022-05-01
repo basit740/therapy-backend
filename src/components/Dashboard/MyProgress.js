@@ -6,6 +6,7 @@ import { createFeelings } from '../../api/stepthree';
 import { createTags } from '../../api/stepfour.js';
 import { createActions } from '../../api/stepFive.js';
 import { createContacts } from '../../api/stepSix.js';
+import { createThoughts } from '../../api/stepSeven.js';
 
 //context
 import NewVersionContext from '../../store/new-version-context.js';
@@ -48,6 +49,7 @@ const MyProgress = () => {
 	const [stepFourState, setStepFourState] = useState({});
 	const [stepFiveState, setStepFiveState] = useState({});
 	const [stepSixState, setStepSixState] = useState({});
+	const [stepSevenState, setStepSevenState] = useState({});
 
 	let [formStep, setFormStep] = useState(1);
 
@@ -167,6 +169,48 @@ const MyProgress = () => {
 			const response = await createContacts(newVerCtx.versionId, stepSixState);
 			console.log(response);
 
+			if (response.success === false) {
+				setSaveButtonText('try again!');
+				return;
+			}
+
+			setSaveButtonText('Save & Continue');
+		} else if (formStep === 8) {
+			setSaveButtonText('Saving...');
+			//console.log(stepSevenState);
+
+			const prevState = { ...stepSevenState };
+
+			prevState.thoughts.first.map((thg) => {
+				thg['thoughtCategory'] = 'likely';
+				thg['thoughtContent'] = thg.thgContent;
+			});
+			prevState.thoughts.second.map((thg) => {
+				thg['thoughtCategory'] = 'real';
+				thg['thoughtContent'] = thg.thgContent;
+			});
+			prevState.thoughts.third.map((thg) => {
+				thg['thoughtCategory'] = 'probably';
+				thg['thoughtContent'] = thg.thgContent;
+			});
+			prevState.thoughts.fourth.map((thg) => {
+				thg['thoughtCategory'] = 'unrealistic';
+				thg['thoughtContent'] = thg.thgContent;
+			});
+
+			const requestBody = {
+				thoughts: [
+					...prevState.thoughts.first,
+					...prevState.thoughts.second,
+					...prevState.thoughts.third,
+					...prevState.thoughts.fourth,
+				],
+			};
+
+			//console.log(requestBody);
+
+			const response = await createThoughts(newVerCtx.versionId, requestBody);
+			//console.log(response);
 			if (response.success === false) {
 				setSaveButtonText('try again!');
 				return;
@@ -494,7 +538,9 @@ const MyProgress = () => {
 				{formStep === 7 && (
 					<StepSix onStateChange={(state) => setStepSixState(state)} />
 				)}
-				{formStep === 8 && <StepSeven />}
+				{formStep === 8 && (
+					<StepSeven onStateChange={(state) => setStepSevenState(state)} />
+				)}
 				{formStep === 9 && <StepEight />}
 				{formStep === 10 && <StepNine />}
 				{formStep === 11 && <StepTen />}
