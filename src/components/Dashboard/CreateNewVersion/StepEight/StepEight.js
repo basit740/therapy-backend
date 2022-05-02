@@ -1,104 +1,96 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useReducer, useContext } from 'react';
 
 import classes from './StepEight.module.css';
 import uniqueId from 'lodash.uniqueid';
 
+import { DEFAULT_TAGS_DATA } from '../../../../data/step-eight/defaultData';
+import NewVersionContext from '../../../../store/new-version-context';
+
+import AddNewTag from './AddNewTag';
 import Tag from '../../UI/Tag';
-const DEFAULT_TAGS_DATA = [
-	{
-		id: 123,
-		title: 'Watch a Comedy',
-		status: 'not_selected',
-	},
-	{ id: 453, title: 'Go to sleep early' },
-	{
-		id: 323,
-		title: 'Weighted blanket',
-		status: 'not_selected',
-	},
-	{
-		id: 562,
-		title: 'Go to a movie',
-		status: 'not_selected',
-	},
-	{
-		id: 531,
-		title: 'Ride a bike',
-		status: 'not_selected',
-	},
-];
-const StepEight = () => {
-	let [tags, setTags] = useState(DEFAULT_TAGS_DATA);
-	const [selectedTags, setSelectedTags] = useState([]);
-	const [tagTitle, setTagTitle] = useState('');
+import Loading from './Loading';
 
-	const addToSelected = (item) => {
-		if (item.status === 'selected') {
-			setSelectedTags((prevTags) => {
-				return [...prevTags, item];
-			});
-		} else {
-			let prevTags = selectedTags;
-			const filteredTags = prevTags.filter((tag) => tag.id !== item.id);
-			setSelectedTags(filteredTags);
-			console.log(filteredTags.length);
-		}
-	};
+import StepEightStatic from './StepEightStatic';
 
-	const titleTagHandler = (event) => {
-		let value = event.currentTarget.value;
-		setTagTitle(value);
-	};
+import { get8Tags } from '../../../../api/stepEight';
 
+import reducer, { INITIAL_STATE, ACTIONS } from './reducer';
+
+const StepEight = ({ onStateChange }) => {
+	const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+
+	const newVerCtx = useContext(NewVersionContext);
 	const newTagHandler = () => {
-		if (tagTitle.trim() === '') {
-			console.log('this happend');
+		if (state.tagTitle.trim() === '') {
 			return;
 		}
-		let newId = uniqueId();
-		const ITEM = { id: newId, title: tagTitle, status: 'not_selected' };
-		setTags((prevTags) => {
-			return [...prevTags, ITEM];
+		dispatch({
+			type: ACTIONS.ADD_NEW_TAG,
+			payload: { data: state.tagTitle },
 		});
-		setTagTitle('');
 	};
+
+	useEffect(() => {
+		//console.log(' step4 useeffect 1');
+		//console.log(state);
+		onStateChange(state);
+	}, [state]);
+
+	useEffect(() => {
+		(async () => {
+			const response = await get8Tags(newVerCtx.versionId);
+			console.log('response..', response);
+			if (response.success && response.data.length > 0) {
+				dispatch({
+					type: ACTIONS.DATA_FROM_SERVER,
+					payload: {
+						data: response.data,
+					},
+				});
+			} else {
+				dispatch({
+					type: ACTIONS.DATA_FROM_LOCAL_STATE,
+					payload: {
+						data: DEFAULT_TAGS_DATA,
+					},
+				});
+			}
+		})();
+	}, []);
 	return (
 		<section className={classes.stepEightOfEleven}>
-			<h1>Practise Gratitude and Faith</h1>
-			<p>
-				The benefits of practising gratitude have been clearly proven, as well
-				as the belief in a higher power or something bigger than us. When things
-				seem like they are very gloomy, remembering some of the things that are
-				right or how well some of the other areas of your life may be can have a
-				great impact on your well being and attitude. It's great way to put
-				faith into practise, with the beliefs in good things to come, in what's
-				in store for us, and reality is that most things always have a way of
-				working out.
-			</p>
-			<p>
-				Your goal here is to create a longest list possible and review it often.
-				What are you grateful for and also reflect why are you greatful for
-				things you have listed. Add to the list below.
-			</p>
-			<div className={classes['text-area-wrapper']}>
-				<textarea
-					className={classes.selectedArea}
-					onChange={titleTagHandler}
-					value={tagTitle}
-				></textarea>
-				<div className={classes['add-button']}>
-					<div className={classes['plus-icon']} onClick={newTagHandler}>
-						+
-					</div>{' '}
-					<div>Add</div>
-				</div>
-			</div>
+			<StepEightStatic />
+
+			<AddNewTag
+				onNewTag={newTagHandler}
+				onTitle={(event) =>
+					dispatch({
+						type: ACTIONS.CHANGE_TITLE,
+						payload: { data: event.target.value },
+					})
+				}
+				tagTitle={state.tagTitle}
+			/>
 
 			<br />
+
 			<div className={classes.selectedTextArea}>
-				{tags.length > 0 ? (
-					tags.map((obj, i) => (
-						<Tag title={obj.title} id={obj.id} onClick={addToSelected} />
+				{state.dataIsLoading && <Loading />}
+
+				{!state.dataIsLoading && state.tags.length > 0 ? (
+					state.tags.map((obj, i) => (
+						<Tag
+							key={obj.id}
+							title={obj.title}
+							id={obj.id}
+							status={obj.status}
+							onClick={(item) => {
+								dispatch({
+									type: ACTIONS.TOGGLE_SELECT,
+									payload: { data: item },
+								});
+							}}
+						/>
 					))
 				) : (
 					<div></div>

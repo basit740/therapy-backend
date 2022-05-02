@@ -9,6 +9,7 @@ import { createVersion } from '../../api/version';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import Modal from '../Common/Modal/Modal.js';
 import Step from './Step.js';
 
 const NewVersion = () => {
@@ -18,38 +19,56 @@ const NewVersion = () => {
 	const [versionName, setVersionName] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [buttonText, setButtonText] = useState('Submit');
+
+	// Modal State
+
+	const [modalIsOpen, setModalIsOpen] = useState(false);
+	const [request, setRequest] = useState({
+		sending: false,
+		feedback: '',
+		error: '',
+	});
 	const navigate = useNavigate();
 	const inputRef = useRef();
 
 	const newVersionHandler = (event) => {
 		event.preventDefault();
-		setShowForm(true);
+		//setShowForm(true);
+		setModalIsOpen(true);
 		//inputRef.current.focus();
 	};
 
 	const versionNameHandler = (event) => {
 		setVersionName(event.target.value);
 	};
+	const versionInputHandler = () => {
+		let prev = { ...request };
+		prev.error = '';
+		setRequest(prev);
+	};
 
-	const submitHandler = async (event) => {
-		event.preventDefault();
+	const submitHandler = async (value) => {
+		setRequest({
+			sending: true,
+			feedback: 'Creating version....',
+		});
 
-		setIsLoading(true);
 		const version = {
-			versionName: versionName,
+			versionName: value,
 		};
 
 		const result = await createVersion(version);
 
-		setIsLoading(false);
+		setRequest({
+			sending: false,
+		});
 		if (result.success === false) {
 			if (result.error === 'jwt expired') {
 				authCtx.logout();
 				navigate('/auth', { replace: true });
 			}
-			toast.error(result.error, {
-				position: 'top-center',
-				theme: 'colored',
+			setRequest({
+				error: result.error,
 			});
 		} else {
 			newVerCtx.versionIdHandler(result.data._id);
@@ -59,6 +78,23 @@ const NewVersion = () => {
 	};
 	return (
 		<div className='new-version-container'>
+			{modalIsOpen && (
+				<Modal
+					modalIsOpen={modalIsOpen}
+					title='Create New Version'
+					inputs={[
+						{
+							label: 'Version Name',
+							type: 'text',
+							placeholder: 'Put Version Name here',
+						},
+					]}
+					onInput={versionInputHandler}
+					onClose={() => setModalIsOpen(false)}
+					request={request}
+					onSubmit={submitHandler}
+				/>
+			)}
 			<div className='new-version'>
 				<div className='new-version-action'>
 					<div className=''></div>
@@ -72,7 +108,7 @@ const NewVersion = () => {
 					</div>
 
 					<div className='new-version-button'>
-						<div className='new-version-form-container'>
+						{/* <div className='new-version-form-container'>
 							{showForm && (
 								<form onSubmit={submitHandler}>
 									<input
@@ -90,7 +126,7 @@ const NewVersion = () => {
 									/>
 								</form>
 							)}
-						</div>
+						</div> */}
 						<div className='new-version-button-content'>
 							<Link to='/dashboard/newjourney' onClick={newVersionHandler}>
 								Create New Version

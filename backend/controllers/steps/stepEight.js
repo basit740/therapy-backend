@@ -15,6 +15,21 @@ exports.createTags = async (req, res, next) => {
 				)
 			);
 		}
+
+		//tags
+
+		const tags = await StepEight.find({
+			version: req.params.versionId,
+		});
+
+		let result = null;
+
+		if (tags.length > 0) {
+			result = await StepEight.deleteMany({
+				version: req.params.versionId,
+			});
+		}
+
 		req.body.tags.map((tag) => {
 			tag['version'] = req.params.versionId;
 		});

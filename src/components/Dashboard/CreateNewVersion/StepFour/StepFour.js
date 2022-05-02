@@ -11,7 +11,6 @@ import Loading from './Loading';
 import { getTags } from '../../../../api/stepfour';
 
 import reducer, { INITIAL_STATE, ACTIONS } from './reducer';
-import { initialState } from '../StepThree/reducer';
 
 const StepFour = ({ onStateChange }) => {
 	const [state, dispatch] = useReducer(reducer, INITIAL_STATE);

@@ -3,12 +3,14 @@ const mongoose = require('mongoose');
 // Tags
 
 const StepEightSchema = new mongoose.Schema({
-	tagTitle: {
+	title: {
 		type: String,
 	},
-	tagSelected: {
-		type: Boolean,
-		default: false,
+	status: {
+		type: String,
+		default: 'not_selected',
+		enum: ['selected', 'not_selected'],
+		unique: false,
 	},
 
 	createdAt: {

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { replace } from 'formik';
 
 import { initialState } from '../components/Dashboard/CreateNewVersion/StepThree/reducer';
 
@@ -25,7 +24,6 @@ const NewVersionContext = React.createContext({
 	stepTwoClearer: () => {},
 
 	stepThreeStateModifier: (state) => {},
-	stepThreeState: null,
 });
 
 export const NewVersionContextProvider = (props) => {
