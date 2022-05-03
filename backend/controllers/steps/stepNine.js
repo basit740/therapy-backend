@@ -15,6 +15,19 @@ exports.createGoals = async (req, res, next) => {
 				)
 			);
 		}
+
+		const exGoals = await StepNine.find({
+			version: req.params.versionId,
+		});
+
+		let result = null;
+
+		if (exGoals.length > 0) {
+			result = await StepNine.deleteMany({
+				version: req.params.versionId,
+			});
+		}
+
 		req.body.goals.map((goal) => {
 			goal['version'] = req.params.versionId;
 		});

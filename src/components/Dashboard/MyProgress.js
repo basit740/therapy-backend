@@ -9,6 +9,7 @@ import { createContacts } from '../../api/stepSix.js';
 import { createThoughts } from '../../api/stepSeven.js';
 import { getThoughts } from '../../api/stepSeven.js';
 import { createStep8Tags } from '../../api/stepEight.js';
+import { createGoals } from '../../api/stepNine.js';
 
 //context
 import NewVersionContext from '../../store/new-version-context.js';
@@ -53,6 +54,7 @@ const MyProgress = () => {
 	const [stepSixState, setStepSixState] = useState({});
 	const [stepSevenState, setStepSevenState] = useState({});
 	const [stepEightState, setStepEightState] = useState({});
+	const [stepNineState, setStepNineState] = useState({});
 
 	let [formStep, setFormStep] = useState(1);
 
@@ -226,6 +228,17 @@ const MyProgress = () => {
 				tags: stepEightState.tags,
 			};
 			const response = await createStep8Tags(newVerCtx.versionId, requestObj);
+			if (response.success === false) {
+				setSaveButtonText('try again!');
+				return;
+			}
+			setSaveButtonText('Save & Continue');
+		} else if (formStep === 10) {
+			setSaveButtonText('Saving...');
+
+			const response = await createGoals(newVerCtx.versionId, {
+				goals: stepNineState.goals,
+			});
 			if (response.success === false) {
 				setSaveButtonText('try again!');
 				return;
@@ -558,7 +571,9 @@ const MyProgress = () => {
 				{formStep === 9 && (
 					<StepEight onStateChange={(state) => setStepEightState(state)} />
 				)}
-				{formStep === 10 && <StepNine />}
+				{formStep === 10 && (
+					<StepNine onStateChange={(state) => setStepNineState(state)} />
+				)}
 				{formStep === 11 && <StepTen />}
 				{formStep === 12 && <StepEleven />}
 

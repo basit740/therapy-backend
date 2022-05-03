@@ -5,12 +5,12 @@ const StepTenSchema = new mongoose.Schema({
 		type: String,
 	},
 	tagCategory: {
-		type: [String],
+		type: String,
 		enum: ['rules', 'breakthroughs', 'realizations'],
 	},
-	tagSelected: {
-		type: Boolean,
-		default: false,
+	status: {
+		type: String,
+		default: 'not_selected',
 	},
 	createdAt: {
 		type: Date,

@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import classes from './VisionBoardCard.module.css';
 import Goal from './Goal';
 import uniqueId from 'lodash.uniqueid';
+
+import Loading from '../StepNine/Loading';
 const VisionBoardCard = (props) => {
 	const [inputIsHidden, setInputIsHidden] = useState(true);
-	const [goals, setGoals] = useState([]);
 	const [goal, setGoal] = useState({});
 
 	const inputShowHandler = (event) => {
@@ -17,41 +18,47 @@ const VisionBoardCard = (props) => {
 
 	const submitHandler = (event) => {
 		event.preventDefault();
-		setGoals((prev) => {
-			return [...prev, goal];
-		});
+
+		props.onNewGoal(goal);
 	};
 	const changeHandler = (event) => {
 		const goal = {
 			id: 'goal_' + uniqueId(),
-			title: event.target.value,
+			goalTitle: event.target.value,
+			goalYear: props.goalYear.toString(),
 		};
+
 		setGoal(goal);
 	};
 
-	const deleteHandler = (event) => {
-		const goalId = event.target.id;
+	// const deleteHandler = (event) => {
+	// 	const goalId = event.target.id;
 
-		const filterd = goals.filter((g) => g.id !== goalId);
-		setGoals(filterd);
-	};
+	// 	const filterd = goals.filter((g) => g.id !== goalId);
+	// 	setGoals(filterd);
+	// };
+
 	return (
 		<div className={classes['vision-board-card']} id={props.year}>
 			<div className={classes['board-card__header']}>
-				<h5>{props.year}</h5>
+				<h5>{props.goalYear}</h5>
 			</div>
+
 			<div className={classes['board-card__content']}>
-				{goals.map((g) => {
-					return (
-						<Goal
-							title={g.title}
-							id={g.id}
-							parentId={props.year}
-							onDelete={deleteHandler}
-						/>
-					);
-				})}
+				{props.isLoading && <Loading />}
+				{!props.isLoading &&
+					props.goals.map((g) => {
+						return (
+							<Goal
+								goalTitle={g.goalTitle}
+								id={g.id}
+								parentId={g.goalYear}
+								//onDelete={deleteHandler}
+							/>
+						);
+					})}
 			</div>
+
 			<div className={classes['board-card__action']}>
 				{!inputIsHidden && (
 					<form onSubmit={submitHandler}>
