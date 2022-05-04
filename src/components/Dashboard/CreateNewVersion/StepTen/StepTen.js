@@ -1,59 +1,131 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer, useEffect, useContext } from 'react';
 import classes from './StepTen.module.css';
-import TagsManager from '../../UtilityComponents/TagsManager/TagsManager';
+import TagsManager from './TagsManager';
 
-import {
-	lifeRules,
-	lifeBreakthroughs,
-	lifeRealizations,
-} from '../../../../data/stepTenData';
+import { DEFAULT_TAGS_DATA } from '../../../../data/step-four/defaultData';
+import { getTags } from '../../../../api/stepTen';
 import StepTenStatic from './StepTenStatic';
 
-const StepTen = () => {
-	const [selectedLifeRules, setSelectedLifeRules] = useState([]);
-	const [selectedLifeRealizations, setSelectedLifeRealizations] = useState([]);
-	const [selectedLifeBreakthrouhgs, setSelectedLifeBreakthroughs] = useState(
-		[]
-	);
+import NewVersionContext from '../../../../store/new-version-context';
 
-	const lifeRulesHandler = (selectedTags) => {
-		setSelectedLifeRules(selectedTags);
+import reducer, { ACTIONS, INITIAL_STATE } from './reducer';
+
+const StepTen = ({ onStateChange }) => {
+	const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+
+	const newVerCtx = useContext(NewVersionContext);
+
+	const newTagHandler = (tagCategory) => {
+		if (state.tagTitle.trim() === '') {
+			return;
+		}
+		dispatch({
+			type: ACTIONS.ADD_NEW_TAG,
+			payload: { tagTitle: state.tagTitle, tagCategory: tagCategory },
+		});
 	};
-	const lifeRealizationsHandler = (selectedTags) => {
-		setSelectedLifeRealizations(selectedTags);
-	};
-	const lifeBreakthrouhgsHandler = (selectedTags) => {
-		setSelectedLifeBreakthroughs(selectedTags);
-	};
+
+	useEffect(() => {
+		onStateChange(state);
+	}, [state]);
+	useEffect(() => {
+		(async () => {
+			const response = await getTags(newVerCtx.versionId);
+
+			if (response.success && response.data.length > 0) {
+				dispatch({
+					type: ACTIONS.DATA_FROM_SERVER,
+					payload: {
+						data: response.data,
+					},
+				});
+			} else {
+				dispatch({
+					type: ACTIONS.DATA_FROM_LOCAL_STATE,
+					payload: {
+						data: DEFAULT_TAGS_DATA,
+					},
+				});
+			}
+		})();
+	}, []);
 	return (
 		<div className={classes['step-ten-container']}>
 			<div className={classes['step-ten']}>
 				<StepTenStatic />
-
-				{/*  first Tags Manager */}
-
 				<TagsManager
-					title='List Some Life Rules'
-					defaultTags={lifeRules}
-					onSelectedTags={lifeRulesHandler}
-					instrucitons='Or choose from some backup life rules examples'
+					tags={state.firstTags}
+					onTitleChange={(event) =>
+						dispatch({
+							type: ACTIONS.CHANGE_TITLE_FIRST,
+							payload: { tagTitle: event.target.value },
+						})
+					}
+					tagTitle={state.tagTitleFirst}
+					onNewTag={(tagCategory) => {
+						dispatch({
+							type: ACTIONS.ADD_NEW_TAG_FIRST,
+							payload: { tagCategory: tagCategory },
+						});
+					}}
+					onSelectToggle={(item) => {
+						dispatch({
+							type: ACTIONS.TOGGLE_SELECT,
+							payload: { data: item, tagsManager: 1 },
+						});
+					}}
+					tagCateogory='rules'
+					isLoading={state.isLoading}
 				/>
 
-				{/* second Tags Manager */}
-
 				<TagsManager
-					title='List Some Realizations'
-					defaultTags={lifeRealizations}
-					onSelectedTags={lifeRealizationsHandler}
-					instrucitons='Or choose from some backup Realizations examples'
+					tags={state.secondTags}
+					onTitleChange={(event) =>
+						dispatch({
+							type: ACTIONS.CHANGE_TITLE_SECOND,
+							payload: { tagTitle: event.target.value },
+						})
+					}
+					tagTitle={state.tagTitleSecond}
+					onNewTag={(tagCategory) => {
+						dispatch({
+							type: ACTIONS.ADD_NEW_TAG_SECOND,
+							payload: { tagCategory: tagCategory },
+						});
+					}}
+					onSelectToggle={(item) => {
+						dispatch({
+							type: ACTIONS.TOGGLE_SELECT,
+							payload: { data: item, tagsManager: 2 },
+						});
+					}}
+					tagCateogory='breakthroughs'
+					isLoading={state.isLoading}
 				/>
 
-				{/*third Tags Manager */}
 				<TagsManager
-					title='List Some Breakthroughs'
-					defaultTags={lifeBreakthroughs}
-					onSelectedTags={lifeBreakthrouhgsHandler}
-					instrucitons='Or choose from some backup breakthroughs examples'
+					tags={state.thirdTags}
+					onTitleChange={(event) =>
+						dispatch({
+							type: ACTIONS.CHANGE_TITLE_THIRD,
+							payload: { tagTitle: event.target.value },
+						})
+					}
+					onNewTag={(tagCategory) => {
+						dispatch({
+							type: ACTIONS.ADD_NEW_TAG_THIRD,
+							payload: { tagCategory: tagCategory },
+						});
+					}}
+					tagTitle={state.tagTitleThird}
+					onSelectToggle={(item) => {
+						dispatch({
+							type: ACTIONS.TOGGLE_SELECT,
+							payload: { data: item, tagsManager: 3 },
+						});
+					}}
+					tagCateogory='realizations'
+					isLoading={state.isLoading}
 				/>
 			</div>
 		</div>

@@ -15,6 +15,19 @@ exports.createTags = async (req, res, next) => {
 				)
 			);
 		}
+
+		const exTags = await StepTen.find({
+			version: req.params.versionId,
+		});
+
+		let result = null;
+
+		if (exTags.length > 0) {
+			result = await StepTen.deleteMany({
+				version: req.params.versionId,
+			});
+		}
+
 		req.body.tags.map((tag) => {
 			tag['version'] = req.params.versionId;
 		});

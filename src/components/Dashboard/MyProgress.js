@@ -10,6 +10,7 @@ import { createThoughts } from '../../api/stepSeven.js';
 import { getThoughts } from '../../api/stepSeven.js';
 import { createStep8Tags } from '../../api/stepEight.js';
 import { createGoals } from '../../api/stepNine.js';
+import { createStep10Tags } from '../../api/stepTen.js';
 
 //context
 import NewVersionContext from '../../store/new-version-context.js';
@@ -55,6 +56,7 @@ const MyProgress = () => {
 	const [stepSevenState, setStepSevenState] = useState({});
 	const [stepEightState, setStepEightState] = useState({});
 	const [stepNineState, setStepNineState] = useState({});
+	const [stepTenState, setStepTenState] = useState({});
 
 	let [formStep, setFormStep] = useState(1);
 
@@ -244,6 +246,24 @@ const MyProgress = () => {
 				return;
 			}
 			setSaveButtonText('Save & Continue');
+		} else if (formStep === 11) {
+			setSaveButtonText('Saving...');
+
+			const requestBody = {
+				tags: [
+					...stepTenState.firstTags,
+					...stepTenState.secondTags,
+					...stepTenState.thirdTags,
+				],
+			};
+			const response = await createStep10Tags(newVerCtx.versionId, {
+				tags: requestBody.tags,
+			});
+			if (response.success === false) {
+				setSaveButtonText('try again!');
+				return;
+			}
+			setSaveButtonText('Save & Continue');
 		}
 
 		setFormStep(parseInt(formStep) + 1);
@@ -271,7 +291,10 @@ const MyProgress = () => {
 			<section className='sectionOne'>
 				<h5 className='progress'>MY PROGRESS</h5>
 
-				<div className='progressbar'>
+				<div
+					className='progressbar'
+					// style={{ overflow: 'scroll', height: '900px' }}
+				>
 					<div className='inlineProgress'>
 						<div>
 							<div
@@ -574,7 +597,9 @@ const MyProgress = () => {
 				{formStep === 10 && (
 					<StepNine onStateChange={(state) => setStepNineState(state)} />
 				)}
-				{formStep === 11 && <StepTen />}
+				{formStep === 11 && (
+					<StepTen onStateChange={(state) => setStepTenState(state)} />
+				)}
 				{formStep === 12 && <StepEleven />}
 
 				<div className='prevOrSave'>
