@@ -1,198 +1,225 @@
-import React, { useState } from 'react';
+import React, { useRef, useState, useReducer } from 'react';
 
 import FiveSliders from '../../../UtilityComponents/FiveSliders/FiveSliders';
 
 import classes from './SliderSteps.module.css';
 
 import { slidersData } from '../../../../../data/slidersData';
+import Dots from './Dots';
 
 const prevButtonText = '< PREVIOUS';
 
+const ACTIONS = {
+	NEXT: 'next',
+	PREV: 'prev',
+	FIRST_VALUES: 'first_values',
+	SECOND_VALUES: 'second_values',
+	THIRD_VALUES: 'third_values',
+	FOURTH_VALUES: 'fourth_values',
+	FIFTH_VALUES: 'fifth_values',
+	VALUES: 'values',
+};
+const initialState = {
+	currentStep: '1',
+	showNextBtn: true,
+	showPrevBtn: false,
+	firstValues: [],
+	secondValues: [],
+	thirdValues: [],
+	fourthValues: [],
+	fifthValues: [],
+};
+
+const reducer = (state, action) => {
+	const prevState = { ...state };
+
+	switch (action.type) {
+		case ACTIONS.NEXT:
+			switch (prevState.currentStep) {
+				case '1':
+					prevState.currentStep = '2';
+					prevState.showPrevBtn = true;
+					break;
+				case '2':
+					prevState.currentStep = '3';
+					break;
+				case '3':
+					prevState.currentStep = '4';
+					break;
+				case '4':
+					prevState.currentStep = '5';
+					prevState.showNextBtn = false;
+
+				default:
+				// do nothing
+			}
+			break;
+
+		case ACTIONS.PREV:
+			switch (prevState.currentStep) {
+				case '2':
+					prevState.currentStep = '1';
+					prevState.showPrevBtn = false;
+					prevState.showNextBtn = true;
+					break;
+				case '3':
+					prevState.currentStep = '2';
+					break;
+				case '4':
+					prevState.currentStep = '3';
+					//prevState.showNextBtn = false;
+					break;
+				case '5':
+					prevState.currentStep = '4';
+					//prevState.showPrevBtn = false;
+					prevState.showNextBtn = true;
+
+				default:
+				// do nothing
+			}
+
+		case ACTIONS.VALUES:
+			prevState.firstValues = [];
+			prevState.secondValues = [];
+			prevState.thirdValues = [];
+			prevState.fourthValues = [];
+			prevState.fifthValues = [];
+			switch (action.payload.step) {
+				case '1':
+					prevState.firstValues = action.payload.values;
+
+					break;
+				case '2':
+					prevState.secondValues = action.payload.values;
+					break;
+				case '3':
+					prevState.thirdValues = action.payload.values;
+					break;
+				case '4':
+					prevState.fourthValues = action.payload.values;
+					break;
+				case '5':
+					prevState.fifthValues = action.payload.values;
+					break;
+				default:
+				//
+			}
+
+		default:
+		// do nothing..
+	}
+
+	return prevState;
+};
+
 const SliderSteps = (props) => {
-	debugger;
-	const [currentSlider, setCurrentSlider] = useState(1);
+	const [myState, disptach] = useReducer(reducer, initialState);
+
 	const [allSliders, setAllSliders] = useState(slidersData);
-
-	const [firstStep, setFirstStep] = useState(true);
-	const [secondStep, setSecondStep] = useState(false);
-	const [thirdStep, setThirdStep] = useState(false);
-	const [fourthStep, setFourthStep] = useState(false);
-	const [fifthStep, setFifthStep] = useState(false);
-
-	// saving values in State
-
-	const nextHandler = (event) => {
-		if (firstStep) {
-			setSecondStep(true);
-			setFirstStep(false);
-			setCurrentSlider(2);
-		} else if (secondStep) {
-			setThirdStep(true);
-			setSecondStep(false);
-			setCurrentSlider(3);
-		} else if (thirdStep) {
-			setFourthStep(true);
-			setThirdStep(false);
-			setCurrentSlider(4);
-		} else if (fourthStep) {
-			setFifthStep(true);
-			setFourthStep(false);
-			setCurrentSlider(5);
-		}
-	};
-
-	const prevHandler = (event) => {
-		if (secondStep) {
-			setFirstStep(true);
-			setSecondStep(false);
-			setCurrentSlider(1);
-		} else if (thirdStep) {
-			setSecondStep(true);
-			setThirdStep(false);
-			setCurrentSlider(2);
-		} else if (fourthStep) {
-			setThirdStep(true);
-			setFourthStep(false);
-			setCurrentSlider(3);
-		} else if (fifthStep) {
-			setFourthStep(true);
-			setFifthStep(false);
-			setCurrentSlider(4);
-		}
-	};
-
-	const firstValuesHandler = (values) => {
-		console.log(values);
-
-		let prevSliders = allSliders;
-		prevSliders[0].value = values.first;
-		prevSliders[1].value = values.second;
-		prevSliders[2].value = values.third;
-		prevSliders[3].value = values.fourth;
-		prevSliders[4].value = values.fifth;
-
-		setAllSliders(prevSliders);
-		console.log(allSliders);
-	};
-
-	const secondValuesHandler = (values) => {
-		console.log(values);
-	};
-
-	const thirdValuesHandler = (values) => {
-		console.log(values);
-	};
-
-	const fourthValuesHandler = (values) => {
-		console.log(values);
-	};
-
-	const fifthValuesHandler = (values) => {
-		console.log(values);
-	};
 
 	return (
 		<section className={classes['slider-steps-container']}>
-			<div className={classes['steps-info']}>
-				<div>
-					<h3>Step {currentSlider} of 5</h3>
-				</div>
-
-				<div className={classes['dots']}>
-					<div
-						className={
-							firstStep ? `${classes.dot} ${classes.active}` : `${classes.dot}`
-						}
-					></div>
-					<div
-						className={
-							secondStep ? `${classes.dot} ${classes.active}` : `${classes.dot}`
-						}
-					></div>
-					<div
-						className={
-							thirdStep ? `${classes.dot} ${classes.active}` : `${classes.dot}`
-						}
-					></div>
-					<div
-						className={
-							fourthStep ? `${classes.dot} ${classes.active}` : `${classes.dot}`
-						}
-					></div>
-					<div
-						className={
-							fifthStep ? `${classes.dot} ${classes.active}` : `${classes.dot}`
-						}
-					></div>
-				</div>
-			</div>
+			<Dots currentStep={myState.currentStep} />
 			<div className={classes['slider-steps__content']}>
-				{firstStep && (
+				{myState.currentStep === '1' && (
 					<FiveSliders
 						first={allSliders[0]}
 						second={allSliders[1]}
 						third={allSliders[2]}
 						fourth={allSliders[3]}
 						fifth={allSliders[4]}
-						onValues={firstValuesHandler}
+						onValues={(value) => {
+							disptach({
+								type: ACTIONS.VALUES,
+								payload: { values: value, step: '1' },
+							});
+						}}
 					/>
 				)}
 
-				{secondStep && (
+				{myState.currentStep === '2' && (
 					<FiveSliders
 						first={allSliders[5]}
 						second={allSliders[6]}
 						third={allSliders[7]}
 						fourth={allSliders[8]}
 						fifth={allSliders[9]}
-						onValues={secondValuesHandler}
+						onValues={(value) => {
+							disptach({
+								type: ACTIONS.VALUES,
+								payload: { values: value, step: '2' },
+							});
+						}}
 					/>
 				)}
-				{thirdStep && (
+				{myState.currentStep === '3' && (
 					<FiveSliders
 						first={allSliders[10]}
 						second={allSliders[11]}
 						third={allSliders[12]}
 						fourth={allSliders[13]}
 						fifth={allSliders[14]}
-						onValues={thirdValuesHandler}
+						onValues={(value) => {
+							disptach({
+								type: ACTIONS.VALUES,
+								payload: { values: value, step: '3' },
+							});
+						}}
 					/>
 				)}
 
-				{fourthStep && (
+				{myState.currentStep === '4' && (
 					<FiveSliders
 						first={allSliders[15]}
 						second={allSliders[16]}
 						third={allSliders[17]}
 						fourth={allSliders[18]}
 						fifth={allSliders[19]}
-						onValuse={fourthValuesHandler}
+						onValues={(value) => {
+							disptach({
+								type: ACTIONS.VALUES,
+								payload: { values: value, step: '4' },
+							});
+						}}
 					/>
 				)}
 
-				{fifthStep && (
+				{myState.currentStep === '5' && (
 					<FiveSliders
 						first={allSliders[20]}
 						second={allSliders[21]}
 						third={allSliders[22]}
 						fourth={allSliders[23]}
 						fifth={allSliders[24]}
-						onValues={fifthValuesHandler}
+						onValues={(value) => {
+							disptach({
+								type: ACTIONS.VALUES,
+								payload: { values: value, step: '5' },
+							});
+						}}
 					/>
 				)}
 			</div>
 
 			<div className={classes.actions}>
 				<div
-					className={firstStep ? `${classes.hidden}` : `{${classes.shown}}`}
-					onClick={prevHandler}
+					className={
+						!myState.showPrevBtn ? `${classes.hidden}` : `{${classes.shown}}`
+					}
+					onClick={() => {
+						disptach({ type: ACTIONS.PREV });
+					}}
 				>
 					{' '}
 					{prevButtonText}
 				</div>
 				<div
-					className={fifthStep ? `${classes.hidden}` : `{${classes.shown}}`}
-					onClick={nextHandler}
+					className={
+						!myState.showNextBtn ? `${classes.hidden}` : `{${classes.shown}}`
+					}
+					onClick={() => {
+						disptach({ type: ACTIONS.NEXT });
+					}}
 				>
 					{' '}
 					NEXT >{' '}
