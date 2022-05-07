@@ -17,6 +17,7 @@
 	height: 15px;
 	border-radius: 50%;
 	background-color: #dddddd;
+	cursor: pointer;
 }
 .dots .active {
 	background-color: gray;

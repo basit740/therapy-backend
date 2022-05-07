@@ -1,106 +1,105 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+
+import Step11Context from '../../../../store/step-eleven';
+
 import classes from './FiveSliders.module.css';
 import PersonalSlider from '../Slider/Slider';
 
-const FiveSliders = ({ first, second, third, fourth, fifth, onValues }) => {
-	const [allSliderValues, setAllSliderValues] = useState('');
+const FiveSliders = ({
+	first,
+	second,
+	third,
+	fourth,
+	fifth,
+	onValues,
+	id,
+	values,
+}) => {
+	const s11Ctx = useContext(Step11Context);
 
-	const [firstValue, setFirstValue] = useState(1);
-	const [secondValue, setSecondValue] = useState(1);
-	const [thirdValue, setSThirdValue] = useState(1);
-	const [fourthValue, setFourthValue] = useState(1);
-	const [fifthValue, setFifthValue] = useState(1);
+	// useEffect(() => {
+	// 	console.log('rendered', id);
 
-	const firstChangeHandler = (event) => {
-		setFirstValue(event.target.value);
-
-		setAllSliderValues({
-			first: event.target.value,
-			second: secondValue,
-			third: thirdValue,
-			fourth: fourthValue,
-			fifth: fifthValue,
-		});
-		onValues(allSliderValues);
-	};
-	const secondChangeHandler = (event) => {
-		setSecondValue(event.target.value);
-		setAllSliderValues({
-			first: firstValue,
-			second: event.target.value,
-			third: thirdValue,
-			fourth: fourthValue,
-			fifth: fifthValue,
-		});
-		onValues(allSliderValues);
-	};
-	const thirdChangeHandler = (event) => {
-		setSThirdValue(event.target.value);
-		setAllSliderValues({
-			first: firstValue,
-			second: secondValue,
-			third: event.target.value,
-			fourth: fourthValue,
-			fifth: fifthValue,
-		});
-		onValues(allSliderValues);
-	};
-
-	const fourthChangeHandler = (event) => {
-		setFourthValue(event.target.value);
-		setAllSliderValues({
-			first: firstValue,
-			second: secondValue,
-			third: thirdValue,
-			fourth: event.target.value,
-			fifth: fifthValue,
-		});
-		onValues(allSliderValues);
-	};
-
-	const fifthChangeHandler = (event) => {
-		setFifthValue(event.target.value);
-		setAllSliderValues({
-			first: firstValue,
-			second: secondValue,
-			third: thirdValue,
-			fourth: fourthValue,
-			fifth: event.target.value,
-		});
-		onValues(allSliderValues);
-	};
+	// 	if (id == '1' && s11Ctx.step1Sliders != null) {
+	// 		console.log('first', s11Ctx.step1Sliders);
+	// 		first = s11Ctx.step1Sliders[0];
+	// 		second = s11Ctx.step1Sliders[1];
+	// 		third = s11Ctx.step1Sliders[2];
+	// 		fourth = s11Ctx.step1Sliders[3];
+	// 		fifth = s11Ctx.step1Sliders[4];
+	// 	} else if (id == '2' && s11Ctx.step2Sliders != null) {
+	// 		console.log('second', s11Ctx.step2Sliders);
+	// 		first = s11Ctx.step2Sliders[0];
+	// 		second = s11Ctx.step2Sliders[1];
+	// 		third = s11Ctx.step2Sliders[2];
+	// 		fourth = s11Ctx.step2Sliders[3];
+	// 		fifth = s11Ctx.step2Sliders[4];
+	// 	} else if (id == '3' && s11Ctx.step3Sliders != null) {
+	// 		console.log('third', s11Ctx.Step31Context);
+	// 		first = s11Ctx.step3Sliders[0];
+	// 		second = s11Ctx.step3Sliders[1];
+	// 		third = s11Ctx.step3Sliders[2];
+	// 		fourth = s11Ctx.step3Sliders[3];
+	// 		fifth = s11Ctx.step3Sliders[4];
+	// 	} else if (id == '4' && s11Ctx.step4Sliders != null) {
+	// 		console.log('fourth', s11Ctx.step4Sliders);
+	// 		first = s11Ctx.step4Sliders[0];
+	// 		second = s11Ctx.step4Sliders[1];
+	// 		third = s11Ctx.step4Sliders[2];
+	// 		fourth = s11Ctx.step4Sliders[3];
+	// 		fifth = s11Ctx.step4Sliders[4];
+	// 	} else if (id == '5' && s11Ctx.step5Sliders != null) {
+	// 		console.log('fifth', s11Ctx.step5Sliders);
+	// 		first = s11Ctx.step5Sliders[0];
+	// 		second = s11Ctx.step5Sliders[1];
+	// 		third = s11Ctx.step5Sliders[2];
+	// 		fourth = s11Ctx.step5Sliders[3];
+	// 		fifth = s11Ctx.step5Sliders[4];
+	// 	}
+	// }, []);
 	return (
 		<section className={classes['five-sliders']}>
-			<PersonalSlider
+			{values.map((v) => {
+				return (
+					<PersonalSlider
+						title={v.title}
+						id={v.id}
+						value={v.value}
+						onChange={onValues}
+					/>
+				);
+			})}
+
+			{/* <PersonalSlider
 				title={first.title}
 				id={first.id}
-				value={firstValue}
-				onChange={firstChangeHandler}
+				value={first.value}
+				onChange={onValues}
 			/>
 			<PersonalSlider
 				title={second.title}
 				id={second.id}
-				value={secondValue}
-				onChange={secondChangeHandler}
+				value={second.value}
+				onChange={onValues}
 			/>
 			<PersonalSlider
 				title={third.title}
 				id={third.id}
-				value={thirdValue}
-				onChange={thirdChangeHandler}
+				value={third.value}
+				onChange={onValues}
 			/>
 			<PersonalSlider
 				title={fourth.title}
 				id={fourth.id}
-				value={fourthValue}
-				onChange={fourthChangeHandler}
+				value={fourth.value}
+				onChange={onValues}
 			/>
 			<PersonalSlider
 				title={fifth.title}
 				id={fifth.id}
-				value={fifthValue}
-				onChange={fifthChangeHandler}
-			/>
+				value={fifth.value}
+				onChange={onValues}
+			/> */}
 		</section>
 	);
 };

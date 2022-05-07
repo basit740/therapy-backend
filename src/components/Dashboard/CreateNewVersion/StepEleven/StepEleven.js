@@ -1,17 +1,21 @@
 import React from 'react';
 import classes from './StepEleven.module.css';
 
+import { Step11ContextProvider } from '../../../../store/step-eleven';
+
 import StepElevenStatic from './StepElevenStatic';
 import SliderSteps from './SliderSteps/SliderSteps';
 const StepEleven = () => {
 	return (
-		<section className={classes['step-eleven']}>
-			<StepElevenStatic />
+		<Step11ContextProvider>
+			<section className={classes['step-eleven']}>
+				<StepElevenStatic />
 
-			<div className={classes['sliders']}>
-				<SliderSteps />
-			</div>
-		</section>
+				<div className={classes['sliders']}>
+					<SliderSteps />
+				</div>
+			</section>
+		</Step11ContextProvider>
 	);
 };
 

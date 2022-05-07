@@ -1,34 +1,20 @@
-import React, { useRef, useState, useReducer } from 'react';
-
+import React, {
+	useRef,
+	useState,
+	useEffect,
+	useReducer,
+	useContext,
+} from 'react';
+import Step11Context from '../../../../../store/step-eleven';
 import FiveSliders from '../../../UtilityComponents/FiveSliders/FiveSliders';
 
 import classes from './SliderSteps.module.css';
 
 import { slidersData } from '../../../../../data/slidersData';
+import { initialState, ACTIONS } from './reducer';
 import Dots from './Dots';
 
 const prevButtonText = '< PREVIOUS';
-
-const ACTIONS = {
-	NEXT: 'next',
-	PREV: 'prev',
-	FIRST_VALUES: 'first_values',
-	SECOND_VALUES: 'second_values',
-	THIRD_VALUES: 'third_values',
-	FOURTH_VALUES: 'fourth_values',
-	FIFTH_VALUES: 'fifth_values',
-	VALUES: 'values',
-};
-const initialState = {
-	currentStep: '1',
-	showNextBtn: true,
-	showPrevBtn: false,
-	firstValues: [],
-	secondValues: [],
-	thirdValues: [],
-	fourthValues: [],
-	fifthValues: [],
-};
 
 const reducer = (state, action) => {
 	const prevState = { ...state };
@@ -77,34 +63,71 @@ const reducer = (state, action) => {
 				default:
 				// do nothing
 			}
+			break;
 
 		case ACTIONS.VALUES:
-			prevState.firstValues = [];
-			prevState.secondValues = [];
-			prevState.thirdValues = [];
-			prevState.fourthValues = [];
-			prevState.fifthValues = [];
+			//prevState.firstValues = [];
+			// prevState.secondValues = [];
+			// prevState.thirdValues = [];
+			// prevState.fourthValues = [];
+			// prevState.fifthValues = [];
+
 			switch (action.payload.step) {
 				case '1':
-					prevState.firstValues = action.payload.values;
+					prevState.firstValues.map((sliderV) => {
+						if (sliderV.id === action.payload.sliderID) {
+							sliderV.value = action.payload.value;
+						}
+					});
 
 					break;
 				case '2':
-					prevState.secondValues = action.payload.values;
+					prevState.secondValues.map((sliderV) => {
+						if (sliderV.id === action.payload.sliderID) {
+							sliderV.value = action.payload.value;
+						}
+					});
 					break;
 				case '3':
-					prevState.thirdValues = action.payload.values;
+					prevState.thirdValues.map((sliderV) => {
+						if (sliderV.id === action.payload.sliderID) {
+							sliderV.value = action.payload.value;
+						}
+					});
 					break;
 				case '4':
-					prevState.fourthValues = action.payload.values;
+					prevState.fourthValues.map((sliderV) => {
+						if (sliderV.id === action.payload.sliderID) {
+							sliderV.value = action.payload.value;
+						}
+					});
 					break;
 				case '5':
-					prevState.fifthValues = action.payload.values;
+					prevState.fifthValues.map((sliderV) => {
+						if (sliderV.id === action.payload.sliderID) {
+							sliderV.value = action.payload.value;
+						}
+					});
 					break;
 				default:
 				//
 			}
+			break;
+		case ACTIONS.DOT_CLICK:
+			if (prevState.currentStep == action.payload.step) return prevState;
+			prevState.currentStep = action.payload.step;
+			if (action.payload.step != '1') {
+				prevState.showPrevBtn = true;
+			} else {
+				prevState.showPrevBtn = false;
+			}
 
+			if (action.payload.step == '5') {
+				prevState.showNextBtn = false;
+			} else {
+				prevState.showNextBtn = true;
+			}
+			break;
 		default:
 		// do nothing..
 	}
@@ -115,54 +138,125 @@ const reducer = (state, action) => {
 const SliderSteps = (props) => {
 	const [myState, disptach] = useReducer(reducer, initialState);
 
-	const [allSliders, setAllSliders] = useState(slidersData);
+	const s11Ctx = useContext(Step11Context);
+
+	const prevHandler = () => {
+		switch (myState.currentStep) {
+			case '1':
+				s11Ctx.onStateChange(myState.firstValues, '1');
+				break;
+			case '2':
+				s11Ctx.onStateChange(myState.secondValues, '2');
+				break;
+			case '3':
+				s11Ctx.onStateChange(myState.thirdValues, '3');
+				break;
+			case '4':
+				s11Ctx.onStateChange(myState.fourthValues, '4');
+				break;
+			default:
+				s11Ctx.onStateChange(myState.fifthValues, '5');
+		}
+
+		disptach({
+			type: ACTIONS.PREV,
+		});
+	};
+	const nextHandler = () => {
+		switch (myState.currentStep) {
+			case '1':
+				s11Ctx.onStateChange(myState.firstValues, '1');
+				break;
+			case '2':
+				s11Ctx.onStateChange(myState.secondValues, '2');
+				break;
+			case '3':
+				s11Ctx.onStateChange(myState.thirdValues, '3');
+				break;
+			case '4':
+				s11Ctx.onStateChange(myState.fourthValues, '4');
+				break;
+			default:
+				s11Ctx.onStateChange(myState.fifthValues, '5');
+		}
+		disptach({
+			type: ACTIONS.NEXT,
+		});
+	};
 
 	return (
 		<section className={classes['slider-steps-container']}>
-			<Dots currentStep={myState.currentStep} />
+			<Dots
+				currentStep={myState.currentStep}
+				onDotClick={(stepNumber) => {
+					disptach({
+						type: ACTIONS.DOT_CLICK,
+						payload: { step: stepNumber },
+					});
+				}}
+			/>
 			<div className={classes['slider-steps__content']}>
 				{myState.currentStep === '1' && (
 					<FiveSliders
-						first={allSliders[0]}
-						second={allSliders[1]}
-						third={allSliders[2]}
-						fourth={allSliders[3]}
-						fifth={allSliders[4]}
-						onValues={(value) => {
+						id='1'
+						// first={myState.firstValues[0]}
+						// second={myState.firstValues[1]}
+						// third={myState.firstValues[2]}
+						// fourth={myState.firstValues[3]}
+						// fifth={myState.firstValues[4]}
+						values={
+							s11Ctx.step1Sliders == null
+								? myState.firstValues
+								: s11Ctx.step1Sliders
+						}
+						onValues={(value, sliderID) => {
 							disptach({
 								type: ACTIONS.VALUES,
-								payload: { values: value, step: '1' },
+								payload: { value: value, step: '1', sliderID: sliderID },
 							});
 						}}
+						//onValues={firstValuseHandler}
 					/>
 				)}
 
 				{myState.currentStep === '2' && (
 					<FiveSliders
-						first={allSliders[5]}
-						second={allSliders[6]}
-						third={allSliders[7]}
-						fourth={allSliders[8]}
-						fifth={allSliders[9]}
-						onValues={(value) => {
+						id='2'
+						// first={myState.secondValues[0]}
+						// second={myState.secondValues[1]}
+						// third={myState.secondValues[2]}
+						// fourth={myState.secondValues[3]}
+						// fifth={myState.secondValues[4]}
+						values={
+							s11Ctx.step2Sliders == null
+								? myState.secondValues
+								: s11Ctx.step2Sliders
+						}
+						onValues={(value, sliderID) => {
 							disptach({
 								type: ACTIONS.VALUES,
-								payload: { values: value, step: '2' },
+								payload: { value: value, step: '2', sliderID: sliderID },
 							});
 						}}
 					/>
 				)}
 				{myState.currentStep === '3' && (
 					<FiveSliders
-						first={allSliders[10]}
-						second={allSliders[11]}
-						third={allSliders[12]}
-						fourth={allSliders[13]}
-						fifth={allSliders[14]}
-						onValues={(value) => {
+						id='3'
+						// first={myState.thirdValues[0]}
+						// second={myState.thirdValues[1]}
+						// third={myState.thirdValues[2]}
+						// fourth={myState.thirdValues[3]}
+						// fifth={myState.thirdValues[4]}
+						values={
+							s11Ctx.step3Sliders == null
+								? myState.thirdValues
+								: s11Ctx.step3Sliders
+						}
+						onValues={(value, sliderID) => {
 							disptach({
 								type: ACTIONS.VALUES,
-								payload: { values: value, step: '3' },
+								payload: { value: value, step: '3', sliderID: sliderID },
 							});
 						}}
 					/>
@@ -170,15 +264,21 @@ const SliderSteps = (props) => {
 
 				{myState.currentStep === '4' && (
 					<FiveSliders
-						first={allSliders[15]}
-						second={allSliders[16]}
-						third={allSliders[17]}
-						fourth={allSliders[18]}
-						fifth={allSliders[19]}
-						onValues={(value) => {
+						id='4'
+						// first={myState.fourthValues[0]}
+						// second={myState.fourthValues[1]}
+						// third={myState.fourthValues[2]}
+						// fourth={myState.fourthValues[3]}
+						// fifth={myState.fourthValues[4]}
+						values={
+							s11Ctx.step4Sliders == null
+								? myState.fourthValues
+								: s11Ctx.step4Sliders
+						}
+						onValues={(value, sliderID) => {
 							disptach({
 								type: ACTIONS.VALUES,
-								payload: { values: value, step: '4' },
+								payload: { value: value, step: '4', sliderID: sliderID },
 							});
 						}}
 					/>
@@ -186,15 +286,21 @@ const SliderSteps = (props) => {
 
 				{myState.currentStep === '5' && (
 					<FiveSliders
-						first={allSliders[20]}
-						second={allSliders[21]}
-						third={allSliders[22]}
-						fourth={allSliders[23]}
-						fifth={allSliders[24]}
-						onValues={(value) => {
+						id='5'
+						// first={myState.fifthValues[0]}
+						// second={myState.fifthValues[1]}
+						// third={myState.fifthValues[2]}
+						// fourth={myState.fifthValues[3]}
+						// fifth={myState.fifthValues[4]}
+						values={
+							s11Ctx.step5Sliders == null
+								? myState.fifthValues
+								: s11Ctx.step5Sliders
+						}
+						onValues={(value, sliderID) => {
 							disptach({
 								type: ACTIONS.VALUES,
-								payload: { values: value, step: '5' },
+								payload: { value: value, step: '5', sliderID: sliderID },
 							});
 						}}
 					/>
@@ -206,9 +312,7 @@ const SliderSteps = (props) => {
 					className={
 						!myState.showPrevBtn ? `${classes.hidden}` : `{${classes.shown}}`
 					}
-					onClick={() => {
-						disptach({ type: ACTIONS.PREV });
-					}}
+					onClick={prevHandler}
 				>
 					{' '}
 					{prevButtonText}
@@ -217,9 +321,7 @@ const SliderSteps = (props) => {
 					className={
 						!myState.showNextBtn ? `${classes.hidden}` : `{${classes.shown}}`
 					}
-					onClick={() => {
-						disptach({ type: ACTIONS.NEXT });
-					}}
+					onClick={nextHandler}
 				>
 					{' '}
 					NEXT >{' '}
