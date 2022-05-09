@@ -6,13 +6,17 @@ const VersionSchema = new mongoose.Schema({
 		required: true,
 	},
 	status: {
-		type: [String],
+		type: String,
 		enum: ['completed', 'not_started', 'in_progress'],
-		default: ['not_started'],
+		default: 'not_started',
 	},
 	createdAt: {
 		type: Date,
 		default: Date.now,
+	},
+	stepsCount: {
+		type: Number,
+		default: 0,
 	},
 
 	user: {
@@ -21,16 +25,6 @@ const VersionSchema = new mongoose.Schema({
 		required: false,
 	},
 });
-
-/*
-BootcampSchema.virtual('courses', {
-	ref: 'Course',
-	localField: '_id',
-	foreignField: 'bootcamp',
-	justOne: false,
-});
-
-*/
 
 VersionSchema.virtual('steptwos', {
 	ref: 'StepTwo',

@@ -4,7 +4,8 @@
 	padding: 15px 30px;
 	border-radius: 10px;
 	margin-right: 30px;
-	min-height: 400px;
+	min-height: 500px;
+	margin-bottom: 100px;
 }
 
 .my-versions-left table {
@@ -40,6 +41,20 @@
 	color: white;
 	text-transform: uppercase;
 }
+a.action-chip:hover {
+	text-decoration: none;
+	color: white;
+}
+a.no-style,
+a.no-style:hover {
+	text-decoration: none;
+	color: black;
+}
 .bg-black {
 	background-color: black;
+}
+
+.skeleton-container {
+	display: flex;
+	align-items: center;
 }

@@ -52,7 +52,17 @@ exports.createFeelings = async (req, res, next) => {
 					new ErrorResponse(`feelings not created on StepThree`, 400)
 				);
 			}
+			//
+			if (updatedResult === null) {
+				let prevCounts = version.stepsCount;
+				prevCounts += 1;
+				const updated = await Version.findByIdAndUpdate(req.params.versionId, {
+					stepsCount: prevCounts,
+					status: prevCounts === 11 ? 'completed' : 'in_progress',
+				});
+			}
 
+			//
 			res.status(200).json({
 				success: true,
 				data: returnedFeelings,

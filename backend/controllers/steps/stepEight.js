@@ -38,6 +38,19 @@ exports.createTags = async (req, res, next) => {
 			return next(new ErrorResponse('tags not created on Step Eight', 400));
 		}
 
+		//
+
+		if (result === null) {
+			let prevCounts = version.stepsCount;
+			prevCounts += 1;
+			const updated = await Version.findByIdAndUpdate(req.params.versionId, {
+				stepsCount: prevCounts,
+				status: prevCounts === 11 ? 'completed' : 'in_progress',
+			});
+		}
+
+		//
+
 		res.status(200).json({
 			success: true,
 			data: tag,

@@ -36,6 +36,19 @@ exports.createGoals = async (req, res, next) => {
 			return next(new ErrorResponse('goals not creatd on Step Nine', 400));
 		}
 
+		//
+
+		if (result === null) {
+			let prevCounts = version.stepsCount;
+			prevCounts += 1;
+			const updated = await Version.findByIdAndUpdate(req.params.versionId, {
+				stepsCount: prevCounts,
+				status: prevCounts === 11 ? 'completed' : 'in_progress',
+			});
+		}
+
+		//
+
 		res.status(200).json({
 			success: true,
 			data: goals,

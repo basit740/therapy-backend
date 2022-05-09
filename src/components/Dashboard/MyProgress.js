@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // for API call
 import { createIssues } from '../../api/steptwo.js';
@@ -35,6 +36,7 @@ import Results from './CreateNewVersion/Results/Results.js';
 import './MyProgress.css';
 
 const MyProgress = () => {
+	const navigate = useNavigate();
 	const newVerCtx = useContext(NewVersionContext);
 	const previousButton = document.querySelector('buttonPrevious');
 	const saveButton = document.querySelector('buttonSave');
@@ -301,6 +303,8 @@ const MyProgress = () => {
 				setSaveButtonText('try again!');
 				return;
 			}
+
+			navigate('/dashboard');
 			setSaveButtonText('See Results');
 		}
 

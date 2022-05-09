@@ -54,6 +54,16 @@ exports.createIssue = async (req, res, next) => {
 				message: 'issues not created on StepTwo',
 			});
 		} else {
+			// update version status and count
+			if (updatedResult === null) {
+				let prevCounts = version.stepsCount;
+				prevCounts += 2;
+				const updated = await Version.findByIdAndUpdate(req.params.versionId, {
+					stepsCount: prevCounts,
+					status: prevCounts === 11 ? 'completed' : 'in_progress',
+				});
+			}
+
 			res.status(200).json({
 				success: true,
 				data: returnedIssues,
