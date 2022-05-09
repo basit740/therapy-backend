@@ -11,6 +11,7 @@ import { getThoughts } from '../../api/stepSeven.js';
 import { createStep8Tags } from '../../api/stepEight.js';
 import { createGoals } from '../../api/stepNine.js';
 import { createStep10Tags } from '../../api/stepTen.js';
+import { createBenefits } from '../../api/stepEleven.js';
 
 //context
 import NewVersionContext from '../../store/new-version-context.js';
@@ -57,6 +58,7 @@ const MyProgress = () => {
 	const [stepEightState, setStepEightState] = useState({});
 	const [stepNineState, setStepNineState] = useState({});
 	const [stepTenState, setStepTenState] = useState({});
+	const [stepElevenState, setStepElevenState] = useState(null);
 
 	let [formStep, setFormStep] = useState(1);
 
@@ -77,6 +79,7 @@ const MyProgress = () => {
 
 	const prevHandler = () => {
 		if (formStep === 12) {
+			console.log(formStep);
 			setSaveButtonText('See Results');
 		} else {
 			setSaveButtonText('Save & Continue');
@@ -145,8 +148,6 @@ const MyProgress = () => {
 				return;
 			}
 			//console.log('data from Server For Step Three', response.data);
-		} else if (formStep === 12) {
-			setSaveButtonText('See Results');
 		} else if (formStep === 5) {
 			setSaveButtonText('Saving...');
 			const requestObj = {
@@ -264,6 +265,43 @@ const MyProgress = () => {
 				return;
 			}
 			setSaveButtonText('Save & Continue');
+		} else if (formStep === 12) {
+			console.log('i am here');
+			setSaveButtonText('Saving...');
+
+			stepElevenState.firstValues.map((s) => {
+				s['step'] = '1';
+			});
+			stepElevenState.secondValues.map((s) => {
+				s['step'] = '2';
+			});
+			stepElevenState.thirdValues.map((s) => {
+				s['step'] = '3';
+			});
+			stepElevenState.fourthValues.map((s) => {
+				s['step'] = '4';
+			});
+			stepElevenState.fifthValues.map((s) => {
+				s['step'] = '5';
+			});
+
+			const requestBody = {
+				benefits: [
+					...stepElevenState.firstValues,
+					...stepElevenState.secondValues,
+					...stepElevenState.thirdValues,
+					...stepElevenState.fourthValues,
+					...stepElevenState.fifthValues,
+				],
+			};
+			const response = await createBenefits(newVerCtx.versionId, {
+				benefits: requestBody.benefits,
+			});
+			if (response.success === false) {
+				setSaveButtonText('try again!');
+				return;
+			}
+			setSaveButtonText('See Results');
 		}
 
 		setFormStep(parseInt(formStep) + 1);
@@ -274,7 +312,7 @@ const MyProgress = () => {
 		setStepTwoState(state);
 	};
 	const stepsHandler = (event) => {
-		// for StepOne Values
+		//for StepOne Values
 
 		if (event.target.id == 12) {
 			setSaveButtonText('See Results');
@@ -600,7 +638,9 @@ const MyProgress = () => {
 				{formStep === 11 && (
 					<StepTen onStateChange={(state) => setStepTenState(state)} />
 				)}
-				{formStep === 12 && <StepEleven />}
+				{formStep === 12 && (
+					<StepEleven onStateChange={(state) => setStepElevenState(state)} />
+				)}
 
 				<div className='prevOrSave'>
 					<button className='buttonPrevious' onClick={() => prevHandler()}>

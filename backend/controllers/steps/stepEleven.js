@@ -16,6 +16,19 @@ exports.createBenefits = async (req, res, next) => {
 				)
 			);
 		}
+
+		const exBenefits = await StepEleven.find({
+			version: req.params.versionId,
+		});
+
+		let result = null;
+
+		if (exBenefits.length > 0) {
+			result = await StepEleven.deleteMany({
+				version: req.params.versionId,
+			});
+		}
+
 		req.body.benefits.map((benefit) => {
 			benefit['version'] = req.params.versionId;
 		});
@@ -34,6 +47,7 @@ exports.createBenefits = async (req, res, next) => {
 };
 
 exports.getBenefits = async (req, res, next) => {
+	console.log('working');
 	try {
 		const version = await Version.findById(req.params.versionId);
 		if (!version) {
@@ -45,8 +59,10 @@ exports.getBenefits = async (req, res, next) => {
 			);
 		}
 		const benefits = await StepEleven.find({
-			version: req.body.versionId,
+			version: req.params.versionId,
 		});
+
+		console.log(benefits);
 
 		if (!benefits) {
 			return next(new ErrorResponse('error finding benefits on Step Eleven'));

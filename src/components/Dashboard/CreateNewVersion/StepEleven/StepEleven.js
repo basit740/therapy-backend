@@ -5,14 +5,14 @@ import { Step11ContextProvider } from '../../../../store/step-eleven';
 
 import StepElevenStatic from './StepElevenStatic';
 import SliderSteps from './SliderSteps/SliderSteps';
-const StepEleven = () => {
+const StepEleven = ({ onStateChange }) => {
 	return (
 		<Step11ContextProvider>
 			<section className={classes['step-eleven']}>
 				<StepElevenStatic />
 
 				<div className={classes['sliders']}>
-					<SliderSteps />
+					<SliderSteps onStateChange={onStateChange} />
 				</div>
 			</section>
 		</Step11ContextProvider>

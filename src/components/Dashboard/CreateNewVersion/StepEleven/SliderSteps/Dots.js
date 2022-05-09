@@ -1,7 +1,7 @@
 import React from 'react';
-
+import DotsLaoding from './DotsLaoding';
 import classes from './SliderSteps.module.css';
-const Dots = ({ currentStep, onDotClick }) => {
+const Dots = ({ currentStep, onDotClick, isLoading }) => {
 	const dotClickHandler = (event) => {
 		onDotClick(event.target.id);
 	};
@@ -10,7 +10,7 @@ const Dots = ({ currentStep, onDotClick }) => {
 		<>
 			<div className={classes['steps-info']}>
 				<div>
-					<h3>Step {currentStep} of 5</h3>
+					{!isLoading ? <h3>Step {currentStep} of 5</h3> : <DotsLaoding />}
 				</div>
 
 				<div className={classes['dots']}>

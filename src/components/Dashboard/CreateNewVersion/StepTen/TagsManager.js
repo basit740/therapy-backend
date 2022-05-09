@@ -3,7 +3,7 @@ import classes from './StepTen.module.css';
 import AddNewTag from './AddNewTag';
 import Loading from './Loading';
 
-import Tag from '../../UI/Tag.js';
+import Tag from '../../Shapes/UI/Tag';
 const TagsManager = ({
 	onTitleChange,
 	tagTitle,

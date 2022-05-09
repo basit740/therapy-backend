@@ -5,7 +5,7 @@ import { DEFAULT_TAGS_DATA } from '../../../../data/step-four/defaultData';
 import NewVersionContext from '../../../../store/new-version-context';
 import StepFourStatic from './StepFourStatic';
 import AddNewTag from './AddNewTag';
-import Tag from '../../UI/Tag';
+import Tag from '../../Shapes/UI/Tag';
 import Loading from './Loading';
 
 import { getTags } from '../../../../api/stepfour';

@@ -7,7 +7,7 @@ import { DEFAULT_TAGS_DATA } from '../../../../data/step-eight/defaultData';
 import NewVersionContext from '../../../../store/new-version-context';
 
 import AddNewTag from './AddNewTag';
-import Tag from '../../UI/Tag';
+import Tag from '../../Shapes/UI/Tag.js';
 import Loading from './Loading';
 
 import StepEightStatic from './StepEightStatic';

@@ -3,17 +3,17 @@ const mongoose = require('mongoose');
 // benefits
 
 const StepElevenSchema = new mongoose.Schema({
-	benefitTitle: {
+	title: {
 		type: String,
 		required: true,
 	},
-	benefitValue: {
+	value: {
 		type: Number,
 		required: true,
 	},
-	benefitStep: {
-		type: [Number],
-		enum: [1, 2, 3, 4, 5],
+	step: {
+		type: String,
+		enum: ['1', '2', '3', '4', '5'],
 		required: true,
 	},
 	createdAt: {
