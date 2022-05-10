@@ -59,7 +59,6 @@ exports.createBenefits = async (req, res, next) => {
 };
 
 exports.getBenefits = async (req, res, next) => {
-	console.log('working');
 	try {
 		const version = await Version.findById(req.params.versionId);
 		if (!version) {
@@ -73,8 +72,6 @@ exports.getBenefits = async (req, res, next) => {
 		const benefits = await StepEleven.find({
 			version: req.params.versionId,
 		});
-
-		console.log(benefits);
 
 		if (!benefits) {
 			return next(new ErrorResponse('error finding benefits on Step Eleven'));
