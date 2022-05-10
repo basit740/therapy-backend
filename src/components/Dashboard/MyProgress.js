@@ -328,6 +328,9 @@ const MyProgress = () => {
 
 	//console.log('formStemp', formStep);
 
+	useEffect(() => {
+		setFormStep(newVerCtx.currentStep);
+	}, []);
 	return (
 		<main className='Body'>
 			<section className='sectionOne'>

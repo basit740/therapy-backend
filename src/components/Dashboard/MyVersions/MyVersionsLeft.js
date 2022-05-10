@@ -35,9 +35,9 @@ const MyVersionsLeft = () => {
 
 	const newVerCtx = useContext(NewVersionContext);
 
-	const actionHandler = (event) => {
-		event.preventDefault();
-		newVerCtx.versionIdHandler(event.target.id);
+	const actionHandler = (id, stepsCount) => {
+		newVerCtx.versionIdHandler(id);
+		newVerCtx.currentStepHandler(stepsCount + 1);
 		navigate('/dashboard/newjourney');
 	};
 
@@ -85,6 +85,7 @@ const MyVersionsLeft = () => {
 									id={vr._id}
 									date={vr.createdAt}
 									status={vr.status}
+									stepsCount={vr.stepsCount}
 									onAction={actionHandler}
 								/>
 							);

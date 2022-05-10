@@ -69,6 +69,26 @@ exports.getVersions = async (req, res, next) => {
 	});
 };
 
+// @desc Get a single Version by Id
+// @route GET /api/v1/versions/:id
+// @access Private
+
+exports.getVersion = async (req, res, next) => {
+	const version = await Version.findById(req.params.id);
+
+	if (!version) {
+		res.status(400).json({
+			success: false,
+			message: 'error finding version',
+		});
+	}
+
+	res.status(200).json({
+		success: true,
+		data: version,
+	});
+};
+
 // @desc Update Version
 // @route PUT /api/v1/versions/:id
 // @access Private

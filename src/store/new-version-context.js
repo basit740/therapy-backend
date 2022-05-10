@@ -5,6 +5,8 @@ import { initialState } from '../components/Dashboard/CreateNewVersion/StepThree
 const NewVersionContext = React.createContext({
 	versionId: '',
 	versionIdHandler: (versionId) => {},
+	currentStep: 1,
+	currentStepHandler: (stepNumber) => {},
 
 	stepOneFirstHandler: (val) => {},
 	stepOneSecondHandler: (val) => {},
@@ -28,6 +30,7 @@ const NewVersionContext = React.createContext({
 
 export const NewVersionContextProvider = (props) => {
 	const [versionId, setVersionId] = useState('');
+	const [currentStep, setCurrentStep] = useState(1);
 
 	// For StepOne Context
 	const [stepOneFirst, setStepOneFirst] = useState('');
@@ -65,6 +68,10 @@ export const NewVersionContextProvider = (props) => {
 				{ id: 3, feelingContent: '', feelingReflection: '' },
 			],
 		});
+	};
+
+	const currentStepHandler = (currentStep) => {
+		setCurrentStep(currentStep);
 	};
 
 	const stepOneFirstHandler = (val) => {
@@ -121,6 +128,8 @@ export const NewVersionContextProvider = (props) => {
 	const contextValue = {
 		versionIdHandler: versionIdHandler,
 		versionId: versionId,
+		currentStep: currentStep,
+		currentStepHandler: currentStepHandler,
 		stepOneValuesClearer,
 		stepOneFirstHandler,
 		stepOneFirst,

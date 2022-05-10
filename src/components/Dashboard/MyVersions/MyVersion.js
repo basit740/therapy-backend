@@ -1,17 +1,10 @@
 import React from 'react';
 import MyVersionsLeft from './MyVersionsLeft';
 import { Link } from 'react-router-dom';
+import { dateFormatter } from '../../../utils/items';
 
-const MyVersion = ({ date, status, id, onAction }) => {
-	const formatedDate = new Date(date);
-
-	var month = formatedDate.getUTCMonth() + 1; //months from 1-12
-	var day = formatedDate.getUTCDate();
-	var year = formatedDate.getUTCFullYear();
-
-	day.toString().length === 1 ? (day = '0' + day) : (day = day);
-	month.toString().length === 1 ? (month = '0' + month) : (month = month);
-	const properDate = day + '/' + month + '/' + year;
+const MyVersion = ({ date, status, id, onAction, stepsCount }) => {
+	const properDate = dateFormatter(date);
 
 	let statusText = '';
 	let versionAction = 'START VERSION';
@@ -43,6 +36,11 @@ const MyVersion = ({ date, status, id, onAction }) => {
 		// do nothing
 	}
 
+	const actionHandler = (event) => {
+		event.preventDefault();
+		onAction(event.target.id, stepsCount);
+	};
+
 	return (
 		<>
 			<tr id={id}>
@@ -56,7 +54,7 @@ const MyVersion = ({ date, status, id, onAction }) => {
 						className={vClass}
 						to='/dashboard/newjourney'
 						id={id}
-						onClick={onAction}
+						onClick={actionHandler}
 					>
 						{versionAction}
 					</Link>

@@ -1,24 +1,45 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, {
+	useState,
+	useRef,
+	useContext,
+	useEffect,
+	useReducer,
+} from 'react';
 import NewVersionContext from '../../store/new-version-context';
 import AuthContext from '../../store/auth-context';
 import './NewVersion.css';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 
-import { createVersion } from '../../api/version';
-
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { createVersion, getVersions, getVersion } from '../../api/version';
 
 import Modal from '../Common/Modal/Modal.js';
 import Step from './Step.js';
 
+// data
+import { steps } from '../../data/new-version/steps';
+import reducer, { initialState } from './newVersionReducer';
+import { Skeleton } from '@mui/material';
+
 const NewVersion = () => {
 	const newVerCtx = useContext(NewVersionContext);
 	const authCtx = useContext(AuthContext);
+
+	let firstFive = 0;
+	let secondFive = 0;
+
+	const [state, dispatch] = useReducer(reducer, initialState);
+
 	const [showForm, setShowForm] = useState(false);
 	const [versionName, setVersionName] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const [buttonText, setButtonText] = useState('Submit');
+
+	// states for managing version drop down
+
+	const [versions, setVersions] = useState([]);
+	const [selectedVersion, setSelectedVersion] = useState(null);
+	const [selectedStep, setSelectedStep] = useState(null);
+	//
 
 	// Modal State
 
@@ -72,10 +93,77 @@ const NewVersion = () => {
 			});
 		} else {
 			newVerCtx.versionIdHandler(result.data._id);
+			newVerCtx.currentStepHandler(1);
 			newVerCtx.stepOneValuesClearer();
 			navigate('/dashboard/newjourney');
 		}
 	};
+
+	// select version functionality
+
+	const versionSelector = async (event) => {
+		newVerCtx.versionIdHandler(event.target.value);
+		dispatch({
+			type: 'DATA_LOADING',
+		});
+
+		const response = await getVersion(event.target.value);
+		if (response.success) {
+			//setSelectedVersion(response.data);
+			dispatch({
+				type: 'SELECT_VERSION',
+				payload: {
+					version: response.data,
+				},
+			});
+
+			newVerCtx.currentStepHandler(response.data.stepsCount + 1);
+		} else {
+			return;
+		}
+
+		const version = response.data;
+		setSelectedStep(version.stepsCount + 1);
+	};
+
+	// useEffect(() => {
+	// 	newVerCtx.versionIdHandler(state.selectedVersion._id);
+	// 	newVerCtx.currentStepHandler(state.selectedVersion.stepsCount);
+	// }, [state.selectedVersion]);
+
+	useEffect(() => {
+		(async () => {
+			const response = await getVersions();
+			if (response.success && response.data.length > 0) {
+				const filterd = response.data.filter((v) => v.status === 'in_progress');
+				setVersions((prev) => {
+					return [...filterd];
+				});
+
+				// for state update
+
+				const recentVersions = response.data.sort(
+					(a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+				);
+
+				const latestInProgress = recentVersions.find((v) => {
+					return v.status === 'in_progress';
+				});
+
+				newVerCtx.versionIdHandler(latestInProgress._id);
+				newVerCtx.currentStepHandler(latestInProgress.stepsCount + 1); // this is how MyProgress is handling formStep
+
+				// for state upadate
+
+				dispatch({
+					type: 'DATA_FROM_SERVER',
+					payload: {
+						data: response.data,
+					},
+				});
+			}
+		})();
+	}, []);
 	return (
 		<div className='new-version-container'>
 			{modalIsOpen && (
@@ -100,33 +188,14 @@ const NewVersion = () => {
 					<div className=''></div>
 					<div className='choose-version'>
 						<label>Choose Veresion</label>
-						<select>
-							<option value='loss-of-grandma'>
-								Dealing with the loss of Grandma
-							</option>
+						<select onChange={versionSelector}>
+							{versions.map((v) => {
+								return <option value={v._id}>{v.versionName}</option>;
+							})}
 						</select>
 					</div>
 
 					<div className='new-version-button'>
-						{/* <div className='new-version-form-container'>
-							{showForm && (
-								<form onSubmit={submitHandler}>
-									<input
-										type='text'
-										autoFocus
-										onChange={versionNameHandler}
-										placeholder='enter version name here'
-										disabled={isLoading ? true : false}
-									/>
-
-									<input
-										type='submit'
-										disabled={isLoading ? true : false}
-										value={isLoading ? 'Creating...' : 'Submit'}
-									/>
-								</form>
-							)}
-						</div> */}
 						<div className='new-version-button-content'>
 							<Link to='/dashboard/newjourney' onClick={newVersionHandler}>
 								Create New Version
@@ -142,39 +211,122 @@ const NewVersion = () => {
 					<div className='first-box'>
 						<h6>Continue Version</h6>
 						<div className='first-box-content'>
-							STEP 4
+							STEP{' '}
+							{state.isLoading && (
+								<Skeleton
+									animation='wave'
+									style={{
+										width: '20px',
+										height: '20px',
+										display: 'inline-block',
+										marginTop: '10px',
+									}}
+								/>
+							)}{' '}
+							{!state.isLoading && state.selectedVersion.stepsCount}
 							<h3>
-								Replace non productive coping methods with "Mean Time Tools"
+								{state.isLoading && (
+									<Skeleton
+										animation='wave'
+										style={{
+											width: '300px',
+											height: '100px',
+										}}
+									/>
+								)}
+								{!state.isLoading &&
+									steps.find(
+										(s) => s.stepNumber === state.selectedVersion.stepsCount
+									).stepTitle}
 							</h3>
 							<div className='first-box-content-tag'>
 								<span>Duration: 15 minutes</span>
 							</div>
-							<button>Continue</button>
+							<button>
+								<Link to='/dashboard/newjourney' style={{ color: 'white' }}>
+									Continue
+								</Link>
+							</button>
 						</div>
 					</div>
 					<div className='second-box'>
 						<h6 className='h6-upper'>Or Skip to anothers step</h6>
 						<div className='steps__first_five'>
-							<Step actionType='View' />
+							{/* <Step actionType='View' title={} />
 							<Step actionType='View' />
 							<Step actionType='Edit' />
 							<Step actionType='Edit' />
-							<Step actionType='Start' />
+							<Step actionType='Start' /> */}
+
+							{state.isLoading &&
+								steps.map((s, index) => {
+									if (index < 5)
+										return (
+											<Skeleton
+												style={{
+													height: '80px',
+												}}
+											/>
+										);
+								})}
+
+							{!state.isLoading &&
+								steps.map((s, index) => {
+									if (
+										s.stepNumber != state.selectedVersion.stepsCount &&
+										index < 6
+									) {
+										return (
+											<Step
+												title={s.stepTitle}
+												date={state.selectedVersion.createdAt}
+												actionType='Edit'
+												stepNumber={s.stepNumber}
+											/>
+										);
+									}
+								})}
 						</div>
 					</div>
 					<div className='third-box'>
 						<h6 style={{ color: 'white' }}>this is third box</h6>
-						<Step />
-						<Step />
-						<Step />
-						<Step />
-						<Step />
+
+						{state.isLoading &&
+							steps.map((s, index) => {
+								if (index < 5)
+									return (
+										<Skeleton
+											style={{
+												height: '80px',
+											}}
+										/>
+									);
+							})}
+
+						{!state.isLoading &&
+							steps.map((s, index) => {
+								if (
+									s.stepNumber != state.selectedVersion.stepsCount &&
+									index >= 6
+								) {
+									return (
+										<Step
+											title={s.stepTitle}
+											date={state.selectedVersion.createdAt}
+											actionType='Edit'
+											stepNumber={s.stepNumber}
+										/>
+									);
+								}
+							})}
 					</div>
 				</div>
 			</div>
-			<ToastContainer />
 		</div>
 	);
 };
 
 export default NewVersion;
+
+//{steps[selectedVersion - 1].stepNumber}
+//{steps[selectedVersion - 1].stepTitle}
