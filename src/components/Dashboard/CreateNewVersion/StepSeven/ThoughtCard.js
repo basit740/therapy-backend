@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import './ThoughtCard.css';
 import uniqueId from 'lodash.uniqueid';
 
@@ -6,8 +6,8 @@ import Thought from './Thought';
 const ThoughtCard = (props) => {
 	const [thoughtContent, setThoughtContent] = useState('');
 	const [isShown, setIsShown] = useState(false);
-	const [cardId, setCardId] = useState(props.id);
-	const [thoughts, setThoughts] = useState([]);
+
+	//const [thoughts, setThoughts] = useState([]);
 	const [trigger, setTrigger] = useState(false);
 
 	const inputRef = useRef();
@@ -15,12 +15,15 @@ const ThoughtCard = (props) => {
 	const thoughtContentHandler = (event) => {
 		setThoughtContent(event.target.value);
 	};
-	const inputShowHideHandler = () => {
-		setIsShown(true);
-		inputRef.current.focus();
-	};
+	// const inputShowHideHandler = () => {
+	// 	setIsShown(true);
+	// 	inputRef.current.focus();
+	// };
 
 	const submitHandler = (event) => {
+		//alert('something');
+		console.log(event.target.cardId);
+
 		if (trigger) {
 			setTrigger(false);
 		} else {
@@ -30,7 +33,7 @@ const ThoughtCard = (props) => {
 		let newThought = {
 			id: 'thg_' + uniqueId(),
 			thgContent: thoughtContent,
-			cardId: cardId,
+			cardId: props.id,
 		};
 		props.onNewThought(newThought);
 		inputRef.current.innerHTML = '';

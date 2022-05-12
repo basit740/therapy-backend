@@ -15,6 +15,7 @@ export const initialState = {
 		{ id: 2, feelingContent: '', feelingReflection: '' },
 		{ id: 3, feelingContent: '', feelingReflection: '' },
 	],
+	isLoading: true,
 };
 
 export default function reducer(state, action) {
@@ -50,6 +51,7 @@ export default function reducer(state, action) {
 					{ id: 3, feelingContent: '', feelingReflection: '' },
 				],
 			};
+			prevState.isLoading = false;
 			break;
 		case ACTIONS.DATA_FROM_SERVER:
 			console.log('stepthree reducer', data);
@@ -57,6 +59,7 @@ export default function reducer(state, action) {
 				feelings: [...data],
 			};
 			prevState = newState;
+			prevState.isLoading = false;
 			break;
 		default:
 		//return prevState;

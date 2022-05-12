@@ -1,14 +1,8 @@
-import React, {
-	useState,
-	useRef,
-	useContext,
-	useEffect,
-	useReducer,
-} from 'react';
+import React, { useState, useContext, useEffect, useReducer } from 'react';
 import NewVersionContext from '../../store/new-version-context';
 import AuthContext from '../../store/auth-context';
 import './NewVersion.css';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { createVersion, getVersions, getVersion } from '../../api/version';
 
@@ -24,21 +18,20 @@ const NewVersion = () => {
 	const newVerCtx = useContext(NewVersionContext);
 	const authCtx = useContext(AuthContext);
 
-	let firstFive = 0;
-	let secondFive = 0;
-
 	const [state, dispatch] = useReducer(reducer, initialState);
 
-	const [showForm, setShowForm] = useState(false);
-	const [versionName, setVersionName] = useState('');
-	const [isLoading, setIsLoading] = useState(false);
-	const [buttonText, setButtonText] = useState('Submit');
+	// const [showForm, setShowForm] = useState(false);
+	// const [versionName, setVersionName] = useState('');
+	// //just using it
+	// console.log(versionName);
+	// const [isLoading, setIsLoading] = useState(false);
+	// const [buttonText, setButtonText] = useState('Submit');
 
 	// states for managing version drop down
 
 	const [versions, setVersions] = useState([]);
-	const [selectedVersion, setSelectedVersion] = useState(null);
-	const [selectedStep, setSelectedStep] = useState(null);
+	//const [selectedVersion, setSelectedVersion] = useState(null);
+	//const [selectedStep, setSelectedStep] = useState(null);
 	//
 
 	// Modal State
@@ -50,7 +43,7 @@ const NewVersion = () => {
 		error: '',
 	});
 	const navigate = useNavigate();
-	const inputRef = useRef();
+	//const inputRef = useRef();
 
 	const newVersionHandler = (event) => {
 		event.preventDefault();
@@ -59,9 +52,9 @@ const NewVersion = () => {
 		//inputRef.current.focus();
 	};
 
-	const versionNameHandler = (event) => {
-		setVersionName(event.target.value);
-	};
+	// const versionNameHandler = (event) => {
+	// 	setVersionName(event.target.value);
+	// };
 	const versionInputHandler = () => {
 		let prev = { ...request };
 		prev.error = '';
@@ -122,15 +115,14 @@ const NewVersion = () => {
 			return;
 		}
 
-		const version = response.data;
-		setSelectedStep(version.stepsCount + 1);
+		//const version = response.data;
+		//setSelectedStep(version.stepsCount + 1);
 	};
 
-	// useEffect(() => {
-	// 	newVerCtx.versionIdHandler(state.selectedVersion._id);
-	// 	newVerCtx.currentStepHandler(state.selectedVersion.stepsCount);
-	// }, [state.selectedVersion]);
-
+	useEffect(() => {
+		console.log('use Effect 1 in New Version');
+		console.log(state);
+	}, [state]);
 	useEffect(() => {
 		(async () => {
 			const response = await getVersions();
@@ -163,6 +155,7 @@ const NewVersion = () => {
 				});
 			}
 		})();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	return (
 		<div className='new-version-container'>
@@ -257,10 +250,9 @@ const NewVersion = () => {
 							<Step actionType='Edit' />
 							<Step actionType='Edit' />
 							<Step actionType='Start' /> */}
-
 							{state.isLoading &&
 								steps.map((s, index) => {
-									if (index < 5)
+									if (index < 5) {
 										return (
 											<Skeleton
 												style={{
@@ -268,47 +260,12 @@ const NewVersion = () => {
 												}}
 											/>
 										);
+									}
+									return null;
 								})}
 
 							{!state.isLoading &&
-								steps.map((s, index) => {
-									if (
-										s.stepNumber != state.selectedVersion.stepsCount &&
-										index < 6
-									) {
-										return (
-											<Step
-												title={s.stepTitle}
-												date={state.selectedVersion.createdAt}
-												actionType='Edit'
-												stepNumber={s.stepNumber}
-											/>
-										);
-									}
-								})}
-						</div>
-					</div>
-					<div className='third-box'>
-						<h6 style={{ color: 'white' }}>this is third box</h6>
-
-						{state.isLoading &&
-							steps.map((s, index) => {
-								if (index < 5)
-									return (
-										<Skeleton
-											style={{
-												height: '80px',
-											}}
-										/>
-									);
-							})}
-
-						{!state.isLoading &&
-							steps.map((s, index) => {
-								if (
-									s.stepNumber != state.selectedVersion.stepsCount &&
-									index >= 6
-								) {
+								state.firstFive.map((s, index) => {
 									return (
 										<Step
 											title={s.stepTitle}
@@ -317,7 +274,35 @@ const NewVersion = () => {
 											stepNumber={s.stepNumber}
 										/>
 									);
+								})}
+						</div>
+					</div>
+					<div className='third-box'>
+						<h6 style={{ color: 'white' }}>this is third box</h6>
+						{state.isLoading &&
+							steps.map((s, index) => {
+								if (index < 5) {
+									return (
+										<Skeleton
+											style={{
+												height: '80px',
+											}}
+										/>
+									);
 								}
+								return null;
+							})}
+
+						{!state.isLoading &&
+							state.secondFive.map((s, index) => {
+								return (
+									<Step
+										title={s.stepTitle}
+										date={state.selectedVersion.createdAt}
+										actionType='Edit'
+										stepNumber={s.stepNumber}
+									/>
+								);
 							})}
 					</div>
 				</div>

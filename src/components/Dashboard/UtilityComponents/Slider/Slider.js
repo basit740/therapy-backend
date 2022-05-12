@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 
 import classes from './Slider.module.css';
-import Box from '@mui/material/Box';
+
 import Slider from '@mui/material/Slider';
 
 const PersonalSlider = (props) => {

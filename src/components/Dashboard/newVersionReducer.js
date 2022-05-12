@@ -1,6 +1,9 @@
+import { steps } from '../../data/new-version/steps';
 export const initialState = {
 	versions: [],
 	selectedVersion: null,
+	firstFive: [],
+	secondFive: [],
 	isLoading: true,
 };
 
@@ -19,11 +22,25 @@ export default function reducer(state, action) {
 		//console.log(latestInProgress.stepsCount);
 
 		pState.selectedVersion = { ...latestInProgress };
+		console.log(latestInProgress);
+
+		const filtered = steps.filter(
+			(s) => s.stepNumber !== latestInProgress.stepsCount
+		);
+		pState.firstFive = [...filtered.slice(0, 5)];
+		pState.secondFive = [...filtered.slice(5, 10)];
+
 		pState.isLoading = false;
 	} else if (action.type === 'DATA_LOADING') {
 		pState.isLoading = true;
 	} else if (action.type === 'SELECT_VERSION') {
 		pState.selectedVersion = action.payload.version;
+
+		const filtered = steps.filter(
+			(s) => s.stepNumber !== state.selectedVersion.stepsCount
+		);
+		pState.firstFive = [...filtered.slice(0, 5)];
+		pState.seocndFive = [...filtered.slice(5, 10)];
 		pState.isLoading = false;
 	}
 	return pState;

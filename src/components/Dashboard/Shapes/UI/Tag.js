@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Tag.css';
 
 const Tag = ({ title, id, onClick, status }) => {
 	//const [localStatus, setLocalStatus] = useState(status);
 
-	const [classes, setClasses] = useState('tag');
+	// const [classes, setClasses] = useState('tag');
 	const clickHandler = () => {
 		onClick({
 			id: id,

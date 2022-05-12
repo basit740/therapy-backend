@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './StepThree.css';
 
-function StepThreeAdd({ i, onReflection, onHabit, habit, reflection }) {
+function StepThreeAdd({
+	i,
+	onReflection,
+	onHabit,
+	habit,
+	reflection,
+	isLoading,
+}) {
 	const textAreaHandler = (event) => {
 		onHabit(event.target.value);
 	};
@@ -13,13 +20,16 @@ function StepThreeAdd({ i, onReflection, onHabit, habit, reflection }) {
 			<div className='identify'>
 				<div>{i}</div>
 				<div>
-					<textarea onChange={textAreaHandler} value={habit}></textarea>
+					<textarea
+						onChange={textAreaHandler}
+						value={isLoading ? 'loading...' : habit}
+					></textarea>
 					<br />
 					<div>Reflection</div>
 					<input
 						className='reflectionInputs'
 						onChange={inputHandler}
-						value={reflection}
+						value={isLoading ? 'loading...' : reflection}
 					/>
 				</div>
 			</div>

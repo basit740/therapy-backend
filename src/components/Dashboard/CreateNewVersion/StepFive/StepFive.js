@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useContext, useEffect } from 'react';
+import React, { useReducer, useContext, useEffect } from 'react';
 import NewVersionContext from '../../../../store/new-version-context';
 import StepFiveAdd from './StepFiveAdd';
 import './StepFive.css';
@@ -54,11 +54,10 @@ function StepFive({ onStateChange }) {
 	useEffect(() => {
 		console.log('use effect 1', state);
 		onStateChange(state);
-	}, [state]);
+	}, [state, onStateChange]);
 
 	useEffect(() => {
 		(async () => {
-			console.log('use effect 2', state);
 			const response = await getActions(newVerCtx.versionId);
 
 			if (response.success && response.data.length > 0) {
@@ -75,7 +74,7 @@ function StepFive({ onStateChange }) {
 				});
 			}
 		})();
-	}, []);
+	}, [newVerCtx.versionId]);
 
 	return (
 		<section className='takeAction'>

@@ -52,19 +52,24 @@ export default function reducer(state, action) {
 			} else if (iss.issueImpactType[0] === 'critical') {
 				state.critical.push(iss);
 			}
+			return null;
 		});
 
 		state.low.map((iss) => {
 			iss['id'] = iss._id;
+			return null;
 		});
 		state.medium.map((iss) => {
 			iss['id'] = iss._id;
+			return null;
 		});
 		state.high.map((iss) => {
 			iss['id'] = iss._id;
+			return null;
 		});
 		state.critical.map((iss) => {
 			iss['id'] = iss._id;
+			return null;
 		});
 
 		state.dataLoading = false;
@@ -77,58 +82,58 @@ export default function reducer(state, action) {
 		return { ...state };
 	}
 	if (action.type === ACTIONS.DROP_ON_LOW) {
-		if (state.dragSrcId === 2) {
+		if (state.dragSrcId === '2') {
 			issue = prevState.medium.find((isu) => {
 				console.log('ise', isu.id, id);
-				return isu.id == id;
+				return isu.id === id;
 			});
-			prevState.medium = prevState.medium.filter((isu) => isu.id != id);
-		} else if (state.dragSrcId === 3) {
-			issue = prevState.high.find((isu) => isu.id == id);
-			prevState.high = prevState.high.filter((isu) => isu.id != id);
+			prevState.medium = prevState.medium.filter((isu) => isu.id !== id);
+		} else if (state.dragSrcId === '3') {
+			issue = prevState.high.find((isu) => isu.id === id);
+			prevState.high = prevState.high.filter((isu) => isu.id !== id);
 		} else {
-			issue = prevState.critical.find((isu) => isu.id == id);
-			prevState.critical = prevState.critical.filter((isu) => isu.id != id);
+			issue = prevState.critical.find((isu) => isu.id === id);
+			prevState.critical = prevState.critical.filter((isu) => isu.id !== id);
 		}
 		prevState.low = [...prevState.low, issue];
 		//console.log(s)
 		return prevState;
 	} else if (action.type === ACTIONS.DROP_ON_MEDIUM) {
-		if (state.dragSrcId === 3) {
-			issue = prevState.high.find((isu) => isu.id == id);
-			prevState.high = prevState.high.filter((isu) => isu.id != id);
-		} else if (state.dragSrcId === 4) {
-			issue = prevState.critical.find((isu) => isu.id == id);
-			prevState.critical = prevState.critical.filter((isu) => isu.id != id);
+		if (state.dragSrcId === '3') {
+			issue = prevState.high.find((isu) => isu.id === id);
+			prevState.high = prevState.high.filter((isu) => isu.id !== id);
+		} else if (state.dragSrcId === '4') {
+			issue = prevState.critical.find((isu) => isu.id === id);
+			prevState.critical = prevState.critical.filter((isu) => isu.id !== id);
 		} else {
-			issue = prevState.low.find((isu) => isu.id == id);
-			prevState.low = prevState.low.filter((isu) => isu.id != id);
+			issue = prevState.low.find((isu) => isu.id === id);
+			prevState.low = prevState.low.filter((isu) => isu.id !== id);
 		}
 		prevState.medium = [...prevState.medium, issue];
 		return prevState;
 	} else if (action.type === ACTIONS.DROP_ON_HIGH) {
-		if (state.dragSrcId === 2) {
-			issue = prevState.medium.find((isu) => isu.id == id);
-			prevState.medium = prevState.medium.filter((isu) => isu.id != id);
-		} else if (state.dragSrcId === 4) {
-			issue = prevState.critical.find((isu) => isu.id == id);
-			prevState.critical = prevState.critical.filter((isu) => isu.id != id);
+		if (state.dragSrcId === '2') {
+			issue = prevState.medium.find((isu) => isu.id === id);
+			prevState.medium = prevState.medium.filter((isu) => isu.id !== id);
+		} else if (state.dragSrcId === '4') {
+			issue = prevState.critical.find((isu) => isu.id === id);
+			prevState.critical = prevState.critical.filter((isu) => isu.id !== id);
 		} else {
-			issue = prevState.low.find((isu) => isu.id == id);
-			prevState.low = prevState.low.filter((isu) => isu.id != id);
+			issue = prevState.low.find((isu) => isu.id === id);
+			prevState.low = prevState.low.filter((isu) => isu.id !== id);
 		}
 		prevState.high = [...prevState.high, issue];
 		return prevState;
 	} else if (action.type === ACTIONS.DROP_ON_CRITICAL) {
-		if (state.dragSrcId === 2) {
-			issue = prevState.medium.find((isu) => isu.id == id);
-			prevState.medium = prevState.medium.filter((isu) => isu.id != id);
-		} else if (state.dragSrcId === 3) {
-			issue = prevState.high.find((isu) => isu.id == id);
-			prevState.high = prevState.high.filter((isu) => isu.id != id);
+		if (state.dragSrcId === '2') {
+			issue = prevState.medium.find((isu) => isu.id === id);
+			prevState.medium = prevState.medium.filter((isu) => isu.id !== id);
+		} else if (state.dragSrcId === '3') {
+			issue = prevState.high.find((isu) => isu.id === id);
+			prevState.high = prevState.high.filter((isu) => isu.id !== id);
 		} else {
-			issue = prevState.low.find((isu) => isu.id == id);
-			prevState.low = prevState.low.filter((isu) => isu.id != id);
+			issue = prevState.low.find((isu) => isu.id === id);
+			prevState.low = prevState.low.filter((isu) => isu.id !== id);
 		}
 		prevState.critical = [...prevState.critical, issue];
 		return prevState;

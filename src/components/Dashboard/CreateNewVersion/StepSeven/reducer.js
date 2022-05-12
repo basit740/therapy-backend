@@ -14,12 +14,12 @@ export const ACTIONS = {
 };
 export default function reducer(state, action) {
 	console.log('action', action);
-	let id = state.dragId;
+	//let id = state.dragId;
 	// let dragSrc = action.payload.dragSourceId;
 
 	let prevState = { ...state };
 	let thought = null;
-	let data = null;
+	//let data = null;
 
 	switch (action.type) {
 		case ACTIONS.ADD_NEW_THOUGHT:
@@ -54,25 +54,25 @@ export default function reducer(state, action) {
 			switch (action.payload.cardId) {
 				case '1':
 					filtered = prevState.thoughts.first.filter(
-						(thg) => thg.id != action.payload.thoughtId
+						(thg) => thg.id !== action.payload.thoughtId
 					);
 					prevState.thoughts.first = [...filtered];
 					break;
 				case '2':
 					filtered = prevState.thoughts.second.filter(
-						(thg) => thg.id != action.payload.thoughtId
+						(thg) => thg.id !== action.payload.thoughtId
 					);
 					prevState.thoughts.second = [...filtered];
 					break;
 				case '3':
 					filtered = prevState.thoughts.third.filter(
-						(thg) => thg.id != action.payload.thoughtId
+						(thg) => thg.id !== action.payload.thoughtId
 					);
 					prevState.thoughts.third = [...filtered];
 					break;
 				default:
 					filtered = prevState.thoughts.fourth.filter(
-						(thg) => thg.id != action.payload.thoughtId
+						(thg) => thg.id !== action.payload.thoughtId
 					);
 					prevState.thoughts.fourth = [...filtered];
 			}
@@ -82,102 +82,102 @@ export default function reducer(state, action) {
 			prevState.dragSrcId = action.payload.dragSrcId;
 			break;
 		case ACTIONS.DROP_ON_FIRST:
-			if (prevState.dragSrcId == 2) {
+			if (prevState.dragSrcId === '2') {
 				thought = prevState.thoughts.second.find((thg) => {
-					return thg.id == prevState.dragId;
+					return thg.id === prevState.dragId;
 				});
 				prevState.thoughts.second = prevState.thoughts.second.filter(
-					(thg) => thg.id != prevState.dragId
+					(thg) => thg.id !== prevState.dragId
 				);
-			} else if (state.dragSrcId == 3) {
+			} else if (state.dragSrcId === '3') {
 				thought = prevState.thoughts.third.find(
-					(thg) => thg.id == prevState.dragId
+					(thg) => thg.id === prevState.dragId
 				);
 				prevState.thoughts.third = prevState.thoughts.third.filter(
-					(thg) => thg.id != prevState.dragId
+					(thg) => thg.id !== prevState.dragId
 				);
 			} else {
 				thought = prevState.thoughts.fourth.find(
-					(thg) => thg.id == prevState.dragId
+					(thg) => thg.id === prevState.dragId
 				);
 				prevState.thoughts.fourth = prevState.thoughts.fourth.filter(
-					(thg) => thg.id != prevState.dragId
+					(thg) => thg.id !== prevState.dragId
 				);
 			}
 			prevState.thoughts.first = [...prevState.thoughts.first, thought];
 			break;
 		case ACTIONS.DROP_ON_SECOND:
-			if (prevState.dragSrcId == 1) {
+			if (prevState.dragSrcId === '1') {
 				thought = prevState.thoughts.first.find((thg) => {
-					return thg.id == prevState.dragId;
+					return thg.id === prevState.dragId;
 				});
 				prevState.thoughts.first = prevState.thoughts.first.filter(
-					(thg) => thg.id != prevState.dragId
+					(thg) => thg.id !== prevState.dragId
 				);
-			} else if (state.dragSrcId == 3) {
+			} else if (state.dragSrcId === '3') {
 				thought = prevState.thoughts.third.find(
-					(thg) => thg.id == prevState.dragId
+					(thg) => thg.id === prevState.dragId
 				);
 				prevState.thoughts.third = prevState.thoughts.third.filter(
-					(thg) => thg.id != prevState.dragId
+					(thg) => thg.id !== prevState.dragId
 				);
 			} else {
 				thought = prevState.thoughts.fourth.find(
-					(thg) => thg.id == prevState.dragId
+					(thg) => thg.id === prevState.dragId
 				);
 				prevState.thoughts.fourth = prevState.thoughts.fourth.filter(
-					(thg) => thg.id != prevState.dragId
+					(thg) => thg.id !== prevState.dragId
 				);
 			}
 			prevState.thoughts.second = [...prevState.thoughts.second, thought];
 			break;
 		case ACTIONS.DROP_ON_THIRD:
-			if (prevState.dragSrcId == 1) {
+			if (prevState.dragSrcId === '1') {
 				thought = prevState.thoughts.first.find((thg) => {
-					return thg.id == prevState.dragId;
+					return thg.id === prevState.dragId;
 				});
 				prevState.thoughts.first = prevState.thoughts.first.filter(
-					(thg) => thg.id != prevState.dragId
+					(thg) => thg.id !== prevState.dragId
 				);
-			} else if (state.dragSrcId == 2) {
+			} else if (state.dragSrcId === '2') {
 				thought = prevState.thoughts.second.find((thg) => {
-					return thg.id == prevState.dragId;
+					return thg.id === prevState.dragId;
 				});
 				prevState.thoughts.second = prevState.thoughts.second.filter(
-					(thg) => thg.id != prevState.dragId
+					(thg) => thg.id !== prevState.dragId
 				);
 			} else {
 				thought = prevState.thoughts.fourth.find(
-					(thg) => thg.id == prevState.dragId
+					(thg) => thg.id === prevState.dragId
 				);
 				prevState.thoughts.fourth = prevState.thoughts.fourth.filter(
-					(thg) => thg.id != prevState.dragId
+					(thg) => thg.id !== prevState.dragId
 				);
 			}
 			prevState.thoughts.third = [...prevState.thoughts.third, thought];
 			break;
 
 		case ACTIONS.DROP_ON_FOURTH:
-			if (prevState.dragSrcId == 1) {
+			if (prevState.dragSrcId === '1') {
 				thought = prevState.thoughts.first.find((thg) => {
-					return thg.id == prevState.dragId;
+					return thg.id === prevState.dragId;
 				});
 				prevState.thoughts.first = prevState.thoughts.first.filter(
-					(thg) => thg.id != prevState.dragId
+					(thg) => thg.id !== prevState.dragId
 				);
-			} else if (state.dragSrcId == 2) {
+			} else if (state.dragSrcId === '2') {
 				thought = prevState.thoughts.second.find((thg) => {
-					return thg.id == prevState.dragId;
+					return thg.id === prevState.dragId;
 				});
 				prevState.thoughts.second = prevState.thoughts.second.filter(
-					(thg) => thg.id != prevState.dragId
+					(thg) => thg.id !== prevState.dragId
 				);
 			} else {
 				thought = prevState.thoughts.third.find(
-					(thg) => thg.id == prevState.dragId
+					(thg) => thg.id === prevState.dragId
 				);
 				prevState.thoughts.third = prevState.thoughts.third.filter(
-					(thg) => thg.id != prevState.dragId
+					(thg) => thg.id !== prevState.dragId
 				);
 			}
 			prevState.thoughts.fourth = [...prevState.thoughts.fourth, thought];
@@ -206,6 +206,7 @@ export default function reducer(state, action) {
 				}
 				thg['thgContent'] = thg.thoughtContent;
 				thg['id'] = thg._id;
+				return null;
 			});
 			prevState.dataLoading = false;
 			break;

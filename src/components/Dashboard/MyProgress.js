@@ -8,7 +8,6 @@ import { createTags } from '../../api/stepfour.js';
 import { createActions } from '../../api/stepFive.js';
 import { createContacts } from '../../api/stepSix.js';
 import { createThoughts } from '../../api/stepSeven.js';
-import { getThoughts } from '../../api/stepSeven.js';
 import { createStep8Tags } from '../../api/stepEight.js';
 import { createGoals } from '../../api/stepNine.js';
 import { createStep10Tags } from '../../api/stepTen.js';
@@ -31,24 +30,24 @@ import StepEight from './CreateNewVersion/StepEight/StepEight.js';
 import StepNine from './CreateNewVersion/StepNine/StepNine.js';
 import StepTen from './CreateNewVersion/StepTen/StepTen.js';
 import StepEleven from './CreateNewVersion/StepEleven/StepEleven.js';
-import Results from './CreateNewVersion/Results/Results.js';
+//import Results from './CreateNewVersion/Results/Results.js';
 
 import './MyProgress.css';
 
 const MyProgress = () => {
 	const navigate = useNavigate();
 	const newVerCtx = useContext(NewVersionContext);
-	const previousButton = document.querySelector('buttonPrevious');
-	const saveButton = document.querySelector('buttonSave');
-	const tab = document.querySelector('tab');
-	const progressStep = document.querySelector('progressStep');
-	const progressStepActive = document.querySelector('progressStep-Active');
-	const progressStepDone = document.querySelector('progressStep-Done');
+	//const previousButton = document.querySelector('buttonPrevious');
+	//const saveButton = document.querySelector('buttonSave');
+	//const tab = document.querySelector('tab');
+	//const progressStep = document.querySelector('progressStep');
+	//const progressStepActive = document.querySelector('progressStep-Active');
+	//const progressStepDone = document.querySelector('progressStep-Done');
 
-	const [sendingRequest, setSendingRequest] = useState(false);
+	//const [sendingRequest, setSendingRequest] = useState(false);
 	const [saveButtonText, setSaveButtonText] = useState('Save & Continue');
 
-	const [checkClassName, setCheckClassName] = useState('');
+	//const [checkClassName, setCheckClassName] = useState('');
 
 	// States for All Step Components
 	const [stepTwoState, setStepTwoState] = useState({});
@@ -64,20 +63,20 @@ const MyProgress = () => {
 
 	let [formStep, setFormStep] = useState(1);
 
-	const [activeClassNames, setActiveClassNames] = useState({
-		intro: 'progressStep progressStep-Active',
-		first: 'progressStep',
-		second: 'progressStep',
-		third: 'progressStep',
-		fourth: 'progressStep',
-		fifth: 'progressStep',
-		sixth: 'progressStep',
-		seventh: 'progressStep',
-		eigth: 'progressStep',
-		nine: 'progressStep',
-		ten: 'progressStep',
-		eleven: 'progressStep',
-	});
+	// const [activeClassNames, setActiveClassNames] = useState({
+	// 	intro: 'progressStep progressStep-Active',
+	// 	first: 'progressStep',
+	// 	second: 'progressStep',
+	// 	third: 'progressStep',
+	// 	fourth: 'progressStep',
+	// 	fifth: 'progressStep',
+	// 	sixth: 'progressStep',
+	// 	seventh: 'progressStep',
+	// 	eigth: 'progressStep',
+	// 	nine: 'progressStep',
+	// 	ten: 'progressStep',
+	// 	eleven: 'progressStep',
+	// });
 
 	const prevHandler = () => {
 		if (formStep === 12) {
@@ -104,17 +103,21 @@ const MyProgress = () => {
 
 			stepTwoState.low.map((iss) => {
 				iss['issueImpactType'] = 'low';
+				return null;
 			});
 			stepTwoState.medium.map((iss) => {
 				iss['issueImpactType'] = 'medium';
+				return null;
 			});
 
 			stepTwoState.high.map((iss) => {
 				iss['issueImpactType'] = 'high';
+				return null;
 			});
 
 			stepTwoState.critical.map((iss) => {
 				iss['issueImpactType'] = 'critical';
+				return null;
 			});
 
 			let requestBody = {
@@ -131,8 +134,7 @@ const MyProgress = () => {
 			//console.log('step two state in my progressjs', stepTwoState);
 
 			const response = await createIssues(newVerCtx.versionId, requestBody);
-
-			//console.log('data from server', response.data);
+			console.log('steptwo in my progress', response);
 
 			setSaveButtonText('Save & Continue');
 		} else if (formStep === 4) {
@@ -145,7 +147,7 @@ const MyProgress = () => {
 			);
 			setSaveButtonText('Save & Continue');
 
-			if (response.success == false) {
+			if (response.success === false) {
 				setSaveButtonText('try again');
 				return;
 			}
@@ -194,18 +196,22 @@ const MyProgress = () => {
 			prevState.thoughts.first.map((thg) => {
 				thg['thoughtCategory'] = 'likely';
 				thg['thoughtContent'] = thg.thgContent;
+				return null;
 			});
 			prevState.thoughts.second.map((thg) => {
 				thg['thoughtCategory'] = 'real';
 				thg['thoughtContent'] = thg.thgContent;
+				return null;
 			});
 			prevState.thoughts.third.map((thg) => {
 				thg['thoughtCategory'] = 'probably';
 				thg['thoughtContent'] = thg.thgContent;
+				return null;
 			});
 			prevState.thoughts.fourth.map((thg) => {
 				thg['thoughtCategory'] = 'unrealistic';
 				thg['thoughtContent'] = thg.thgContent;
+				return null;
 			});
 
 			const requestBody = {
@@ -273,18 +279,23 @@ const MyProgress = () => {
 
 			stepElevenState.firstValues.map((s) => {
 				s['step'] = '1';
+				return null;
 			});
 			stepElevenState.secondValues.map((s) => {
 				s['step'] = '2';
+				return null;
 			});
 			stepElevenState.thirdValues.map((s) => {
 				s['step'] = '3';
+				return null;
 			});
 			stepElevenState.fourthValues.map((s) => {
 				s['step'] = '4';
+				return null;
 			});
 			stepElevenState.fifthValues.map((s) => {
 				s['step'] = '5';
+				return null;
 			});
 
 			const requestBody = {
@@ -318,7 +329,7 @@ const MyProgress = () => {
 	const stepsHandler = (event) => {
 		//for StepOne Values
 
-		if (event.target.id == 12) {
+		if (Number(event.target.id) === 12) {
 			setSaveButtonText('See Results');
 		} else {
 			setSaveButtonText('Save & Continue');
@@ -330,7 +341,7 @@ const MyProgress = () => {
 
 	useEffect(() => {
 		setFormStep(newVerCtx.currentStep);
-	}, []);
+	}, [newVerCtx.currentStep]);
 	return (
 		<main className='Body'>
 			<section className='sectionOne'>
@@ -344,7 +355,7 @@ const MyProgress = () => {
 						<div>
 							<div
 								className={
-									formStep == 1
+									formStep === 1
 										? 'progressStep progressStep-Active'
 										: 'progressStep'
 								}
@@ -367,7 +378,7 @@ const MyProgress = () => {
 						<div>
 							<div
 								className={
-									formStep == 2
+									formStep === 2
 										? 'progressStep progressStep-Active'
 										: 'progressStep'
 								}
@@ -390,7 +401,7 @@ const MyProgress = () => {
 						<div>
 							<div
 								className={
-									formStep == 3
+									formStep === 3
 										? 'progressStep progressStep-Active'
 										: 'progressStep'
 								}
@@ -415,7 +426,7 @@ const MyProgress = () => {
 						<div>
 							<div
 								className={
-									formStep == 4
+									formStep === 4
 										? 'progressStep progressStep-Active'
 										: 'progressStep'
 								}
@@ -437,7 +448,7 @@ const MyProgress = () => {
 						<div>
 							<div
 								className={
-									formStep == 5
+									formStep === 5
 										? 'progressStep progressStep-Active'
 										: 'progressStep'
 								}
@@ -462,7 +473,7 @@ const MyProgress = () => {
 						<div>
 							<div
 								className={
-									formStep == 6
+									formStep === 6
 										? 'progressStep progressStep-Active'
 										: 'progressStep'
 								}
@@ -484,7 +495,7 @@ const MyProgress = () => {
 						<div>
 							<div
 								className={
-									formStep == 7
+									formStep === 7
 										? 'progressStep progressStep-Active'
 										: 'progressStep'
 								}
@@ -506,7 +517,7 @@ const MyProgress = () => {
 						<div>
 							<div
 								className={
-									formStep == 8
+									formStep === 8
 										? 'progressStep progressStep-Active'
 										: 'progressStep'
 								}
@@ -528,7 +539,7 @@ const MyProgress = () => {
 						<div>
 							<div
 								className={
-									formStep == 9
+									formStep === 9
 										? 'progressStep progressStep-Active'
 										: 'progressStep'
 								}
@@ -550,7 +561,7 @@ const MyProgress = () => {
 						<div>
 							<div
 								className={
-									formStep == 10
+									formStep === 10
 										? 'progressStep progressStep-Active'
 										: 'progressStep'
 								}
@@ -572,7 +583,7 @@ const MyProgress = () => {
 						<div>
 							<div
 								className={
-									formStep == 11
+									formStep === 11
 										? 'progressStep progressStep-Active'
 										: 'progressStep'
 								}
@@ -598,7 +609,7 @@ const MyProgress = () => {
 						<div>
 							<div
 								className={
-									formStep == 12 || formStep == 13
+									formStep === 12 || formStep === 13
 										? 'progressStep progressStep-Active'
 										: 'progressStep'
 								}

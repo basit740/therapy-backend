@@ -5,9 +5,9 @@ import classes from './StepNine.module.css';
 
 import StepNineStatic from './StepNineStatic.js';
 
-const goalsHandler = (goals) => {
-	console.log('StepNine.js ', goals);
-};
+// const goalsHandler = (goals) => {
+// 	console.log('StepNine.js ', goals);
+// };
 
 const StepNine = ({ onStateChange }) => {
 	return (

@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Outlet } from 'react-router-dom';
 
-import Version from './Version/Version';
+// import Version from './Version/Version';
 
 // New Journey
-import NewJourney from './NewJourney/NewJourney';
+// import NewJourney from './NewJourney/NewJourney';
 
-import MyProgress from './MyProgress';
+// import MyProgress from './MyProgress';
 
 const Dashboard = () => {
-	const [newVersion, setNewVersion] = useState(false);
+	// const [newVersion, setNewVersion] = useState(false);
 	return (
 		<>
 			<Outlet />

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 
 import classes from './Modal.module.css';
 
@@ -11,7 +11,7 @@ const Modal = ({
 	request,
 	onInput,
 }) => {
-	const [isOpen, setIsOpen] = useState(false);
+	//const [isOpen, setIsOpen] = useState(false);
 	const inputRef = useRef();
 
 	const modalHider = (event) => {

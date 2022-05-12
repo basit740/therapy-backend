@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useContext, useReducer } from 'react';
+/* eslint-disable no-unused-expressions */
+import React, { useEffect, useContext, useReducer } from 'react';
 import { getIssues } from '../../../../api/steptwo';
-import AuthContext from '../../../../store/auth-context';
+//import AuthContext from '../../../../store/auth-context';
 import NewVersionContext from '../../../../store/new-version-context';
 
 import reducer, { ACTIONS } from './reducer';
@@ -8,41 +9,26 @@ import reducer, { ACTIONS } from './reducer';
 // skeleton
 
 import './StepTwo.css';
-import Feeling from './Feeling.js';
+//import Feeling from './Feeling.js';
 import FeelingCard from './FeelingCard.js';
 
 import StepTwoStatic from './StepTwoStatic';
 
 const EMPTY_ARRAY = [];
 
-const FEELING_CARDS = [
-	{
-		title: 'Low Impact',
-	},
-	{
-		title: 'Medium Impact',
-	},
-	{
-		title: 'High Impact',
-	},
-	{
-		title: 'Critical Impact',
-	},
-];
-
 const issues = {
 	low: [], ///issueImpact='low'
 	medium: [], //issueImpactType='medium'
 	high: [],
 	critical: [],
-	dragId: null,
-	dragSrcId: null,
+	dragId: '',
+	dragSrcId: '',
 	dataLoading: true,
 };
 
 // actual functoin definition starts here
 const StepTwo = (props) => {
-	const authCtx = useContext(AuthContext);
+	//const authCtx = useContext(AuthContext);
 	const newVerCtx = useContext(NewVersionContext);
 
 	console.log('in steptwo');
@@ -53,20 +39,18 @@ const StepTwo = (props) => {
 
 	useEffect(() => {
 		props.onStateChange(state);
-	}, [state, props.onStateChange]);
+	}, [state, props]);
 
 	console.log('local state always renders', state);
 
-	const [feelingCards, setFeelingCards] = useState(FEELING_CARDS);
-
-	const [firstFeelings, setFirstFeelings] = useState(FEELING_CARDS[0].feelings);
-	const [secondFeelings, setSecondFeelings] = useState(
-		FEELING_CARDS[1].feelings
-	);
-	const [thirdFeelings, setThirdFeelings] = useState(FEELING_CARDS[2].feelings);
-	const [fourthFeelings, setFourthFeelings] = useState(
-		FEELING_CARDS[3].feelings
-	);
+	// const [firstFeelings, setFirstFeelings] = useState(FEELING_CARDS[0].feelings);
+	// const [secondFeelings, setSecondFeelings] = useState(
+	// 	FEELING_CARDS[1].feelings
+	// );
+	// const [thirdFeelings, setThirdFeelings] = useState(FEELING_CARDS[2].feelings);
+	// const [fourthFeelings, setFourthFeelings] = useState(
+	// 	FEELING_CARDS[3].feelings
+	// );
 
 	///////////////////////// DRAG & DROP FUNCTIONALITY HERE /////////////////////
 
@@ -74,28 +58,28 @@ const StepTwo = (props) => {
 		console.log('drag is started', event.target.parentNode.id);
 		event.target.classList.add('dragging');
 
-		if (event.target.parentNode.id == 4) {
+		if (event.target.parentNode.id === '4') {
 			dispatch({
 				type: ACTIONS.DRAGGING,
-				payload: { dragId: event.target.id, dragSrcId: 4 },
+				payload: { dragId: event.target.id, dragSrcId: '4' },
 			});
 		}
-		if (event.target.parentNode.id == 3) {
+		if (event.target.parentNode.id === '3') {
 			dispatch({
 				type: ACTIONS.DRAGGING,
-				payload: { dragId: event.target.id, dragSrcId: 3 },
+				payload: { dragId: event.target.id, dragSrcId: '3' },
 			});
 		}
-		if (event.target.parentNode.id == 2) {
+		if (event.target.parentNode.id === '2') {
 			dispatch({
 				type: ACTIONS.DRAGGING,
-				payload: { dragId: event.target.id, dragSrcId: 2 },
+				payload: { dragId: event.target.id, dragSrcId: '2' },
 			});
 		}
-		if (event.target.parentNode.id == 1) {
+		if (event.target.parentNode.id === '1') {
 			dispatch({
 				type: ACTIONS.DRAGGING,
-				payload: { dragId: event.target.id, dragSrcId: 1 },
+				payload: { dragId: event.target.id, dragSrcId: '1' },
 			});
 		}
 	};
@@ -109,8 +93,8 @@ const StepTwo = (props) => {
 
 		newVerCtx.stepOneUnSaver();
 
-		if (event.target.id == 1) {
-			if (state.dragSrcId == 1) {
+		if (event.target.id === '1') {
+			if (state.dragSrcId === '1') {
 				return;
 			}
 
@@ -118,16 +102,16 @@ const StepTwo = (props) => {
 				type: ACTIONS.DROP_ON_LOW,
 				payload: { id: event.target.id },
 			});
-		} else if (event.target.id == 2) {
-			if (state.dragSrcId == 2) {
+		} else if (event.target.id === '2') {
+			if (state.dragSrcId === '2') {
 				return;
 			}
 			dispatch({
 				type: ACTIONS.DROP_ON_MEDIUM,
 				payload: { id: event.target.id },
 			});
-		} else if (event.target.id == 3) {
-			if (state.dragSrcId == 3) {
+		} else if (event.target.id === '3') {
+			if (state.dragSrcId === '3') {
 				return;
 			}
 
@@ -135,8 +119,8 @@ const StepTwo = (props) => {
 				type: ACTIONS.DROP_ON_HIGH,
 				payload: { id: event.target.id },
 			});
-		} else if (event.target.id == 4) {
-			if (state.dragSrcId == 4) {
+		} else if (event.target.id === '4') {
+			if (state.dragSrcId === '4') {
 				return;
 			}
 			dispatch({
@@ -218,7 +202,13 @@ const StepTwo = (props) => {
 				});
 			}
 		})();
-	}, []);
+	}, [
+		newVerCtx.versionId,
+		newVerCtx.stepOneFirst,
+		newVerCtx.stepOneSecond,
+		newVerCtx.stepOneThird,
+		newVerCtx.stepOneFourth,
+	]);
 
 	return (
 		<section className='stepTwoOfEleven'>
@@ -226,7 +216,7 @@ const StepTwo = (props) => {
 
 			<div className='feelings-cards-container'>
 				<div className='feeling-card' id='1'>
-					<div className='feeling-card__title'>{feelingCards[0].title}</div>
+					<div className='feeling-card__title'>Low Impact</div>
 
 					<FeelingCard
 						id='1'
@@ -240,7 +230,7 @@ const StepTwo = (props) => {
 					/>
 				</div>
 				<div className='feeling-card' id='2'>
-					<div className='feeling-card__title'>{feelingCards[1].title}</div>
+					<div className='feeling-card__title'>Medium Impact</div>
 					<FeelingCard
 						id='2'
 						key={2}
@@ -254,7 +244,7 @@ const StepTwo = (props) => {
 				</div>
 
 				<div className='feeling-card' id='3'>
-					<div className='feeling-card__title'>{feelingCards[2].title}</div>
+					<div className='feeling-card__title'>High Impact</div>
 					<FeelingCard
 						id='3'
 						key={3}
@@ -268,7 +258,7 @@ const StepTwo = (props) => {
 				</div>
 
 				<div className='feeling-card' id='4'>
-					<div className='feeling-card__title'>{feelingCards[3].title}</div>
+					<div className='feeling-card__title'>Critical Impact</div>
 					<FeelingCard
 						id='4'
 						key={4}

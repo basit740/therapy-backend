@@ -51,7 +51,7 @@ const SignUpIn = (props) => {
 			<div className='row'>
 				<div className='col-md-7 banner nospacing'>
 					<div className='image-container'>
-						<img src={registerbanner} className='image' />
+						<img src={registerbanner} className='image' alt='register banner' />
 					</div>
 					<div className='text-container'>
 						<h3>My Therapy Tool</h3>
@@ -103,7 +103,7 @@ const SignUpIn = (props) => {
 													if (response.ok) {
 														return response.json();
 													}
-													throw new Error('Error Signing Up');
+													throw new Error(response.error);
 												})
 												.then((data) => {
 													// console.log the date
@@ -114,7 +114,7 @@ const SignUpIn = (props) => {
 													}
 												})
 												.catch((err) => {
-													console.log(err);
+													alert('user name or email already used');
 												});
 											setShowSuccess(true);
 										}}
@@ -267,16 +267,16 @@ const SignUpIn = (props) => {
 
 									{showSuccess === true && (
 										<>
-											<Alert severity='success'>
+											{/* <Alert severity='success'>
 												Your Account has been created!
-											</Alert>
+											</Alert> */}
 										</>
 									)}
 
 									<div className='signin-text'>
 										<p>
 											Already have an account?{' '}
-											<a href='#' onClick={signinHandler}>
+											<a href='/auth' onClick={signinHandler}>
 												Sign In
 											</a>
 										</p>
@@ -305,7 +305,7 @@ const SignUpIn = (props) => {
 													if (response.ok) {
 														return response.json();
 													}
-													throw new Error('Invalid Credientials');
+													throw new Error(response.error);
 												})
 												.then((data) => {
 													if (data.success === true) {
@@ -348,7 +348,6 @@ const SignUpIn = (props) => {
 													as={TextField}
 													variant='standard'
 													label='Password'
-													as={TextField}
 													error={
 														Boolean(errors.password) &&
 														Boolean(touched.password)
@@ -358,7 +357,7 @@ const SignUpIn = (props) => {
 													}
 												></Field>
 												<p className='forgot-password'>
-													<a>Forgot Password?</a>
+													<a href='/auth/forgotpassword'>Forgot Password?</a>
 												</p>
 												<div className='button-container-sign-in'>
 													<button

@@ -4,6 +4,7 @@ export const initialState = {
 		{ id: '2', contactDetail: '' },
 		{ id: '3', contactDetail: '' },
 	],
+	isLoading: true,
 };
 
 export const ACTIONS = {
@@ -20,9 +21,10 @@ export default function reducer(state, action) {
 			const id = action.payload.id;
 			const value = action.payload.value;
 			pState.contacts.map((ct) => {
-				if (ct.id == id) {
+				if (ct.id === id) {
 					ct.contactDetail = value;
 				}
+				return null;
 			});
 			break;
 		case ACTIONS.ADD_CONTACT:
@@ -38,7 +40,9 @@ export default function reducer(state, action) {
 			pState['contacts'] = action.payload.data;
 			pState.contacts.map((ct) => {
 				ct['id'] = ct._id;
+				return null;
 			});
+			pState.isLoading = false;
 			break;
 		case ACTIONS.DATA_FROM_LOCAL_STATE:
 			pState['contacts'] = [
@@ -46,6 +50,7 @@ export default function reducer(state, action) {
 				{ id: '2', contactDetail: '' },
 				{ id: '3', contactDetail: '' },
 			];
+			pState.isLoading = false;
 			break;
 
 		default:

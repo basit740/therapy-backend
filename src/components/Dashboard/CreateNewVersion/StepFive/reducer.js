@@ -64,6 +64,7 @@ export default function reducer(state, action) {
 
 				let date = new Date(act.actionDate);
 				act.actionDate = date.toISOString().substring(0, 10);
+				return act;
 			});
 			break;
 		case ACTIONS.DATA_FROM_LOCAL_STATE:

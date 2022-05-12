@@ -37,15 +37,17 @@ export default function reducer(state, action) {
 		case ACTIONS.TOGGLE_SELECT:
 			if (data.status === 'selected') {
 				prevState.tags.map((tag) => {
-					if (tag.id == data.id) {
+					if (tag.id === data.id) {
 						tag['status'] = 'not_selected';
 					}
+					return tag;
 				});
 			} else {
 				prevState.tags.map((tag) => {
-					if (tag.id == data.id) {
+					if (tag.id === data.id) {
 						tag['status'] = 'selected';
 					}
+					return tag;
 				});
 			}
 
@@ -55,6 +57,7 @@ export default function reducer(state, action) {
 			prevState['tags'] = data;
 			prevState.tags.map((tag) => {
 				tag['id'] = tag._id;
+				return tag;
 			});
 			prevState.dataIsLoading = false;
 			break;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import classes from './Feeling.module.css';
 
 const Feeling = ({ id, feelingTitle, onDragStart, onDragEnd }) => {

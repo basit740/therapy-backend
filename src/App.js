@@ -19,14 +19,14 @@ import About from './components/About/About';
 import Contact from './components/Contact/Contact.js';
 
 import AuthContext from './store/auth-context.js';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
-import PrivateNoMatch from './components/PrivateNoMatch/PrivateNoMatch.js';
+import { Routes, Route } from 'react-router-dom';
+//import PrivateNoMatch from './components/PrivateNoMatch/PrivateNoMatch.js';
 import UserProfile from './components/Profile/Profile.js';
 
 library.add(faCheck);
 
 function App() {
-	let component = null;
+	//let component = null;
 
 	let authCtx = useContext(AuthContext);
 

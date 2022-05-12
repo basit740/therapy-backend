@@ -44,7 +44,10 @@ export const NewVersionContextProvider = (props) => {
 	const [stepTwoIssues, setStepTwoIssues] = useState({});
 
 	// stepThree
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const [stepThreeState, setStepThreeState] = useState(initialState);
+	// // just using it
+	console.log(stepThreeState);
 
 	const versionIdHandler = (versionId) => {
 		setStepOneSaved(false);
@@ -119,11 +122,11 @@ export const NewVersionContextProvider = (props) => {
 
 	// stepThree Feelings
 
-	const stepThreeStateModifier = (state) => {
-		setStepThreeState((prev) => {
-			return { ...state };
-		});
-	};
+	// const stepThreeStateModifier = (state) => {
+	// 	setStepThreeState((prev) => {
+	// 		return { ...state };
+	// 	});
+	// };
 
 	const contextValue = {
 		versionIdHandler: versionIdHandler,

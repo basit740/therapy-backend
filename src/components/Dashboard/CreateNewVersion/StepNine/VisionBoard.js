@@ -1,10 +1,4 @@
-import React, {
-	useEffect,
-	useReducer,
-	useRef,
-	useState,
-	useContext,
-} from 'react';
+import React, { useEffect, useReducer, useContext } from 'react';
 
 import VisionBoardCard from './VisionBoardCard';
 import classes from './VisionBoard.module.css';
@@ -13,7 +7,7 @@ import NewVersionContext from '../../../../store/new-version-context';
 import { getGoals } from '../../../../api/stepNine';
 
 import reducer, { ACTIONS, initialState } from './reducer';
-const EMPTY_ARRRAY = [];
+//const EMPTY_ARRRAY = [];
 const VisionBoard = ({ onStateChange }) => {
 	let currentYear = new Date().getFullYear();
 
@@ -32,7 +26,7 @@ const VisionBoard = ({ onStateChange }) => {
 	useEffect(() => {
 		console.log('useEffect 1', state);
 		onStateChange(state);
-	}, [state]);
+	}, [state, onStateChange]);
 
 	useEffect(() => {
 		(async () => {
@@ -50,7 +44,7 @@ const VisionBoard = ({ onStateChange }) => {
 				});
 			}
 		})();
-	}, []);
+	}, [newVerCtx.versionId]);
 
 	return (
 		<div className={classes['vision-board']}>

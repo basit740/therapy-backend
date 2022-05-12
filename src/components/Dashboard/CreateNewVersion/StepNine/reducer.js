@@ -66,7 +66,7 @@ export default function redeucer(state, action) {
 		case ACTIONS.DATA_FROM_LOCAL_STATE:
 			pState.goals = [];
 			pState.isLoading = false;
-
+			break;
 		default:
 		// do nothing
 	}

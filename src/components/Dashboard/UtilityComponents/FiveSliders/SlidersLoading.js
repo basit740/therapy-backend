@@ -1,5 +1,5 @@
 import { Skeleton } from '@mui/material';
-import React, { useState } from 'react';
+import React from 'react';
 
 const SlidersLoading = () => {
 	const sliders = [1, 2, 3, 4, 5];

@@ -177,7 +177,7 @@ export default function reducer(state, action) {
 				case '4':
 					prevState.currentStep = '5';
 					prevState.showNextBtn = false;
-
+					break;
 				default:
 				// do nothing
 			}
@@ -201,7 +201,7 @@ export default function reducer(state, action) {
 					prevState.currentStep = '4';
 					//prevState.showPrevBtn = false;
 					prevState.showNextBtn = true;
-
+					break;
 				default:
 				// do nothing
 			}
@@ -220,6 +220,7 @@ export default function reducer(state, action) {
 						if (sliderV.id === action.payload.sliderID) {
 							sliderV.value = action.payload.value;
 						}
+						return sliderV;
 					});
 
 					break;
@@ -228,6 +229,7 @@ export default function reducer(state, action) {
 						if (sliderV.id === action.payload.sliderID) {
 							sliderV.value = action.payload.value;
 						}
+						return sliderV;
 					});
 					break;
 				case '3':
@@ -235,6 +237,7 @@ export default function reducer(state, action) {
 						if (sliderV.id === action.payload.sliderID) {
 							sliderV.value = action.payload.value;
 						}
+						return sliderV;
 					});
 					break;
 				case '4':
@@ -242,6 +245,7 @@ export default function reducer(state, action) {
 						if (sliderV.id === action.payload.sliderID) {
 							sliderV.value = action.payload.value;
 						}
+						return sliderV;
 					});
 					break;
 				case '5':
@@ -249,6 +253,7 @@ export default function reducer(state, action) {
 						if (sliderV.id === action.payload.sliderID) {
 							sliderV.value = action.payload.value;
 						}
+						return sliderV;
 					});
 					break;
 				default:
@@ -256,15 +261,15 @@ export default function reducer(state, action) {
 			}
 			break;
 		case ACTIONS.DOT_CLICK:
-			if (prevState.currentStep == action.payload.step) return prevState;
+			if (prevState.currentStep === action.payload.step) return prevState;
 			prevState.currentStep = action.payload.step;
-			if (action.payload.step != '1') {
+			if (action.payload.step !== '1') {
 				prevState.showPrevBtn = true;
 			} else {
 				prevState.showPrevBtn = false;
 			}
 
-			if (action.payload.step == '5') {
+			if (action.payload.step === '5') {
 				prevState.showNextBtn = false;
 			} else {
 				prevState.showNextBtn = true;
@@ -296,9 +301,11 @@ export default function reducer(state, action) {
 						break;
 					case '5':
 						prevState.fifthValues = [...prevState.fifthValues, v];
+						break;
 					default:
 					// do nothing
 				}
+				return v;
 			});
 			prevState.isLoading = false;
 			break;
@@ -440,6 +447,7 @@ export default function reducer(state, action) {
 				},
 			];
 			prevState.isLoading = false;
+			break;
 
 		default:
 		// do nothing..

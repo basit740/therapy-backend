@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './StepSeven.css';
 import StepSevenStatic from './StepSevenStatic';
 import Thoughts from './Thoughts';
 
 const StepSeven = ({ onStateChange }) => {
-	const [thoughtCards, setThoughtCards] = useState('');
+	//const [thoughtCards, setThoughtCards] = useState('');
 
-	const newThoughtHandler = (newThought) => {
-		console.log(newThought);
+	// const newThoughtHandler = (newThought) => {
+	// 	console.log(newThought);
 
-		let indexOfThoughtCard = newThought.cardId;
-		setThoughtCards((thoughtCards) => {
-			return [...thoughtCards[indexOfThoughtCard].thoughts, newThought];
-		});
-	};
+	// 	let indexOfThoughtCard = newThought.cardId;
+	// 	setThoughtCards((thoughtCards) => {
+	// 		return [...thoughtCards[indexOfThoughtCard].thoughts, newThought];
+	// 	});
+	// };
 
 	return (
 		<section className='step-seven'>

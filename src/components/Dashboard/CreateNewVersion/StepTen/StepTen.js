@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect, useContext } from 'react';
+import React, { useReducer, useEffect, useContext } from 'react';
 import classes from './StepTen.module.css';
 import TagsManager from './TagsManager';
 
@@ -15,19 +15,19 @@ const StepTen = ({ onStateChange }) => {
 
 	const newVerCtx = useContext(NewVersionContext);
 
-	const newTagHandler = (tagCategory) => {
-		if (state.tagTitle.trim() === '') {
-			return;
-		}
-		dispatch({
-			type: ACTIONS.ADD_NEW_TAG,
-			payload: { tagTitle: state.tagTitle, tagCategory: tagCategory },
-		});
-	};
+	// const newTagHandler = (tagCategory) => {
+	// 	if (state.tagTitle.trim() === '') {
+	// 		return;
+	// 	}
+	// 	dispatch({
+	// 		type: ACTIONS.ADD_NEW_TAG,
+	// 		payload: { tagTitle: state.tagTitle, tagCategory: tagCategory },
+	// 	});
+	// };
 
 	useEffect(() => {
 		onStateChange(state);
-	}, [state]);
+	}, [state, onStateChange]);
 	useEffect(() => {
 		(async () => {
 			const response = await getTags(newVerCtx.versionId);
@@ -48,7 +48,7 @@ const StepTen = ({ onStateChange }) => {
 				});
 			}
 		})();
-	}, []);
+	}, [newVerCtx.versionId]);
 	return (
 		<div className={classes['step-ten-container']}>
 			<div className={classes['step-ten']}>

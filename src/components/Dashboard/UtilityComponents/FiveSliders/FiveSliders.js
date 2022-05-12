@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React from 'react';
 
-import Step11Context from '../../../../store/step-eleven';
+//import Step11Context from '../../../../store/step-eleven';
 
 import classes from './FiveSliders.module.css';
 import PersonalSlider from '../Slider/Slider';

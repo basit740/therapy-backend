@@ -14,12 +14,10 @@ function StepThree({ onStateChange }) {
 	const [state, dispatch] = useReducer(reducer, initialState);
 
 	useEffect(() => {
-		console.log('useEffect 1', state);
 		onStateChange(state);
-	}, [state]);
+	}, [state, onStateChange]);
 
 	useEffect(() => {
-		console.log('useEffect 2', state);
 		(async () => {
 			const response = await getFeelings(newVerCtx.versionId);
 
@@ -34,9 +32,8 @@ function StepThree({ onStateChange }) {
 					payload: { data: initialState },
 				});
 			}
-			console.log('useEffect 3', state);
 		})();
-	}, []);
+	}, [newVerCtx.versionId]);
 
 	return (
 		<section className='stepThreeOfEleven'>
@@ -54,6 +51,7 @@ function StepThree({ onStateChange }) {
 						payload: { data: value },
 					})
 				}
+				isLoading={state.isLoading}
 			/>
 			<StepThreeAdd
 				habit={state.feelings[1].feelingContent}
@@ -67,6 +65,7 @@ function StepThree({ onStateChange }) {
 						payload: { data: value },
 					})
 				}
+				isLoading={state.isLoading}
 			/>
 			<StepThreeAdd
 				habit={state.feelings[2].feelingContent}
@@ -83,6 +82,7 @@ function StepThree({ onStateChange }) {
 						payload: { data: value },
 					})
 				}
+				isLoading={state.isLoading}
 			/>
 		</section>
 	);

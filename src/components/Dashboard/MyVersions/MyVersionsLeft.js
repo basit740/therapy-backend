@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState, useContext } from 'react';
+import React, { useEffect, useReducer, useContext } from 'react';
 
 import NewVersionContext from '../../../store/new-version-context';
 import { useNavigate } from 'react-router-dom';
@@ -23,6 +23,7 @@ const reducer = (state, action) => {
 		pState.versions = [...action.payload.versions];
 		pState.versions.map((v) => {
 			v['id'] = v._id;
+			return null;
 		});
 		pState.isLoading = false;
 	}

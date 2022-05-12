@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useReducer, useContext } from 'react';
+import React, { useEffect, useReducer, useContext } from 'react';
 
 import classes from './StepEight.module.css';
-import uniqueId from 'lodash.uniqueid';
+//import uniqueId from 'lodash.uniqueid';
 
 import { DEFAULT_TAGS_DATA } from '../../../../data/step-eight/defaultData';
 import NewVersionContext from '../../../../store/new-version-context';
@@ -34,7 +34,7 @@ const StepEight = ({ onStateChange }) => {
 		//console.log(' step4 useeffect 1');
 		//console.log(state);
 		onStateChange(state);
-	}, [state]);
+	}, [state, onStateChange]);
 
 	useEffect(() => {
 		(async () => {
@@ -56,7 +56,7 @@ const StepEight = ({ onStateChange }) => {
 				});
 			}
 		})();
-	}, []);
+	}, [newVerCtx.versionId]);
 	return (
 		<section className={classes.stepEightOfEleven}>
 			<StepEightStatic />

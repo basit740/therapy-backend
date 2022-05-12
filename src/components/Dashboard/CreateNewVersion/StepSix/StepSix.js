@@ -1,10 +1,10 @@
-import React, { useState, useReducer, useEffect, useContext } from 'react';
+import React, { useReducer, useEffect, useContext } from 'react';
 import NewVersionContext from '../../../../store/new-version-context';
 import StepSixAdd from './StepSixAdd';
 import './StepSix.css';
 import StepSixStatic from './StepSixStatic';
 
-import uniqueId from 'lodash.uniqueid';
+//import uniqueId from 'lodash.uniqueid';
 import reducer, { ACTIONS, initialState } from './reducer';
 import { getContacts } from '../../../../api/stepSix';
 
@@ -29,7 +29,7 @@ const StepSix = ({ onStateChange }) => {
 
 	useEffect(() => {
 		onStateChange(state);
-	}, [state]);
+	}, [state, onStateChange]);
 
 	useEffect(() => {
 		(async () => {
@@ -47,7 +47,7 @@ const StepSix = ({ onStateChange }) => {
 				});
 			}
 		})();
-	}, []);
+	}, [newVerCtx.versionId]);
 	return (
 		<section className='sectionReachOut'>
 			<StepSixStatic />
@@ -60,6 +60,7 @@ const StepSix = ({ onStateChange }) => {
 						number={index + 1}
 						value={ct.contactDetail}
 						onChange={enterText}
+						isLoading={state.isLoading}
 					/>
 				);
 			})}

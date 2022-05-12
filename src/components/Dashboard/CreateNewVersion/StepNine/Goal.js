@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classes from './Goal.module.css';
 const Goal = (props) => {
 	//const [showDeleteBtn, setShowDeleteBtn] = useState(false);

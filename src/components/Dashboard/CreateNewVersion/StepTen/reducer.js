@@ -1,12 +1,11 @@
-import { faBirthdayCake } from '@fortawesome/free-solid-svg-icons';
 import uniqueId from 'lodash.uniqueid';
 import { DEFAULT_TAGS_DATA } from '../../../../data/step-four/defaultData';
 
-import {
-	DEFAULT_TAGS_SECOND,
-	DEFAULT_TAGS_FIRST,
-	DEFAULT_TAGS_THIRD,
-} from '../../../../data/step-ten/defaultData';
+// import {
+// 	DEFAULT_TAGS_SECOND,
+// 	DEFAULT_TAGS_FIRST,
+// 	DEFAULT_TAGS_THIRD,
+// } from '../../../../data/step-ten/defaultData';
 export const INITIAL_STATE = {
 	tags: DEFAULT_TAGS_DATA,
 	firstTags: DEFAULT_TAGS_DATA,
@@ -111,30 +110,34 @@ export default function reducer(state, action) {
 				case 1:
 					if (data.status === 'selected') {
 						prevState.firstTags.map((tag) => {
-							if (tag.id == data.id) {
+							if (tag.id === data.id) {
 								tag['status'] = 'not_selected';
 							}
+							return null;
 						});
 					} else {
 						prevState.firstTags.map((tag) => {
-							if (tag.id == data.id) {
+							if (tag.id === data.id) {
 								tag['status'] = 'selected';
 							}
+							return null;
 						});
 					}
 					break;
 				case 2:
 					if (data.status === 'selected') {
 						prevState.secondTags.map((tag) => {
-							if (tag.id == data.id) {
+							if (tag.id === data.id) {
 								tag['status'] = 'not_selected';
 							}
+							return null;
 						});
 					} else {
 						prevState.secondTags.map((tag) => {
-							if (tag.id == data.id) {
+							if (tag.id === data.id) {
 								tag['status'] = 'selected';
 							}
+							return null;
 						});
 					}
 					break;
@@ -142,18 +145,20 @@ export default function reducer(state, action) {
 				case 3:
 					if (data.status === 'selected') {
 						prevState.thirdTags.map((tag) => {
-							if (tag.id == data.id) {
+							if (tag.id === data.id) {
 								tag['status'] = 'not_selected';
 							}
+							return null;
 						});
 					} else {
 						prevState.thirdTags.map((tag) => {
-							if (tag.id == data.id) {
+							if (tag.id === data.id) {
 								tag['status'] = 'selected';
 							}
+							return null;
 						});
 					}
-
+					break;
 				default:
 				//
 			}
@@ -179,6 +184,7 @@ export default function reducer(state, action) {
 				} else {
 					prevState.thirdTags = [...prevState.thirdTags, tg];
 				}
+				return null;
 			});
 			prevState.isLoading = false;
 			break;

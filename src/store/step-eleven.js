@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 const Step11Context = React.createContext({
-	state: null,
 	step1Sliders: null,
 	step2Sliders: null,
 	step3Sliders: null,
@@ -11,7 +10,8 @@ const Step11Context = React.createContext({
 });
 
 export const Step11ContextProvider = (props) => {
-	const [state, setState] = useState(null);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// const [state, setState] = useState(null);
 
 	const [step1Sliders, setStep1Sliders] = useState(null);
 	const [step2Sliders, setStep2Sliders] = useState(null);
@@ -20,14 +20,6 @@ export const Step11ContextProvider = (props) => {
 	const [step5Sliders, setStep5Sliders] = useState(null);
 
 	const onStateChange = (sliders, stepID) => {
-		// console.log(sliders);
-		// console.log(
-		// 	step1Sliders,
-		// 	step2Sliders,
-		// 	step3Sliders,
-		// 	step4Sliders,
-		// 	step5Sliders
-		// );
 		switch (stepID) {
 			case '1':
 				setStep1Sliders((prev) => {
@@ -53,13 +45,12 @@ export const Step11ContextProvider = (props) => {
 				setStep5Sliders((prev) => {
 					return [...sliders];
 				});
-
+				break;
 			default:
 			// do nothing
 		}
 	};
 	const contextValue = {
-		state,
 		step1Sliders,
 		step2Sliders,
 		step3Sliders,

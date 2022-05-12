@@ -1,5 +1,5 @@
 import React from 'react';
-import MyVersionsLeft from './MyVersionsLeft';
+//import MyVersionsLeft from './MyVersionsLeft';
 import { Link } from 'react-router-dom';
 import { dateFormatter } from '../../../utils/items';
 
@@ -32,6 +32,7 @@ const MyVersion = ({ date, status, id, onAction, stepsCount }) => {
 		case 'completed':
 			statusText = 'Complete';
 			versionAction = 'Edit';
+			break;
 		default:
 		// do nothing
 	}

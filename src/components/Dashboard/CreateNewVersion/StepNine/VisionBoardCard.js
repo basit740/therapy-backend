@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import classes from './VisionBoardCard.module.css';
 import Goal from './Goal';
 import uniqueId from 'lodash.uniqueid';

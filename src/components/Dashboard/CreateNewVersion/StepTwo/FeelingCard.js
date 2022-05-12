@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classes from './FeelingCard.module.css';
 import Feeling from './Feeling.js';
 import Loading from './Loading';
@@ -15,18 +15,18 @@ const FeelingCard = ({
 	console.log('feeliongs', feelings);
 	//const [feeling, setFeelings] = useState(feelings);
 
-	const updateFeelings = (item) => {
-		let prevArray = feelings;
+	// const updateFeelings = (item) => {
+	// 	let prevArray = feelings;
 
-		let result = prevArray.some((prevItem) => {
-			return prevItem.id === item.id;
-		});
-		if (result) {
-			console.log(feelings);
-			console.log('already found');
-			return;
-		}
-	};
+	// 	let result = prevArray.some((prevItem) => {
+	// 		return prevItem.id === item.id;
+	// 	});
+	// 	if (result) {
+	// 		console.log(feelings);
+	// 		console.log('already found');
+	// 		return;
+	// 	}
+	// };
 	return (
 		<>
 			<div

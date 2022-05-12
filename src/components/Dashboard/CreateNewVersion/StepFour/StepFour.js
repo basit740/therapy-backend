@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useReducer, useContext } from 'react';
+import React, { useEffect, useReducer, useContext } from 'react';
 import classes from './StepFour.module.css';
-import uniqueId from 'lodash.uniqueid';
+//import uniqueId from 'lodash.uniqueid';
 import { DEFAULT_TAGS_DATA } from '../../../../data/step-four/defaultData';
 import NewVersionContext from '../../../../store/new-version-context';
 import StepFourStatic from './StepFourStatic';
@@ -30,7 +30,7 @@ const StepFour = ({ onStateChange }) => {
 		//console.log(' step4 useeffect 1');
 		//console.log(state);
 		onStateChange(state);
-	}, [state]);
+	}, [state, onStateChange]);
 
 	useEffect(() => {
 		(async () => {
@@ -51,7 +51,7 @@ const StepFour = ({ onStateChange }) => {
 				});
 			}
 		})();
-	}, []);
+	}, [newVerCtx.versionId]);
 
 	return (
 		<section className={classes.stepFourOfEleven}>

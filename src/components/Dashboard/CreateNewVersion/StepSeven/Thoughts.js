@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useReducer, useContext } from 'react';
+import React, { useEffect, useReducer, useContext } from 'react';
 import './Thoughts.css';
 import ThoughtCard from './ThoughtCard';
 
-import Thought from './Thought';
+//import Thought from './Thought';
 
 import reducer, { ACTIONS } from './reducer';
 
@@ -85,10 +85,10 @@ const Thoughts = ({ onStateChange }) => {
 
 	const dropHandler = (event) => {
 		event.preventDefault();
-		const element = document.querySelector('.dragging');
+		//const element = document.querySelector('.dragging');
 		console.log('drop end', event.target.id);
 
-		if (event.target.id == state.dragSrcId) {
+		if (event.target.id === state.dragSrcId) {
 			// check if already exists
 			return;
 		}
@@ -124,8 +124,7 @@ const Thoughts = ({ onStateChange }) => {
 
 	useEffect(() => {
 		onStateChange(state);
-		console.log('useEffect 1', state);
-	}, [state]);
+	}, [state, onStateChange]);
 
 	useEffect(() => {
 		(async () => {
@@ -140,7 +139,7 @@ const Thoughts = ({ onStateChange }) => {
 				dispatch({ type: ACTIONS.DATA_FROM_LOCAL_STATE });
 			}
 		})();
-	}, []);
+	}, [newVerCtx.versionId]);
 	return (
 		<div className='thought-cards-container'>
 			<div className='container'>

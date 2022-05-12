@@ -1,10 +1,4 @@
-import React, {
-	useRef,
-	useState,
-	useEffect,
-	useReducer,
-	useContext,
-} from 'react';
+import React, { useEffect, useReducer, useContext } from 'react';
 import Step11Context from '../../../../../store/step-eleven';
 import NewVersionContext from '../../../../../store/new-version-context';
 import FiveSliders from '../../../UtilityComponents/FiveSliders/FiveSliders';
@@ -13,7 +7,7 @@ import { getBenefits } from '../../../../../api/stepEleven';
 
 import classes from './SliderSteps.module.css';
 
-import { slidersData } from '../../../../../data/slidersData';
+//import { slidersData } from '../../../../../data/slidersData';
 import reducer, { initialState, ACTIONS } from './reducer';
 import Dots from './Dots';
 
@@ -71,13 +65,13 @@ const SliderSteps = (props) => {
 
 	useEffect(() => {
 		props.onStateChange(myState);
-	}, [myState]);
+	}, [myState, props]);
 
 	useEffect(() => {
 		console.log('useEffect 2 slidersStep', myState);
 		(async () => {
 			const response = await getBenefits(newVerCtx.versionId);
-			console.log(response);
+
 			if (response.success && response.data.length > 0) {
 				disptach({
 					type: ACTIONS.DATA_FROM_SERVER,
@@ -91,6 +85,7 @@ const SliderSteps = (props) => {
 				});
 			}
 		})();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	return (
 		<section className={classes['slider-steps-container']}>
