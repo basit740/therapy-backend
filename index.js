@@ -6,6 +6,10 @@ const morgan = require('morgan');
 const cors = require('cors');
 const errorHandler = require('./middleware/errorHandler');
 
+const https = require('https'),
+	fs = require('fs'),
+	helmet = require('helmet');
+
 const connectDB = require('./config/db.js');
 
 // load env variables
@@ -46,6 +50,10 @@ const stepEleven = require('./routes/steps/stepEleven');
 // versions
 const versions = require('./routes/versions.js');
 
+// email
+
+const email = require('./routes/email.js');
+
 // Mount Routes
 
 // Authentication
@@ -73,6 +81,8 @@ app.use('/api/v1/stepTenTags', stepTen);
 app.use('/api/v1/stepElevenBenefits', stepEleven);
 // mounting versions
 app.use('/api/v1/versions', versions);
+
+app.use('/api/v1/email', email);
 
 app.use(errorHandler);
 
