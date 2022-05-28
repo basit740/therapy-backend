@@ -86,6 +86,8 @@ app.use('/api/v1/email', email);
 
 app.use(errorHandler);
 
+// testings github///
+
 app.listen(5000, () => {
 	console.log('server is running at PORT: 5000');
 });
