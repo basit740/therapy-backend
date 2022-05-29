@@ -88,7 +88,7 @@ app.use(errorHandler);
 
 // testings github///
 
-app.listen(5000, () => {
+const server = app.listen(5000, () => {
 	console.log('server is running at PORT: 5000');
 });
 
@@ -105,5 +105,5 @@ if (process.env.NODE_ENV === 'development') {
 process.on('unhandledRejection', (err, promise) => {
 	console.log(`Error: ${err.message}`.red);
 	// Close server & exit process
-	// server.close(() => process.exit(1));
+	server.close(() => process.exit(1));
 });
