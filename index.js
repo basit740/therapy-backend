@@ -82,7 +82,7 @@ app.use('/api/v1/stepElevenBenefits', stepEleven);
 // mounting versions
 app.use('/api/v1/versions', versions);
 
-app.use('/api/v1/email', email);
+// app.use('/api/v1/email', email);
 
 app.use(errorHandler);
 
