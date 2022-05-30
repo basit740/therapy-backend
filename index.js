@@ -82,13 +82,14 @@ app.use('/api/v1/stepElevenBenefits', stepEleven);
 // mounting versions
 app.use('/api/v1/versions', versions);
 
-// app.use('/api/v1/email', email);
+app.use('/api/v1/email', email);
 
 app.use(errorHandler);
 
 // testings github///
 
-const server = app.listen(5000, () => {
+const port = process.env.PORT || 5000;
+const server = app.listen(port, () => {
 	console.log('server is running at PORT: 5000');
 });
 
