@@ -1,4 +1,15 @@
 const Version = require('../models/Version.js');
+const StepTwo = require('../models/steps/StepTwo');
+const StepThree = require('../models/steps/StepThree');
+const StepFour = require('../models/steps/StepFour');
+const StepFive = require('../models/steps/StepFive');
+
+const StepSix = require('../models/steps/StepSix');
+const StepSeven = require('../models/steps/StepSeven');
+const StepEight = require('../models/steps/StepEight');
+const StepNine = require('../models/steps/StepNine');
+const StepTen = require('../models/steps/StepTen');
+const StepEleven = require('../models/steps/StepEleven');
 
 const ErrorResponse = require('../utils/errorResponse.js');
 // @desc Create new version
@@ -86,6 +97,129 @@ exports.getVersion = async (req, res, next) => {
 	res.status(200).json({
 		success: true,
 		data: version,
+	});
+};
+
+exports.getVersionReport = async (req, res, next) => {
+	const version = await Version.findById(req.params.id);
+
+	const allData = [];
+	const stepTwoData = await StepTwo.find({
+		version: req.params.id,
+	});
+
+	let stepData = null;
+	for (let i = 2; i <= 11; i++) {
+		if (i === 2) {
+			stepData = await StepTwo.find({
+				version: req.params.id,
+			});
+			const data = {
+				step: 'StepTwo',
+				data: stepData,
+			};
+			allData.push(data);
+		} else if (i === 3) {
+			stepData = await StepThree.find({
+				version: req.params.id,
+			});
+			const data = {
+				step: 'StepThree',
+				data: stepData,
+			};
+			allData.push(data);
+		} else if (i === 4) {
+			stepData = await StepFour.find({
+				version: req.params.id,
+			});
+			const data = {
+				step: 'StepFour',
+				data: stepData,
+			};
+			allData.push(data);
+		} else if (i === 5) {
+			stepData = await StepFive.find({
+				version: req.params.id,
+			});
+			const data = {
+				step: 'StepFive',
+				data: stepData,
+			};
+			allData.push(data);
+		} else if (i === 6) {
+			stepData = await StepSix.find({
+				version: req.params.id,
+			});
+			const data = {
+				step: 'StepSix',
+				data: stepData,
+			};
+			allData.push(data);
+		} else if (i === 7) {
+			stepData = await StepSeven.find({
+				version: req.params.id,
+			});
+			const data = {
+				step: 'StepSeven',
+				data: stepData,
+			};
+			allData.push(data);
+		} else if (i === 8) {
+			stepData = await StepEight.find({
+				version: req.params.id,
+			});
+			const data = {
+				step: 'StepEight',
+				data: stepData,
+			};
+			allData.push(data);
+		} else if (i === 9) {
+			stepData = await StepNine.find({
+				version: req.params.id,
+			});
+			const data = {
+				step: 'StepNine',
+				data: stepData,
+			};
+			allData.push(data);
+		} else if (i === 10) {
+			stepData = await StepTen.find({
+				version: req.params.id,
+			});
+			const data = {
+				step: 'StepTen',
+				data: stepData,
+			};
+			allData.push(data);
+		} else if (i === 11) {
+			stepData = await StepEleven.find({
+				version: req.params.id,
+			});
+			const data = {
+				step: 'StepEleven',
+				data: stepData,
+			};
+			allData.push(data);
+		}
+	}
+
+	// All Steps
+
+	const finalData = {
+		versionName: version.versionName,
+		stepsData: allData,
+	};
+
+	if (!version) {
+		res.status(400).json({
+			success: false,
+			message: 'error finding version',
+		});
+	}
+
+	res.status(200).json({
+		success: true,
+		data: finalData,
 	});
 };
 

@@ -6,6 +6,7 @@ const {
 	updateVersion,
 	deleteVersion,
 	getVersion,
+	getVersionReport,
 } = require('../controllers/versions');
 
 const { protect } = require('../middleware/auth.js');
@@ -18,5 +19,6 @@ router
 	.put(protect, updateVersion)
 	.delete(protect, deleteVersion)
 	.get(protect, getVersion);
+router.route('/report/:id').get(protect, getVersionReport);
 
 module.exports = router;
