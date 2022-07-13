@@ -3,6 +3,7 @@ const ErrorResponse = require('../utils/errorResponse');
 const sendEmail = require('../utils/sendEmail');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const codeGenerator = require('../utils/codeGenerator');
 
 const User = require('../models/User');
 exports.register = async (req, res, next) => {
@@ -188,27 +189,39 @@ exports.forgotPassword = async (req, res, next) => {
 // @access    Public
 exports.resetPassword = async (req, res, next) => {
 	// Get hashed token
-	const resetPasswordToken = crypto
-		.createHash('sha256')
-		.update(req.params.resettoken)
-		.digest('hex');
+	// const resetPasswordToken = crypto
+	// 	.createHash('sha256')
+	// 	.update(req.params.resettoken)
+	// 	.digest('hex');
 
-	const user = await User.findOne({
-		resetPasswordToken,
-		resetPasswordExpire: { $gt: Date.now() },
-	});
+	// const user = await User.findOne({
+	// 	resetPasswordToken,
+	// 	resetPasswordExpire: { $gt: Date.now() },
+	// });
 
-	if (!user) {
-		return next(new ErrorResponse('Invalid token', 400));
-	}
+	// if (!user) {
+	// 	return next(new ErrorResponse('Invalid token', 400));
+	// }
 
 	// Set new password
-	user.password = req.body.password;
+
+	const user = await User.findOne({ email: req.params.email });
+
+	if (!user) {
+		return next(new ErrorResponse('There is no user with that email', 404));
+	}
+	user.password = req.params.password;
 	user.resetPasswordToken = undefined;
 	user.resetPasswordExpire = undefined;
+	user.resetCode = '';
 	await user.save();
 
-	sendTokenResponse(user, 200, res);
+	// sendTokenResponse(user, 200, res);
+
+	res.status(200).json({
+		success: true,
+		message: 'password updated successfully',
+	});
 };
 
 // Get token from model, create cookie and send response
@@ -230,5 +243,72 @@ const sendTokenResponse = (user, statusCode, res) => {
 	res.status(statusCode).cookie('token', token, options).json({
 		success: true,
 		token,
+	});
+};
+
+// send 4 digit code
+
+exports.sendCode = async (req, res, next) => {
+	const user = await User.findOne({ email: req.params.email });
+
+	if (!user) {
+		return next(new ErrorResponse('There is no user with that email', 404));
+	}
+
+	const code = codeGenerator();
+	const fieldsToUpdate = {
+		resetCode: code,
+	};
+
+	const updatedUser = await User.findByIdAndUpdate(user._id, fieldsToUpdate, {
+		new: true,
+		runValidators: true,
+	});
+
+	const options = {
+		subject: 'Password Reset Code',
+		email: req.params.email,
+		message: `<div>
+			<p>Hi there, </p>
+			<p>Following is your 4 digit code from <strong>My Therapy Tool</strong> </p>
+			<p>${code}</p>
+		</div>`,
+	};
+	const result = await sendEmail(options);
+
+	console.log(result);
+
+	if (result.rejected.length === 0) {
+		res.status(200).json({
+			success: true,
+			message: 'code is sent',
+		});
+	} else {
+		res.status(400).json({
+			success: true,
+			message: 'code was not sent',
+		});
+	}
+};
+
+exports.verifyCode = async (req, res, next) => {
+	const email = req.params.email;
+	const code = req.params.code;
+
+	const user = await User.findOne({ email: req.params.email });
+
+	if (!user) {
+		return next(new ErrorResponse('There is no user with that email', 404));
+	}
+
+	if (user.resetCode != code) {
+		return next(
+			new ErrorResponse('The code is wrong, please check again', 404)
+		);
+	}
+
+	res.status(200).json({
+		success: true,
+		message: 'You are good to go',
 	});
 };

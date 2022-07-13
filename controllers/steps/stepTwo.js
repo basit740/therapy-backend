@@ -7,6 +7,7 @@ const ErrorResponse = require('../../utils/errorResponse.js');
 const mongoose = require('mongoose');
 
 exports.createIssue = async (req, res, next) => {
+	console.log(req.params);
 	const version = await Version.findById(req.params.versionId);
 	if (!version) {
 		return next(
@@ -16,6 +17,7 @@ exports.createIssue = async (req, res, next) => {
 			)
 		);
 	}
+	console.log(req.body.issues);
 	const issues = [...req.body.issues];
 
 	// check if already exits
