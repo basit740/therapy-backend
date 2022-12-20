@@ -12,7 +12,7 @@ const StepTwoSchema = new mongoose.Schema({
 	},
 	action: {
 		type: [String],
-		enum: ['low', 'medium', 'high', 'critical'],
+		enum: ['immediate', 'hold', 'acceptance'],
 	},
 	actionDate: {
 		type: Date,
