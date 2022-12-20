@@ -10,6 +10,13 @@ const StepTwoSchema = new mongoose.Schema({
 		type: [String],
 		enum: ['low', 'medium', 'high', 'critical'],
 	},
+	action: {
+		type: [String],
+		enum: ['low', 'medium', 'high', 'critical'],
+	},
+	actionDate: {
+		type: Date,
+	},
 	createdAt: {
 		type: Date,
 		default: Date.now,
